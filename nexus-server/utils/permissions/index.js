@@ -30,6 +30,7 @@ const PERMISSIONS = {
   INVITES_MANAGE: "invites.manage",
   ROLES_MANAGE: "roles.manage",
   WORKSPACE_ROLES_MANAGE: "workspace_roles.manage",
+  CUSTOMERS_MANAGE: "customers.manage",
 
   WORKSPACES_CREATE: "workspaces.create",
   WORKSPACES_VIEW_ALL: "workspaces.view_all",
@@ -86,6 +87,7 @@ const PERMISSION_CATALOG = [
   { key: PERMISSIONS.INVITES_MANAGE, label: "Manage invitations", category: "people", scope: "system" },
   { key: PERMISSIONS.ROLES_MANAGE, label: "Manage system roles", category: "people", scope: "system" },
   { key: PERMISSIONS.WORKSPACE_ROLES_MANAGE, label: "Manage workspace roles", category: "people", scope: "system" },
+  { key: PERMISSIONS.CUSTOMERS_MANAGE, label: "Manage customers (tenants)", category: "people", scope: "system" },
   // workspaces
   { key: PERMISSIONS.WORKSPACES_CREATE, label: "Create workspaces", category: "workspaces", scope: "system" },
   { key: PERMISSIONS.WORKSPACES_VIEW_ALL, label: "View all workspaces", category: "workspaces", scope: "system" },
@@ -171,6 +173,7 @@ const SYSTEM_ROLES = [
       PERMISSIONS.DOCUMENTS_MANAGE,
       PERMISSIONS.CHATS_VIEW_ALL,
       PERMISSIONS.SYSTEM_API_KEYS,
+      PERMISSIONS.CUSTOMERS_MANAGE,
     ],
     protectedPermissions: [],
   },

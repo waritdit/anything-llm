@@ -15,7 +15,11 @@ const Customer = {
     return slugifyModule(...args);
   },
 
-  new: async function (name = null, trialExpiresAt = null) {
+  new: async function (
+    name = null,
+    trialExpiresAt = null,
+    { maxUsers = null, maxWorkspaces = null, maxConcurrentRequests = null } = {}
+  ) {
     if (!name) return { customer: null, message: "name cannot be null" };
     var slug = this.slugify(name, { lower: true });
     slug = slug || uuidv4();
@@ -32,6 +36,11 @@ const Customer = {
           name: String(name),
           slug,
           trialExpiresAt: trialExpiresAt ? new Date(trialExpiresAt) : null,
+          maxUsers: maxUsers ? Number(maxUsers) : null,
+          maxWorkspaces: maxWorkspaces ? Number(maxWorkspaces) : null,
+          maxConcurrentRequests: maxConcurrentRequests
+            ? Number(maxConcurrentRequests)
+            : null,
         },
       });
       return { customer, message: null };
@@ -81,6 +90,14 @@ const Customer = {
       data.status = updates.status;
     if (updates.hasOwnProperty("trialExpiresAt"))
       data.trialExpiresAt = updates.trialExpiresAt ? new Date(updates.trialExpiresAt) : null;
+    if (updates.hasOwnProperty("maxUsers"))
+      data.maxUsers = updates.maxUsers ? Number(updates.maxUsers) : null;
+    if (updates.hasOwnProperty("maxWorkspaces"))
+      data.maxWorkspaces = updates.maxWorkspaces ? Number(updates.maxWorkspaces) : null;
+    if (updates.hasOwnProperty("maxConcurrentRequests"))
+      data.maxConcurrentRequests = updates.maxConcurrentRequests
+        ? Number(updates.maxConcurrentRequests)
+        : null;
     if (Object.keys(data).length === 0)
       return { customer: null, message: "No valid updates provided" };
     return this._update(id, data);
@@ -131,6 +148,40 @@ const Customer = {
     try {
       return await prisma.users.count({
         where: { customer_id: Number(customerId), role: "customer_admin", suspended: 0 },
+      });
+    } catch (error) {
+      console.error(error.message);
+      return 0;
+    }
+  },
+
+  /**
+   * Every user under this customer, regardless of role - used against
+   * `maxUsers` at creation time (Trial & Resource Control, V.1.5).
+   * @param {number} customerId
+   * @returns {Promise<number>}
+   */
+  countUsers: async function (customerId) {
+    try {
+      return await prisma.users.count({
+        where: { customer_id: Number(customerId) },
+      });
+    } catch (error) {
+      console.error(error.message);
+      return 0;
+    }
+  },
+
+  /**
+   * Every workspace under this customer - used against `maxWorkspaces` at
+   * creation time (Trial & Resource Control, V.1.5).
+   * @param {number} customerId
+   * @returns {Promise<number>}
+   */
+  countWorkspaces: async function (customerId) {
+    try {
+      return await prisma.workspaces.count({
+        where: { customer_id: Number(customerId) },
       });
     } catch (error) {
       console.error(error.message);

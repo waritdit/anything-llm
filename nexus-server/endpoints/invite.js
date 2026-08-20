@@ -1,6 +1,7 @@
 const { EventLogs } = require("../models/eventLogs");
 const { Invite } = require("../models/invite");
 const { User } = require("../models/user");
+const { Customer } = require("../models/customer");
 const { reqBody } = require("../utils/http");
 const {
   simpleSSOLoginDisabledMiddleware,
@@ -47,6 +48,23 @@ function inviteEndpoints(app) {
             .status(200)
             .json({ success: false, error: "Invite not found or is invalid." });
           return;
+        }
+
+        // Trial & Resource Control (V.1.5): self-registration via a
+        // customer-scoped invite is another path into a capped customer,
+        // so it needs the same maxUsers check as the admin-panel create path.
+        if (invite.customer_id) {
+          const customer = await Customer.get({ id: invite.customer_id });
+          if (customer?.maxUsers) {
+            const currentCount = await Customer.countUsers(customer.id);
+            if (currentCount >= customer.maxUsers) {
+              response.status(200).json({
+                success: false,
+                error: `This customer has reached its user limit (${customer.maxUsers}).`,
+              });
+              return;
+            }
+          }
         }
 
         // A customer-scoped invite (created by a Customer Admin) stamps its

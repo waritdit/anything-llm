@@ -6,20 +6,22 @@ const { MimeDetector } = require("./mime");
  * The folder where documents are stored to be stored when
  * processed by the collector.
  */
-const documentsFolder =
-  process.env.NODE_ENV === "development"
-    ? path.resolve(__dirname, `../../../server/storage/documents`)
-    : path.resolve(process.env.STORAGE_DIR, `documents`);
+// STORAGE_DIR always wins when set, in dev or production - the old
+// dev-only fallback below assumed the sibling backend folder is literally
+// named "server", which silently misroutes every processed document into
+// that folder instead (e.g. when the backend folder is "nexus-server").
+const documentsFolder = process.env.STORAGE_DIR
+  ? path.resolve(process.env.STORAGE_DIR, `documents`)
+  : path.resolve(__dirname, `../../../server/storage/documents`);
 
 /**
  * The folder where direct uploads are stored to be stored when
  * processed by the collector. These are files that were DnD'd into UI
  * and are not to be embedded or selectable from the file picker.
  */
-const directUploadsFolder =
-  process.env.NODE_ENV === "development"
-    ? path.resolve(__dirname, `../../../server/storage/direct-uploads`)
-    : path.resolve(process.env.STORAGE_DIR, `direct-uploads`);
+const directUploadsFolder = process.env.STORAGE_DIR
+  ? path.resolve(process.env.STORAGE_DIR, `direct-uploads`)
+  : path.resolve(__dirname, `../../../server/storage/direct-uploads`);
 
 /**
  * Checks if a file is text by checking the mime type and then falling back to buffer inspection.

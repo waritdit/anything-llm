@@ -2,6 +2,9 @@ process.env.NODE_ENV === "development"
   ? require("dotenv").config({ path: `.env.${process.env.NODE_ENV}` })
   : require("dotenv").config();
 
+// Must run before anything else - see utils/boot/applyPendingRestore.js for why.
+require("./utils/boot/applyPendingRestore")();
+
 require("./utils/logger")();
 require("./utils/boot/patchSdkTimeouts")();
 const express = require("express");

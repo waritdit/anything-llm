@@ -297,6 +297,16 @@ model customers {
   // needed to flip a status column. NULL = no trial limit (default/internal
   // customers created without one).
   trialExpiresAt DateTime?
+  // Trial & Resource Control (V.1.5): caps on how many users/workspaces this
+  // customer's own Customer Admin(s) may create. NULL = unlimited. Checked
+  // at creation time only (not retroactive) - lowering a limit below the
+  // current count does not remove anything.
+  maxUsers      Int?
+  maxWorkspaces Int?
+  // In-flight chat requests across this customer's workspaces, checked
+  // against an in-memory counter (utils/chats/concurrency.js) - NOT a
+  // persisted count, this column is only the configured ceiling.
+  maxConcurrentRequests Int?
   createdAt     DateTime   @default(now())
   lastUpdatedAt DateTime   @default(now())
   users         users[]

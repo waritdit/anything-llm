@@ -6,6 +6,9 @@ const { SystemSettings } = require("../models/systemSettings");
 const { User } = require("../models/user");
 const { Workspace } = require("../models/workspace");
 const { Customer } = require("../models/customer");
+const { DemoContent } = require("../models/demoContent");
+const { Backup } = require("../utils/backup");
+const path = require("path");
 const { getEmbeddingEngineSelection } = require("../utils/helpers");
 const {
   validRoleSelection,
@@ -79,6 +82,25 @@ function adminEndpoints(app) {
         // never client-supplied, mirroring how the workspace_role_id/role
         // fields are already forced elsewhere in this file.
         if (isCustomerAdmin(currUser)) newUserParams.customer_id = currUser.customer_id;
+
+        // Trial & Resource Control (V.1.5): a customer with a maxUsers cap
+        // can't grow past it, whether the account is being created by their
+        // own Customer Admin or explicitly assigned there by Platform Admin.
+        if (newUserParams.customer_id) {
+          const customer = await Customer.get({
+            id: Number(newUserParams.customer_id),
+          });
+          if (customer?.maxUsers) {
+            const currentCount = await Customer.countUsers(customer.id);
+            if (currentCount >= customer.maxUsers) {
+              response.status(200).json({
+                user: null,
+                error: `This customer has reached its user limit (${customer.maxUsers}).`,
+              });
+              return;
+            }
+          }
+        }
 
         // The old frontend lets the operator type a password directly; the new
         // frontend sends none and expects the server to generate one, handed
@@ -421,11 +443,29 @@ function adminEndpoints(app) {
       try {
         const user = await userFromSession(request, response);
         const { name } = reqBody(request);
+        const customerId = isCustomerAdmin(user) ? user.customer_id : null;
+
+        // Trial & Resource Control (V.1.5): a customer with a maxWorkspaces
+        // cap can't grow past it.
+        if (customerId) {
+          const customer = await Customer.get({ id: Number(customerId) });
+          if (customer?.maxWorkspaces) {
+            const currentCount = await Customer.countWorkspaces(customer.id);
+            if (currentCount >= customer.maxWorkspaces) {
+              response.status(200).json({
+                workspace: null,
+                error: `This customer has reached its workspace limit (${customer.maxWorkspaces}).`,
+              });
+              return;
+            }
+          }
+        }
+
         const { workspace, message: error } = await Workspace.new(
           name,
           user.id,
           {},
-          isCustomerAdmin(user) ? user.customer_id : null
+          customerId
         );
         response.status(200).json({ workspace, error });
       } catch (e) {
@@ -531,8 +571,18 @@ function adminEndpoints(app) {
     [validatedRequest, strictMultiUserRoleValid([ROLES.admin, ROLES.manager])],
     async (request, response) => {
       try {
-        const { name, trialExpiresAt } = reqBody(request);
-        const { customer, message: error } = await Customer.new(name, trialExpiresAt);
+        const {
+          name,
+          trialExpiresAt,
+          maxUsers,
+          maxWorkspaces,
+          maxConcurrentRequests,
+        } = reqBody(request);
+        const { customer, message: error } = await Customer.new(
+          name,
+          trialExpiresAt,
+          { maxUsers, maxWorkspaces, maxConcurrentRequests }
+        );
         if (customer) {
           await EventLogs.logEvent(
             "customer_created",
@@ -589,6 +639,154 @@ function adminEndpoints(app) {
         const user = await userFromSession(request, response);
         const { customer, message: error } = await Customer.restore(id, user?.id);
         response.status(200).json({ customer, error });
+      } catch (e) {
+        console.error(e);
+        response.sendStatus(500).end();
+      }
+    }
+  );
+
+  // Backup/Restore (V.1.5, basic) - Platform-Admin only. Restore is staged,
+  // not applied live - see utils/backup and utils/boot/applyPendingRestore.js
+  // for why, and why an explicit restart is required to complete it.
+  app.get(
+    "/admin/backup",
+    [validatedRequest, strictMultiUserRoleValid([ROLES.admin, ROLES.manager])],
+    async (_request, response) => {
+      try {
+        response.status(200).json({ backups: Backup.list() });
+      } catch (e) {
+        console.error(e);
+        response.sendStatus(500).end();
+      }
+    }
+  );
+
+  app.post(
+    "/admin/backup/create",
+    [validatedRequest, strictMultiUserRoleValid([ROLES.admin, ROLES.manager])],
+    async (request, response) => {
+      try {
+        const backup = Backup.create();
+        await EventLogs.logEvent(
+          "backup_created",
+          { filename: backup.filename },
+          response.locals?.user?.id
+        );
+        response.status(200).json({ backup, error: null });
+      } catch (e) {
+        console.error(e);
+        response
+          .status(500)
+          .json({ backup: null, error: "Failed to create backup." });
+      }
+    }
+  );
+
+  app.get(
+    "/admin/backup/:filename/download",
+    [validatedRequest, strictMultiUserRoleValid([ROLES.admin, ROLES.manager])],
+    async (request, response) => {
+      try {
+        const filePath = Backup.downloadPath(request.params.filename);
+        if (!filePath) {
+          response.status(404).json({ error: "Backup not found." });
+          return;
+        }
+        response.download(filePath, path.basename(filePath));
+      } catch (e) {
+        console.error(e);
+        response.sendStatus(500).end();
+      }
+    }
+  );
+
+  app.delete(
+    "/admin/backup/:filename",
+    [validatedRequest, strictMultiUserRoleValid([ROLES.admin, ROLES.manager])],
+    async (request, response) => {
+      try {
+        const success = Backup.delete(request.params.filename);
+        response
+          .status(200)
+          .json({ success, error: success ? null : "Backup not found." });
+      } catch (e) {
+        console.error(e);
+        response.sendStatus(500).end();
+      }
+    }
+  );
+
+  app.post(
+    "/admin/backup/:filename/restore",
+    [validatedRequest, strictMultiUserRoleValid([ROLES.admin, ROLES.manager])],
+    async (request, response) => {
+      try {
+        const result = Backup.stageRestore(request.params.filename);
+        if (!result.success) {
+          response.status(200).json(result);
+          return;
+        }
+        await EventLogs.logEvent(
+          "backup_restore_staged",
+          { filename: request.params.filename },
+          response.locals?.user?.id
+        );
+        response.status(200).json({
+          success: true,
+          error: null,
+          restartRequired: true,
+          message:
+            "Restore staged. Restart the server process for it to take effect.",
+        });
+      } catch (e) {
+        console.error(e);
+        response
+          .status(500)
+          .json({ success: false, error: "Failed to stage restore." });
+      }
+    }
+  );
+
+  // Demo Environment & Content (V.1.5) - Platform-Admin only. Always
+  // company-owned (customer_id: null), separate from Hosted Customer Trial.
+  app.get(
+    "/admin/demo/status",
+    [validatedRequest, strictMultiUserRoleValid([ROLES.admin, ROLES.manager])],
+    async (_request, response) => {
+      try {
+        const seeded = await DemoContent.isSeeded();
+        response.status(200).json({ seeded });
+      } catch (e) {
+        console.error(e);
+        response.sendStatus(500).end();
+      }
+    }
+  );
+
+  app.post(
+    "/admin/demo/seed",
+    [validatedRequest, strictMultiUserRoleValid([ROLES.admin, ROLES.manager])],
+    async (request, response) => {
+      try {
+        const user = await userFromSession(request, response);
+        const result = await DemoContent.seed(user?.id ?? null);
+        response.status(200).json(result);
+      } catch (e) {
+        console.error(e);
+        response.sendStatus(500).end();
+      }
+    }
+  );
+
+  app.post(
+    "/admin/demo/reset",
+    [validatedRequest, strictMultiUserRoleValid([ROLES.admin, ROLES.manager])],
+    async (request, response) => {
+      try {
+        const user = await userFromSession(request, response);
+        const result = await DemoContent.reset(user?.id ?? null);
+        response.status(200).json(result);
       } catch (e) {
         console.error(e);
         response.sendStatus(500).end();

@@ -15,6 +15,8 @@ const {
 const { writeResponseChunk } = require("../utils/helpers/chat/responses");
 const { WorkspaceThread } = require("../models/workspaceThread");
 const { User } = require("../models/user");
+const { Customer } = require("../models/customer");
+const ConcurrencyTracker = require("../utils/chats/concurrency");
 const { getModelTag } = require("./utils");
 
 /**
@@ -63,55 +65,82 @@ async function handleStreamChat(request, response, thread = null) {
       return;
     }
 
-    await streamChatWithWorkspace(
-      response,
-      workspace,
-      message,
-      workspace?.chatMode,
-      user,
-      thread,
-      attachments
-    );
-
-    if (thread) {
-      // If thread was renamed emit event to frontend via special `action` response.
-      await WorkspaceThread.autoRenameThread({
-        thread,
-        workspace,
-        user,
-        prompt: message,
-        onRename: (renamed) => {
-          writeResponseChunk(response, {
-            action: "rename_thread",
-            thread: {
-              slug: renamed.slug,
-              name: renamed.name,
-            },
-          });
-        },
-      });
+    // Trial & Resource Control (V.1.5): a customer with a
+    // maxConcurrentRequests cap can't have more than that many chats
+    // in flight across all of its workspaces at once, protecting the
+    // shared DGX Spark GPU from one trial customer starving the rest.
+    // Platform-owned workspaces (customer_id: null) are never capped here.
+    const customerId = workspace?.customer_id ?? null;
+    let concurrencySlotHeld = false;
+    if (customerId) {
+      const customer = await Customer.get({ id: customerId });
+      if (!ConcurrencyTracker.acquire(customerId, customer?.maxConcurrentRequests)) {
+        writeResponseChunk(response, {
+          id: uuidv4(),
+          type: "abort",
+          textResponse: null,
+          sources: [],
+          close: true,
+          error: `This organization has reached its limit of ${customer.maxConcurrentRequests} concurrent chat request(s). Please try again shortly.`,
+        });
+        return;
+      }
+      concurrencySlotHeld = true;
     }
 
-    await Telemetry.sendTelemetry("sent_chat", {
-      multiUserMode: multiUserMode(response),
-      LLMSelection: process.env.LLM_PROVIDER || "openai",
-      Embedder: process.env.EMBEDDING_ENGINE || "inherit",
-      VectorDbSelection: process.env.VECTOR_DB || "lancedb",
-      multiModal: Array.isArray(attachments) && attachments?.length !== 0,
-      TTSSelection: process.env.TTS_PROVIDER || "native",
-      LLMModel: getModelTag(),
-    });
+    try {
+      await streamChatWithWorkspace(
+        response,
+        workspace,
+        message,
+        workspace?.chatMode,
+        user,
+        thread,
+        attachments
+      );
 
-    await EventLogs.logEvent(
-      "sent_chat",
-      {
-        workspaceName: workspace?.name,
-        ...(thread ? { thread: thread.name } : {}),
-        chatModel: workspace?.chatModel || "System Default",
-      },
-      user?.id
-    );
-    response.end();
+      if (thread) {
+        // If thread was renamed emit event to frontend via special `action` response.
+        await WorkspaceThread.autoRenameThread({
+          thread,
+          workspace,
+          user,
+          prompt: message,
+          onRename: (renamed) => {
+            writeResponseChunk(response, {
+              action: "rename_thread",
+              thread: {
+                slug: renamed.slug,
+                name: renamed.name,
+              },
+            });
+          },
+        });
+      }
+
+      await Telemetry.sendTelemetry("sent_chat", {
+        multiUserMode: multiUserMode(response),
+        LLMSelection: process.env.LLM_PROVIDER || "openai",
+        Embedder: process.env.EMBEDDING_ENGINE || "inherit",
+        VectorDbSelection: process.env.VECTOR_DB || "lancedb",
+        multiModal: Array.isArray(attachments) && attachments?.length !== 0,
+        TTSSelection: process.env.TTS_PROVIDER || "native",
+        LLMModel: getModelTag(),
+      });
+
+      await EventLogs.logEvent(
+        "sent_chat",
+        {
+          workspaceName: workspace?.name,
+          ...(thread ? { thread: thread.name } : {}),
+          chatModel: workspace?.chatModel || "System Default",
+        },
+        user?.id
+      );
+      response.end();
+    } finally {
+      if (concurrencySlotHeld) ConcurrencyTracker.release(customerId);
+    }
   } catch (e) {
     console.error(e);
     writeResponseChunk(response, {
