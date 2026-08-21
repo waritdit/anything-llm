@@ -30,8 +30,8 @@ export default function KeyboardShortcutsHelp() {
   if (!isOpen) return null;
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-2xl bg-theme-bg-secondary border-theme-modal-border">
-        <DialogHeader className="p-0">
+      <DialogContent>
+        <DialogHeader>
           <DialogTitle>{t("keyboard-shortcuts.title")}</DialogTitle>
         </DialogHeader>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -40,10 +40,10 @@ export default function KeyboardShortcutsHelp() {
               key={key}
               className="flex items-center justify-between p-3 bg-theme-bg-hover rounded-lg"
             >
-              <span className="text-white">
+              <span className="text-theme-text-primary">
                 {t(`keyboard-shortcuts.shortcuts.${shortcut.translationKey}`)}
               </span>
-              <kbd className="px-2 py-1 bg-theme-bg-secondary text-white rounded border border-gray-600">
+              <kbd className="px-2 py-1 bg-theme-bg-secondary text-theme-text-primary rounded border border-gray-600">
                 {isMac ? key : key.replace("⌘", "Ctrl")}
               </kbd>
             </div>

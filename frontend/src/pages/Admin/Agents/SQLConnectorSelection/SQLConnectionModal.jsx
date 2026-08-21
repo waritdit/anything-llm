@@ -7,7 +7,7 @@ import {
   DialogFooter,
   DialogClose,
 } from "@/components/ui/dialog";
-import { WarningOctagon } from "@phosphor-icons/react";
+import { OctagonAlert } from "lucide-react";
 import { DB_LOGOS } from "./DBConnection";
 import System from "@/models/system";
 import showToast from "@/utils/toast";
@@ -277,8 +277,8 @@ export default function SQLConnectionModal({
   // any ancestor <form> and avoids the nesting problem.
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
-      <DialogContent className="max-w-2xl bg-theme-bg-secondary border-theme-modal-border">
-        <DialogHeader className="p-0">
+      <DialogContent>
+        <DialogHeader>
           <DialogTitle className="text-sm font-semibold">
             {isEditMode ? "Edit SQL Connection" : "New SQL Connection"}
           </DialogTitle>
@@ -289,14 +289,14 @@ export default function SQLConnectionModal({
           onSubmit={handleUpdate}
         >
           <div className="space-y-6">
-            <p className="text-sm text-white/60">
+            <p className="text-sm text-theme-text-secondary">
               {isEditMode
                 ? "Update the connection information for your database below."
                 : "Add the connection information for your database below and it will be available for future SQL agent calls."}
             </p>
             <div className="flex flex-col w-full">
               <div className="border border-red-800 bg-zinc-800 light:bg-red-200/50 p-4 rounded-lg flex items-center gap-x-2 text-sm text-red-400 light:text-red-500">
-                <WarningOctagon size={28} className="shrink-0" />
+                <OctagonAlert size={28} className="shrink-0" />
                 <p>
                   <b>WARNING:</b> The SQL agent has been <i>instructed</i> to
                   only perform non-modifying queries. This <b>does not</b>{" "}
@@ -305,7 +305,7 @@ export default function SQLConnectionModal({
                 </p>
               </div>
 
-              <label className="block mb-2 text-sm font-medium text-white mt-4">
+              <label className="block mb-2 text-sm font-medium text-theme-text-primary mt-4">
                 Select your SQL engine
               </label>
               <div className="grid md:grid-cols-4 gap-4 grid-cols-2">
@@ -328,11 +328,8 @@ export default function SQLConnectionModal({
             </div>
 
             <div className="flex flex-col w-full">
-              <Label variant="field" className="block mb-2">
-                Connection name
-              </Label>
+              <Label className="block mb-2">Connection name</Label>
               <Input
-                variant="settings"
                 type="text"
                 name="name"
                 placeholder="a unique name to identify this SQL connection"
@@ -345,11 +342,8 @@ export default function SQLConnectionModal({
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="flex flex-col">
-                <Label variant="field" className="block mb-2">
-                  Database user
-                </Label>
+                <Label className="block mb-2">Database user</Label>
                 <Input
-                  variant="settings"
                   type="text"
                   name="username"
                   placeholder="root"
@@ -360,16 +354,13 @@ export default function SQLConnectionModal({
                 />
               </div>
               <div className="flex flex-col">
-                <Label variant="field" className="block mb-2">
-                  Database user password
-                </Label>
+                <Label className="block mb-2">Database user password</Label>
                 <Input
-                  variant="settings"
                   type="password"
                   name="password"
                   placeholder="password123"
                   required={true}
-                  autoComplete="off"
+                  autoComplete="new-password"
                   spellCheck={false}
                   defaultValue={config.password || ""}
                 />
@@ -378,11 +369,8 @@ export default function SQLConnectionModal({
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
               <div className="sm:col-span-2">
-                <Label variant="field" className="block mb-2">
-                  Server endpoint
-                </Label>
+                <Label className="block mb-2">Server endpoint</Label>
                 <Input
-                  variant="settings"
                   type="text"
                   name="host"
                   placeholder="the hostname or endpoint for your database"
@@ -393,11 +381,8 @@ export default function SQLConnectionModal({
                 />
               </div>
               <div>
-                <Label variant="field" className="block mb-2">
-                  Port
-                </Label>
+                <Label className="block mb-2">Port</Label>
                 <Input
-                  variant="settings"
                   type="text"
                   name="port"
                   placeholder="3306"
@@ -410,11 +395,8 @@ export default function SQLConnectionModal({
             </div>
 
             <div className="flex flex-col">
-              <Label variant="field" className="block mb-2">
-                Database
-              </Label>
+              <Label className="block mb-2">Database</Label>
               <Input
-                variant="settings"
                 type="text"
                 name="database"
                 placeholder="the database the agent will interact with"
@@ -427,11 +409,8 @@ export default function SQLConnectionModal({
 
             {engine === "postgresql" && (
               <div className="flex flex-col">
-                <Label variant="field" className="block mb-2">
-                  Schema (optional)
-                </Label>
+                <Label className="block mb-2">Schema (optional)</Label>
                 <Input
-                  variant="settings"
                   type="text"
                   name="schema"
                   placeholder="public (default schema if not specified)"
@@ -468,11 +447,13 @@ export default function SQLConnectionModal({
             </p>
           </div>
         </form>
-        <DialogFooter className="p-0 mt-4">
-          <DialogClose asChild>
-            <Button variant="outline" type="button" onClick={handleClose}>
-              Cancel
-            </Button>
+        <DialogFooter>
+          <DialogClose
+            render={
+              <Button variant="outline" type="button" onClick={handleClose} />
+            }
+          >
+            Cancel
           </DialogClose>
           <Button
             variant="default"
@@ -504,7 +485,7 @@ function DBEngine({ provider, active, onClick }) {
       type="button"
       onClick={onClick}
       className={`flex flex-col p-4 border border-white/40 bg-zinc-800 light:bg-theme-settings-input-bg rounded-lg w-fit hover:bg-zinc-700 ${
-        active ? "!bg-blue-500/50" : ""
+        active ? "bg-blue-500/50!" : ""
       }`}
     >
       <img

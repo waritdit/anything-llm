@@ -2,13 +2,19 @@ import React, { useEffect, useRef, useState } from "react";
 import AnythingLLMIcon from "@/media/logo/anything-llm-icon.png";
 import WorkspaceLLMItem from "./WorkspaceLLMItem";
 import { ALL_LLM_PROVIDERS } from "@/pages/GeneralSettings/LLMPreference";
-import { CaretUpDown, MagnifyingGlass, X } from "@phosphor-icons/react";
+import { ChevronsUpDown, Search, X } from "lucide-react";
 import ChatModelSelection from "./ChatModelSelection";
 import RouterSelection from "./RouterSelection";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import paths from "@/utils/paths";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 // Some providers do not support model selection via /models.
 // In that case we allow the user to enter the model name manually and hope they
@@ -78,88 +84,80 @@ export default function WorkspaceLLMSelection({
         <label htmlFor="name" className="block input-label">
           {t("chat.llm.title")}
         </label>
-        <p className="text-white text-opacity-60 text-xs font-medium">
+        <p className="text-theme-text-primary/60 text-xs font-medium">
           {t("chat.llm.description")}
         </p>
       </div>
 
-      <div className="relative">
-        <input type="hidden" name="chatProvider" value={selectedLLM} />
-        {searchMenuOpen && (
-          <div
-            className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-70 backdrop-blur-sm z-10"
-            onClick={() => setSearchMenuOpen(false)}
-          />
-        )}
-        {searchMenuOpen ? (
-          <div className="absolute top-0 left-0 w-full max-w-[640px] max-h-[310px] min-h-[64px] bg-theme-settings-input-bg rounded-lg flex flex-col justify-between cursor-pointer border-2 border-primary-button z-20">
-            <div className="w-full flex flex-col gap-y-1">
-              <div className="flex items-center sticky top-0 z-10 border-b border-[#9CA3AF] mx-4 bg-theme-settings-input-bg">
-                <MagnifyingGlass
-                  size={20}
-                  weight="bold"
-                  className="absolute left-4 z-30 text-theme-text-primary -ml-4 my-2"
+      <input type="hidden" name="chatProvider" value={selectedLLM} />
+      <Popover open={searchMenuOpen} onOpenChange={setSearchMenuOpen}>
+        <PopoverTrigger
+          render={
+            <Button
+              type="button"
+              variant="ghost"
+              className="w-full max-w-[640px] h-[64px] justify-between gap-0 p-[14px] rounded-lg border-2 border-transparent bg-theme-settings-input-bg hover:bg-theme-settings-input-bg hover:border-primary-button aria-expanded:bg-theme-settings-input-bg transition-all duration-300"
+            >
+              <div className="flex gap-x-4 items-center">
+                <img
+                  src={selectedLLMObject.logo}
+                  alt={`${selectedLLMObject.name} logo`}
+                  className="w-10 h-10 rounded-md"
                 />
-                <input
-                  type="text"
-                  name="llm-search"
-                  autoComplete="off"
-                  placeholder={t("chat.llm.search")}
-                  className="border-none -ml-4 my-2 bg-transparent z-20 pl-12 h-[38px] w-full px-4 py-1 text-sm outline-none focus:outline-primary-button active:outline-primary-button outline-none text-theme-text-primary placeholder:text-theme-text-primary placeholder:font-medium"
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  ref={searchInputRef}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") e.preventDefault();
-                  }}
-                />
-                <X
-                  size={20}
-                  weight="bold"
-                  className="cursor-pointer text-theme-text-primary hover:text-x-button"
-                  onClick={handleXButton}
-                />
+                <div className="flex flex-col text-left">
+                  <div className="text-sm font-semibold text-theme-text-primary">
+                    {selectedLLMObject.name}
+                  </div>
+                  <div className="text-xs text-description font-normal">
+                    {selectedLLMObject.description}
+                  </div>
+                </div>
               </div>
-              <div className="flex-1 pl-4 pr-2 flex flex-col gap-y-1 overflow-y-auto white-scrollbar pb-4 max-h-[245px]">
-                {filteredLLMs.map((llm) => {
-                  return (
-                    <WorkspaceLLMItem
-                      llm={llm}
-                      key={llm.name}
-                      availableLLMs={LLMS}
-                      settings={settings}
-                      checked={selectedLLM === llm.value}
-                      onClick={() => updateLLMChoice(llm.value)}
-                    />
-                  );
-                })}
-              </div>
-            </div>
+              <ChevronsUpDown size={24} className="text-theme-text-primary" />
+            </Button>
+          }
+        />
+        <PopoverContent
+          align="start"
+          sideOffset={4}
+          className="w-(--anchor-width) max-w-[640px] max-h-[310px] min-h-[64px] flex-col gap-0 rounded-lg bg-theme-settings-input-bg p-0 border-2 border-primary-button"
+        >
+          <div className="flex items-center border-b border-[#9CA3AF] px-4">
+            <Search size={20} className="text-theme-text-primary shrink-0" />
+            <Input
+              type="text"
+              name="llm-search"
+              autoComplete="off"
+              placeholder={t("chat.llm.search")}
+              className="h-[38px] border-0 bg-transparent px-3 shadow-none focus-visible:ring-0 focus-visible:border-0 text-theme-text-primary placeholder:text-theme-text-primary placeholder:font-medium"
+              onChange={(e) => setSearchQuery(e.target.value)}
+              ref={searchInputRef}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") e.preventDefault();
+              }}
+            />
+            <X
+              size={20}
+              className="cursor-pointer text-theme-text-primary hover:text-x-button shrink-0"
+              onClick={handleXButton}
+            />
           </div>
-        ) : (
-          <button
-            className="w-full max-w-[640px] h-[64px] bg-theme-settings-input-bg rounded-lg flex items-center p-[14px] justify-between cursor-pointer border-2 border-transparent hover:border-primary-button transition-all duration-300"
-            type="button"
-            onClick={() => setSearchMenuOpen(true)}
-          >
-            <div className="flex gap-x-4 items-center">
-              <img
-                src={selectedLLMObject.logo}
-                alt={`${selectedLLMObject.name} logo`}
-                className="w-10 h-10 rounded-md"
-              />
-              <div className="flex flex-col text-left">
-                <div className="text-sm font-semibold text-white">
-                  {selectedLLMObject.name}
-                </div>
-                <div className="text-xs text-description">
-                  {selectedLLMObject.description}
-                </div>
-              </div>
-            </div>
-            <CaretUpDown size={24} weight="bold" className="text-white" />
-          </button>
-        )}
-      </div>
+          <div className="flex-1 flex flex-col gap-y-1 overflow-y-auto thin-scrollbar px-2 py-2 max-h-[245px]">
+            {filteredLLMs.map((llm) => {
+              return (
+                <WorkspaceLLMItem
+                  llm={llm}
+                  key={llm.name}
+                  availableLLMs={LLMS}
+                  settings={settings}
+                  checked={selectedLLM === llm.value}
+                  onClick={() => updateLLMChoice(llm.value)}
+                />
+              );
+            })}
+          </div>
+        </PopoverContent>
+      </Popover>
       <ModelSelector
         selectedLLM={selectedLLM}
         workspace={workspace}
@@ -181,7 +179,7 @@ function ModelSelector({ selectedLLM, workspace, setHasChanges }) {
     if (selectedLLM !== "default") {
       return (
         <div className="w-full h-10 justify-center items-center flex">
-          <p className="text-sm font-base text-white text-opacity-60 text-center">
+          <p className="text-sm/60 font-base text-theme-text-primary text-center">
             Multi-model support is not supported for this provider yet.
             <br />
             This workspace will use{" "}
@@ -215,11 +213,10 @@ function FreeFormLLMInput({ workspace, setHasChanges }) {
   return (
     <div className="flex flex-col gap-y-[8px]">
       <label className="block input-label">{t("chat.model.title")}</label>
-      <p className="text-white text-opacity-60 text-xs font-medium">
+      <p className="text-theme-text-primary/60 text-xs font-medium">
         {t("chat.model.description")}
       </p>
       <Input
-        variant="settings"
         type="text"
         name="chatModel"
         defaultValue={workspace?.chatModel || ""}

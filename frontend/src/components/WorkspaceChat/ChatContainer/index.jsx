@@ -456,10 +456,10 @@ export default function ChatContainer({
       <ChatSidebarProvider>
         <div
           style={{ height: "100%" }}
-          className="relative flex w-full h-full z-[2]"
+          className="relative flex w-full h-full z-2"
         >
           <div className="flex-1 min-w-0 relative bg-zinc-900 light:bg-white w-full h-full overflow-hidden border-none light:border-solid light:border light:border-theme-modal-border">
-            <div className="absolute z-30 flex items-center justify-end top-[68px] left-4 right-4 md:top-2 md:left-3 md:right-3">
+            <div className="absolute z-30 flex items-center justify-end top-[68px] left-4 right-4 min-[1100px]:top-2 min-[1100px]:left-3 min-[1100px]:right-3">
               <ChatSettingsMenu
                 history={chatHistory}
                 workspace={workspace}
@@ -473,7 +473,7 @@ export default function ChatContainer({
               <div className="h-full w-full overflow-y-auto">
                 <div className="flex flex-col min-h-full w-full items-center justify-center py-6">
                   <div className="flex flex-col items-center w-full max-w-[750px]">
-                    <h1 className="text-white text-xl md:text-2xl mb-11 text-center">
+                    <h1 className="text-theme-text-primary text-xl md:text-2xl mb-11 text-center">
                       {t("main-page.greeting")}
                     </h1>
                     {workspace?.active === false ? (
@@ -490,7 +490,9 @@ export default function ChatContainer({
                     )}
                     <QuickActions
                       hasAvailableWorkspace={!!workspace}
-                      onCreateAgent={() => navigate(paths.settings.agentSkills())}
+                      onCreateAgent={() =>
+                        navigate(paths.settings.agentSkills())
+                      }
                       onEditWorkspace={() =>
                         navigate(
                           paths.workspace.settings.generalAppearance(
@@ -499,7 +501,9 @@ export default function ChatContainer({
                         )
                       }
                       onUploadDocument={() =>
-                        document.getElementById("dnd-chat-file-uploader")?.click()
+                        document
+                          .getElementById("dnd-chat-file-uploader")
+                          ?.click()
                       }
                     />
                   </div>
@@ -521,10 +525,10 @@ export default function ChatContainer({
     <ChatSidebarProvider>
       <div
         style={{ height: "100%" }}
-        className="relative flex w-full h-full z-[2]"
+        className="relative flex w-full h-full z-2"
       >
-        <div className="flex-1 min-w-0 relative bg-zinc-900 light:bg-white text-white light:text-slate-900 h-full overflow-hidden border-none light:border-solid light:border light:border-theme-modal-border">
-          <div className="absolute z-30 flex items-center justify-end top-[68px] left-4 right-4 md:top-2 md:left-3 md:right-3">
+        <div className="flex-1 min-w-0 relative bg-zinc-900 light:bg-white text-theme-text-primary light:text-slate-900 h-full overflow-hidden border-none light:border-solid light:border light:border-theme-modal-border">
+          <div className="absolute z-30 flex items-center justify-end top-[68px] left-4 right-4 min-[1100px]:top-2 min-[1100px]:left-3 min-[1100px]:right-3">
             <ChatSettingsMenu
               history={chatHistory}
               workspace={workspace}

@@ -1,13 +1,13 @@
 import { useRef, useState, useEffect } from "react";
+import { Spinner } from "@/components/ui/spinner";
 import {
-  CaretDown,
-  CaretRight,
-  Cpu,
+  ChevronDown,
+  ChevronRight,
   Circle,
-  DotsThreeVertical,
-  CloudArrowDown,
-  CircleNotch,
-} from "@phosphor-icons/react";
+  CloudDownload,
+  Cpu,
+  EllipsisVertical,
+} from "lucide-react";
 import pluralize from "pluralize";
 import { titleCase } from "text-case";
 import {
@@ -62,17 +62,9 @@ export default function ModelTable({
         className="border-none text-theme-text-secondary text-sm font-medium hover:underline flex items-center gap-x-[8px]"
       >
         {showAll ? (
-          <CaretDown
-            size={16}
-            weight="bold"
-            className="text-theme-text-secondary"
-          />
+          <ChevronDown size={16} className="text-theme-text-secondary" />
         ) : (
-          <CaretRight
-            size={16}
-            weight="bold"
-            className="text-theme-text-secondary"
-          />
+          <ChevronRight size={16} className="text-theme-text-secondary" />
         )}
         <div className="flex items-center gap-x-[4px]">
           <MonoProviderIcon
@@ -116,7 +108,7 @@ function DeviceTypeTagWrapper({ text, bgClass, textClass }) {
         bgClass + " px-1.5 py-1 rounded-full flex items-center gap-x-1 w-fit"
       }
     >
-      <Cpu size={14} weight="bold" className={textClass} />
+      <Cpu size={14} className={textClass} />
       <p className={textClass + " text-xs"}>{text}</p>
     </div>
   );
@@ -225,9 +217,9 @@ function ModelRow({
   useEffect(() => {
     if (selectedModelId === model.id) {
       setIsActiveModel(true);
-      modelRowRef.current.classList.add("!bg-gray-200/10");
+      modelRowRef.current.classList.add("bg-gray-200/10!");
       setTimeout(
-        () => modelRowRef.current.classList.remove("!bg-gray-200/10"),
+        () => modelRowRef.current.classList.remove("bg-gray-200/10!"),
         800
       );
     } else {
@@ -280,9 +272,8 @@ function ModelRow({
               className="border-none hover:bg-white/20 rounded-lg p-1"
               onClick={() => setShowOptions(!showOptions)}
             >
-              <DotsThreeVertical
+              <EllipsisVertical
                 size={22}
-                weight="bold"
                 className="text-theme-text-primary cursor-pointer"
               />
             </button>
@@ -305,18 +296,16 @@ function ModelRow({
         install — a provider may list a catalog it cannot download from. */}
         {!model.downloaded && !processing && !!downloadModel && (
           <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                type="button"
-                className="border-none hover:bg-white/20 light:hover:bg-black/5 rounded-lg p-2 flex items-center gap-x-1 cursor-pointer"
-                onClick={handleSetActiveModel}
-              >
-                <CloudArrowDown
-                  size={20}
-                  weight="bold"
-                  className="text-theme-text-primary"
+            <TooltipTrigger
+              render={
+                <button
+                  type="button"
+                  className="border-none hover:bg-white/20 light:hover:bg-black/5 rounded-lg p-2 flex items-center gap-x-1 cursor-pointer"
+                  onClick={handleSetActiveModel}
                 />
-              </button>
+              }
+            >
+              <CloudDownload size={20} className="text-theme-text-primary" />
             </TooltipTrigger>
             <TooltipContent side="top" className="max-w-[250px] text-xs">
               {`Install ${model.organization}:${model.name}`}
@@ -326,11 +315,7 @@ function ModelRow({
         {!model.downloaded && processing && (
           <div className="flex items-center justify-center gap-x-[10px] whitespace-nowrap">
             {!downloadPercentage && (
-              <CircleNotch
-                size={16}
-                weight="bold"
-                className="text-theme-text-primary animate-spin"
-              />
+              <Spinner className="text-theme-text-primary" />
             )}
             <p className="text-theme-text-secondary text-sm">
               {downloadPercentage}%
@@ -346,7 +331,7 @@ function RenderStatus({ model, isActiveModel }) {
   if (isActiveModel) {
     return (
       <div className="flex items-center justify-center gap-x-[10px] whitespace-nowrap">
-        <Circle size={8} weight="fill" className="text-green-500" />
+        <Circle size={8} className="text-green-500 fill-current" />
         <p className="text-theme-text-primary text-sm">Active</p>
       </div>
     );

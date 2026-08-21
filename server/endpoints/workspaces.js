@@ -393,7 +393,11 @@ function workspaceEndpoints(app) {
 
   app.get(
     "/workspace/:slug",
-    [validatedRequest, workspacePermissionValid([WS_PERMISSIONS.DELETE])],
+    // Reading a workspace needs VIEW, not DELETE. This route sat directly below
+    // `app.delete("/workspace/:slug")` and had inherited its gate, so every role
+    // that could not delete the workspace - viewer, member, contributor, and any
+    // custom role without `workspace.delete` - got a 401 just opening it.
+    [validatedRequest, workspacePermissionValid([WS_PERMISSIONS.VIEW])],
     async (request, response) => {
       try {
         const { slug } = request.params;
@@ -450,8 +454,12 @@ function workspaceEndpoints(app) {
         const workspace = response.locals.workspace;
         const {
           resolveConfigForWorkspace,
+          instanceRuntimeConfig,
         } = require("../utils/agents/workspaceSkills");
-        const AgentPlugins = require("../utils/agents/aibitat/plugins");
+        const {
+          skillCredentialStatus,
+          configuredSearchProviders,
+        } = require("../utils/agents/skillCredentials");
         const ImportedPlugin = require("../utils/agents/imported");
         const { AgentFlows } = require("../utils/agentFlows");
         const MCPCompatibilityLayer = require("../utils/MCP");
@@ -459,6 +467,10 @@ function workspaceEndpoints(app) {
 
         const config = await resolveConfigForWorkspace(workspace);
         const mcpServers = await new MCPCompatibilityLayer().activeMCPServers();
+        const [instanceRuntime, skillCredentials] = await Promise.all([
+          instanceRuntimeConfig(),
+          skillCredentialStatus(),
+        ]);
 
         response.status(200).json({
           // `configured` tells the UI whether this workspace is still inheriting
@@ -472,6 +484,16 @@ function workspaceEndpoints(app) {
               { label: "agent_search_provider" },
               null
             )) ?? null,
+          // Resolved instance-wide value of every runtime knob, so the UI can
+          // show what "inherit" currently means for each one.
+          instanceRuntime,
+          // Per-skill credential readiness. Skills whose credential an admin has
+          // not supplied are hidden here rather than offered as a toggle that
+          // would produce a tool failing at call time.
+          skillCredentials,
+          // Search engines this instance holds a usable key for (or that need
+          // none) - the only engines a workspace may pick between.
+          availableSearchProviders: configuredSearchProviders(),
           catalog: {
             // `name` is not guaranteed on either config, so fall back to the id
             // rather than rendering a blank row in the UI.
@@ -1139,7 +1161,10 @@ function workspaceEndpoints(app) {
         });
       } catch (error) {
         console.error("Error checking if agent command is available:", error);
-        response.status(500).json({ showAgentCommand: true });
+        // Capability detection is best-effort. If a provider cannot be
+        // inspected, keep the explicit @agent command available instead of
+        // turning workspace loading into a failed API request.
+        response.status(200).json({ showAgentCommand: true });
       }
     }
   );

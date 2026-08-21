@@ -1,5 +1,5 @@
 import { NavLink, useRouteError } from "react-router-dom";
-import { House, ArrowClockwise, Copy, Check } from "@phosphor-icons/react";
+import { Check, Copy, House, RotateCw } from "lucide-react";
 import { useState } from "react";
 
 export default function ErrorBoundaryFallback({ error, resetErrorBoundary }) {
@@ -56,7 +56,7 @@ ${details.stack}
             >
               {copied ? (
                 <>
-                  <Check className="w-3.5 h-3.5" weight="bold" />
+                  <Check className="w-3.5 h-3.5" />
                   Copied!
                 </>
               ) : (
@@ -67,7 +67,7 @@ ${details.stack}
               )}
             </button>
           </div>
-          <pre className="w-full text-xs md:text-sm text-theme-text-secondary bg-theme-bg-secondary p-4 md:p-6 rounded-lg overflow-x-auto overflow-y-auto max-h-[60vh] md:max-h-[70vh] whitespace-pre-wrap break-words font-mono border border-theme-border shadow-sm">
+          <pre className="w-full text-xs md:text-sm text-theme-text-secondary bg-theme-bg-secondary p-4 md:p-6 rounded-lg overflow-x-auto overflow-y-auto max-h-[60vh] md:max-h-[70vh] whitespace-pre-wrap wrap-break-word font-mono border border-theme-border shadow-xs">
             {error?.stack}
           </pre>
         </div>
@@ -77,7 +77,7 @@ ${details.stack}
           onClick={resetErrorBoundary}
           className="flex items-center justify-center gap-2 px-4 py-2 bg-theme-bg-secondary text-theme-text-primary rounded-lg hover:bg-theme-sidebar-item-hover transition-all duration-300 w-full md:w-auto"
         >
-          <ArrowClockwise className="w-4 h-4" />
+          <RotateCw className="w-4 h-4" />
           Reset
         </button>
         <NavLink

@@ -80,7 +80,7 @@ export default function EditUserModal({
 
   return (
     <>
-      <DialogHeader className="p-0">
+      <DialogHeader>
         <DialogTitle className="text-sm font-semibold">
           Edit {user.username}
         </DialogTitle>
@@ -88,11 +88,10 @@ export default function EditUserModal({
       <form onSubmit={handleUpdate}>
         <div className="space-y-4">
           <div>
-            <Label variant="field" htmlFor="username" className="block mb-2">
+            <Label htmlFor="username" className="block mb-2">
               Username
             </Label>
             <Input
-              variant="settings"
               name="username"
               type="text"
               placeholder="User's username"
@@ -103,16 +102,15 @@ export default function EditUserModal({
               required={true}
               autoComplete="off"
             />
-            <p className="mt-2 text-xs text-white/60">
+            <p className="mt-2 text-xs text-theme-text-secondary">
               {t("common.username_requirements")}
             </p>
           </div>
           <div>
-            <Label variant="field" htmlFor="email" className="block mb-2">
+            <Label htmlFor="email" className="block mb-2">
               Email
             </Label>
             <Input
-              variant="settings"
               name="email"
               type="email"
               placeholder="user@example.com"
@@ -121,17 +119,16 @@ export default function EditUserModal({
               required={true}
               autoComplete="off"
             />
-            <p className="mt-2 text-xs text-white/60">
+            <p className="mt-2 text-xs text-theme-text-secondary">
               Passwords are not set here - use "Reset password" on the user list
               to issue a new one.
             </p>
           </div>
           <div>
-            <Label variant="field" htmlFor="bio" className="block mb-2">
+            <Label htmlFor="bio" className="block mb-2">
               Bio
             </Label>
             <Textarea
-              variant="settings"
               name="bio"
               placeholder="User's bio"
               defaultValue={user.bio}
@@ -140,7 +137,7 @@ export default function EditUserModal({
             />
           </div>
           <div>
-            <Label variant="field" htmlFor="role" className="block mb-2">
+            <Label htmlFor="role" className="block mb-2">
               Role
             </Label>
             <Select
@@ -149,7 +146,7 @@ export default function EditUserModal({
               value={role}
               onValueChange={setRole}
             >
-              <SelectTrigger variant="settings">
+              <SelectTrigger>
                 <SelectValue placeholder="Select a role" />
               </SelectTrigger>
               <SelectContent>
@@ -175,11 +172,9 @@ export default function EditUserModal({
           />
           {error && <p className="text-red-400 text-sm">Error: {error}</p>}
         </div>
-        <DialogFooter className="p-0 mt-4">
-          <DialogClose asChild>
-            <Button variant="outline" type="button">
-              Cancel
-            </Button>
+        <DialogFooter>
+          <DialogClose render={<Button variant="outline" type="button" />}>
+            Cancel
           </DialogClose>
           <Button variant="default" type="submit">
             Update user

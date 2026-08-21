@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import System from "@/models/system";
 import strDistance from "js-levenshtein";
-import { Info } from "@phosphor-icons/react";
+import { Info } from "lucide-react";
 import { LLM_PREFERENCE_CHANGED_EVENT } from "@/pages/GeneralSettings/LLMPreference";
 import ModelTable from "@/components/lib/ModelTable";
 import ModelTableLayout from "@/components/lib/ModelTable/layout";
@@ -48,11 +48,16 @@ export default function FoundryOptions({ settings }) {
       <div className="flex gap-[36px] mt-1.5 flex-wrap">
         <div className="flex flex-col w-60">
           <div className="flex items-center gap-1 mb-3">
-            <Label variant="settings">Base URL</Label>
+            <Label>Base URL</Label>
             <Tooltip>
-              <TooltipTrigger asChild>
-                <Info size={18} className="text-theme-text-secondary cursor-pointer" />
-              </TooltipTrigger>
+              <TooltipTrigger
+                render={
+                  <Info
+                    size={18}
+                    className="text-theme-text-secondary cursor-pointer"
+                  />
+                }
+              ></TooltipTrigger>
               <TooltipContent side="top" className="max-w-[300px] text-xs">
                 The URL where the Foundry Local service is running. Run{" "}
                 <b>foundry status</b> on the host to find it.
@@ -60,7 +65,6 @@ export default function FoundryOptions({ settings }) {
             </Tooltip>
           </div>
           <Input
-            variant="settings"
             type="url"
             name="FoundryBasePath"
             placeholder="eg: http://127.0.0.1:5272"
@@ -73,20 +77,24 @@ export default function FoundryOptions({ settings }) {
         </div>
         <div className="flex flex-col w-60">
           <div className="flex items-center gap-1 mb-3">
-            <Label variant="settings">Model context window</Label>
+            <Label>Model context window</Label>
             <Tooltip>
-              <TooltipTrigger asChild>
-                <Info size={18} className="text-theme-text-secondary cursor-pointer" />
-              </TooltipTrigger>
+              <TooltipTrigger
+                render={
+                  <Info
+                    size={18}
+                    className="text-theme-text-secondary cursor-pointer"
+                  />
+                }
+              ></TooltipTrigger>
               <TooltipContent side="top" className="max-w-[350px] text-xs">
-                Override the context window limit. Leave empty to auto-detect from
-                the model, or lower it if large context windows slow your machine
-                down.
+                Override the context window limit. Leave empty to auto-detect
+                from the model, or lower it if large context windows slow your
+                machine down.
               </TooltipContent>
             </Tooltip>
           </div>
           <Input
-            variant="settings"
             type="number"
             name="FoundryModelTokenLimit"
             placeholder="Automatically managed"

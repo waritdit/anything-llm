@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { TextT } from "@phosphor-icons/react";
+import { Type } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -21,19 +21,20 @@ export default function TextSizeButton() {
   return (
     <>
       <Tooltip>
-        <TooltipTrigger asChild>
-          <div
-            id="text-size-btn"
-            aria-label={t("chat_window.text_size")}
-            onClick={toggleTooltip}
-            className="border-none flex justify-center items-center opacity-60 hover:opacity-100 light:opacity-100 light:hover:opacity-60 cursor-pointer"
-          >
-            <TextT
-              color="var(--theme-sidebar-footer-icon-fill)"
-              weight="fill"
-              className="w-[20px] h-[20px] pointer-events-none text-white"
+        <TooltipTrigger
+          render={
+            <div
+              id="text-size-btn"
+              aria-label={t("chat_window.text_size")}
+              onClick={toggleTooltip}
+              className="border-none flex justify-center items-center opacity-60 hover:opacity-100 light:opacity-100 light:hover:opacity-60 cursor-pointer"
             />
-          </div>
+          }
+        >
+          <Type
+            color="var(--theme-sidebar-footer-icon-fill)"
+            className="w-[20px] h-[20px] pointer-events-none text-theme-text-primary fill-current"
+          />
         </TooltipTrigger>
         <TooltipContent side="top" className="max-w-[250px] text-xs">
           <TextSizeMenu tooltipRef={tooltipRef} />

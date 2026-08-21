@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
-import { SpeakerHigh, PauseCircle, CircleNotch } from "@phosphor-icons/react";
+import { Spinner } from "@/components/ui/spinner";
+import { CirclePause, Volume2 } from "lucide-react";
 import Workspace from "@/models/workspace";
 import showToast from "@/utils/toast";
 import { useTranslation } from "react-i18next";
@@ -62,32 +63,34 @@ export default function AsyncTTSMessage({ slug, chatId }) {
   return (
     <div className="mt-3 relative">
       <Tooltip>
-        <TooltipTrigger asChild>
-          <button
-            onClick={speakMessage}
-            data-auto-play-chat-id={chatId}
-            className="border-none text-zinc-300 light:text-slate-500"
-            aria-label={speaking ? "Pause speech" : "Speak message"}
-          >
-            {speaking ? (
-              <PauseCircle size={18} className="mb-1" />
-            ) : (
-              <>
-                {loading ? (
-                  <CircleNotch size={18} className="mb-1 animate-spin" />
-                ) : (
-                  <SpeakerHigh size={18} className="mb-1" />
-                )}
-              </>
-            )}
-            <audio
-              ref={playerRef}
-              hidden={true}
-              src={audioSrc}
-              autoPlay={true}
-              controls={false}
+        <TooltipTrigger
+          render={
+            <button
+              onClick={speakMessage}
+              data-auto-play-chat-id={chatId}
+              className="border-none text-zinc-300 light:text-slate-500"
+              aria-label={speaking ? "Pause speech" : "Speak message"}
             />
-          </button>
+          }
+        >
+          {speaking ? (
+            <CirclePause size={18} className="mb-1" />
+          ) : (
+            <>
+              {loading ? (
+                <Spinner className="mb-1" />
+              ) : (
+                <Volume2 size={18} className="mb-1" />
+              )}
+            </>
+          )}
+          <audio
+            ref={playerRef}
+            hidden={true}
+            src={audioSrc}
+            autoPlay={true}
+            controls={false}
+          />
         </TooltipTrigger>
         <TooltipContent side="bottom" className="max-w-[250px] text-xs">
           {speaking

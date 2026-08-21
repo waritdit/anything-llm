@@ -17,19 +17,16 @@ export default function OpenAiOptions({ settings }) {
   const [openAIKey, setOpenAIKey] = useState(settings?.OpenAiKey);
 
   return (
-    <div className="flex gap-[36px] mt-1.5">
+    <div className="flex gap-9 mt-1.5">
       <div className="flex flex-col w-60">
-        <Label variant="settings" className="block mb-3">
-          API Key
-        </Label>
+        <Label className="block mb-3">API Key</Label>
         <Input
-          variant="settings"
           type="password"
           name="OpenAiKey"
           placeholder="OpenAI API Key"
           defaultValue={settings?.OpenAiKey ? "*".repeat(20) : ""}
           required={true}
-          autoComplete="off"
+          autoComplete="new-password"
           spellCheck={false}
           onChange={(e) => setInputValue(e.target.value)}
           onBlur={() => setOpenAIKey(inputValue)}
@@ -71,11 +68,9 @@ function OpenAIModelSelection({ apiKey, settings }) {
   if (loading) {
     return (
       <div className="flex flex-col w-60">
-        <Label variant="settings" className="block mb-3">
-          Chat Model Selection
-        </Label>
+        <Label className="block mb-3">Chat Model Selection</Label>
         <Select name="OpenAiModelPref" disabled={true}>
-          <SelectTrigger variant="settings">
+          <SelectTrigger className="w-full">
             <SelectValue placeholder="-- loading available models --" />
           </SelectTrigger>
           <SelectContent />
@@ -86,9 +81,7 @@ function OpenAIModelSelection({ apiKey, settings }) {
 
   return (
     <div className="flex flex-col w-60">
-      <Label variant="settings" className="block mb-3">
-        Chat Model Selection
-      </Label>
+      <Label className="block mb-3">Chat Model Selection</Label>
       <Select
         name="OpenAiModelPref"
         required={true}
@@ -97,7 +90,7 @@ function OpenAIModelSelection({ apiKey, settings }) {
           groupedModels[Object.keys(groupedModels).sort()[0]]?.[0]?.id
         }
       >
-        <SelectTrigger variant="settings">
+        <SelectTrigger className="w-full">
           <SelectValue placeholder="Select an option" />
         </SelectTrigger>
         <SelectContent>

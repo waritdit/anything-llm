@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import Sidebar from "@/components/SettingsSidebar";
+import SettingsLayout from "@/components/layout/SettingsLayout";
+import PageHeader from "@/components/layout/PageHeader";
 import { Skeleton } from "@/components/ui/skeleton";
 import useQuery from "@/hooks/useQuery";
 import ChatRow from "./ChatRow";
 import showToast from "@/utils/toast";
 import System from "@/models/system";
-import { CaretDown, Download, Trash } from "@phosphor-icons/react";
+import { ChevronDown, Download, Trash2 } from "lucide-react";
 import { saveAs } from "file-saver";
 import { useTranslation } from "react-i18next";
 import { CanViewChatHistory } from "@/components/CanViewChatHistory";
@@ -17,6 +18,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import ConfirmDialog from "@/components/ConfirmDialog";
+import { Button } from "@/components/ui/button";
 
 const exportOptions = {
   csv: {
@@ -127,80 +129,73 @@ export default function WorkspaceChats() {
   return (
     <>
       <CanViewChatHistory>
-        <div className="w-screen h-screen overflow-hidden bg-theme-bg-container flex">
-          <Sidebar />
-          <div
-            style={{ height: "100%" }}
-            className="relative bg-theme-bg-secondary w-full h-full overflow-y-scroll p-4 md:p-0"
-          >
-            <div className="flex flex-col w-full px-1 md:pl-6 md:pr-[50px] md:py-6 py-16">
-              <div className="w-full flex flex-col gap-y-1 pb-6 border-white/10 border-b-2">
-                <div className="items-center flex gap-x-4">
-                  <p className="text-lg leading-6 font-bold text-theme-text-primary">
-                    {t("recorded.title")}
-                  </p>
-                </div>
-                <p className="text-xs leading-[18px] font-base text-theme-text-secondary">
-                  {t("recorded.description")}
-                </p>
-              </div>
-              <div className="w-full justify-end flex gap-x-2 mt-4">
-                <div className="relative">
-                  <button
-                    ref={openMenuButton}
-                    onClick={toggleMenu}
-                    className="flex items-center gap-x-2 px-4 py-1 rounded-lg bg-primary-button light:text-[#ffffff] hover:brightness-90 hover:text-white text-xs font-semibold shadow-[0_4px_14px_rgba(0,0,0,0.25)] h-[34px] w-fit transition-[filter]"
-                  >
-                    <Download size={18} weight="bold" />
-                    {t("recorded.export")}
-                    <CaretDown size={18} weight="bold" />
-                  </button>
-                  <div
-                    ref={menuRef}
-                    className={`${
-                      showMenu ? "slide-down" : "slide-up hidden"
-                    } z-20 w-fit rounded-lg absolute top-full right-0 bg-secondary light:bg-theme-bg-secondary mt-2 shadow-md`}
-                  >
-                    <div className="py-2">
-                      {Object.entries(exportOptions).map(([key, data]) => (
-                        <button
-                          key={key}
-                          onClick={() => {
-                            handleDumpChats(key);
-                            setShowMenu(false);
-                          }}
-                          className="w-full text-left px-4 py-2 text-white text-sm hover:bg-[#3D4147] light:hover:bg-theme-sidebar-item-hover"
-                        >
-                          {data.name}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                {chats.length > 0 && (
-                  <button
-                    onClick={handleClearAllChats}
-                    className="flex items-center gap-x-2 px-4 py-1 border light:border-theme-sidebar-border border-white/40 text-white/80 light:text-black/80 rounded-lg bg-transparent hover:light:text-red-500 hover:text-red-300 hover:bg-white hover:light:bg-red-50 hover:bg-opacity-10 text-xs font-semibold shadow-[0_4px_14px_rgba(0,0,0,0.25)] h-[34px] w-fit"
-                  >
-                    <Trash size={18} weight="bold" />
-                    Clear Chats
-                  </button>
-                )}
-              </div>
-              <div className="overflow-x-auto">
-                <ChatsContainer
-                  loading={loading}
-                  chats={chats}
-                  setChats={setChats}
-                  offset={offset}
-                  setOffset={setOffset}
-                  canNext={canNext}
-                  t={t}
+        <SettingsLayout>
+          <PageHeader
+            title={t("recorded.title")}
+            description={t("recorded.description")}
+          />
+          <div className="mt-3 mb-4 flex w-full flex-wrap justify-end gap-2">
+            <div className="relative">
+              <Button
+                type="button"
+                size="lg"
+                ref={openMenuButton}
+                onClick={toggleMenu}
+                aria-expanded={showMenu}
+              >
+                <Download />
+                {t("recorded.export")}
+                <ChevronDown
+                  className={`transition-transform ${
+                    showMenu ? "rotate-180" : ""
+                  }`}
                 />
+              </Button>
+              <div
+                ref={menuRef}
+                className={`${
+                  showMenu ? "slide-down" : "slide-up hidden"
+                } absolute right-0 top-full z-20 mt-2 min-w-40 overflow-hidden rounded-lg border border-theme-sidebar-border bg-theme-bg-secondary py-1 shadow-lg`}
+              >
+                {Object.entries(exportOptions).map(([key, data]) => (
+                  <button
+                    type="button"
+                    key={key}
+                    onClick={() => {
+                      handleDumpChats(key);
+                      setShowMenu(false);
+                    }}
+                    className="w-full px-3 py-2 text-left text-sm text-theme-text-primary transition-colors hover:bg-theme-sidebar-item-hover"
+                  >
+                    {data.name}
+                  </button>
+                ))}
               </div>
             </div>
+            {chats.length > 0 && (
+              <Button
+                type="button"
+                size="lg"
+                variant="destructive"
+                onClick={handleClearAllChats}
+              >
+                <Trash2 />
+                Clear Chats
+              </Button>
+            )}
           </div>
-        </div>
+          <div className="overflow-x-auto">
+            <ChatsContainer
+              loading={loading}
+              chats={chats}
+              setChats={setChats}
+              offset={offset}
+              setOffset={setOffset}
+              canNext={canNext}
+              t={t}
+            />
+          </div>
+        </SettingsLayout>
       </CanViewChatHistory>
       <ConfirmDialog config={confirm} onClose={() => setConfirm(null)} />
     </>
@@ -244,63 +239,46 @@ function ChatsContainer({
 
   return (
     <>
-      <Table variant="settings">
-        <TableHeader variant="settings">
-          <TableRow variant="none">
-            <TableHead
-              variant="none"
-              scope="col"
-              className="px-6 py-3 rounded-tl-lg"
-            >
-              {t("recorded.table.id")}
-            </TableHead>
-            <TableHead variant="none" scope="col" className="px-6 py-3">
-              {t("recorded.table.by")}
-            </TableHead>
-            <TableHead variant="none" scope="col" className="px-6 py-3">
-              {t("recorded.table.workspace")}
-            </TableHead>
-            <TableHead variant="none" scope="col" className="px-6 py-3">
-              {t("recorded.table.prompt")}
-            </TableHead>
-            <TableHead variant="none" scope="col" className="px-6 py-3">
-              {t("recorded.table.response")}
-            </TableHead>
-            <TableHead variant="none" scope="col" className="px-6 py-3">
-              {t("recorded.table.at")}
-            </TableHead>
-            <TableHead
-              variant="none"
-              scope="col"
-              className="px-6 py-3 rounded-tr-lg"
-            >
-              {" "}
-            </TableHead>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead scope="col">{t("recorded.table.id")}</TableHead>
+            <TableHead scope="col">{t("recorded.table.by")}</TableHead>
+            <TableHead scope="col">{t("recorded.table.workspace")}</TableHead>
+            <TableHead scope="col">{t("recorded.table.prompt")}</TableHead>
+            <TableHead scope="col">{t("recorded.table.response")}</TableHead>
+            <TableHead scope="col">{t("recorded.table.at")}</TableHead>
+            <TableHead scope="col"> </TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody variant="none">
+        <TableBody>
           {!!chats &&
             chats.map((chat) => (
               <ChatRow key={chat.id} chat={chat} onDelete={handleDeleteChat} />
             ))}
         </TableBody>
       </Table>
-      <div className="flex w-full justify-between items-center mt-6">
-        <button
+      <div className="mt-6 flex w-full items-center justify-between">
+        <Button
+          type="button"
+          size="lg"
+          variant="outline"
           onClick={handlePrevious}
-          className="px-4 py-2 rounded-lg border border-theme-text-secondary text-theme-text-secondary text-sm items-center flex gap-x-2 hover:bg-theme-text-secondary hover:text-theme-bg-secondary disabled:invisible"
+          className="disabled:invisible"
           disabled={offset === 0}
         >
-          {" "}
           Previous Page
-        </button>
-        <button
+        </Button>
+        <Button
+          type="button"
+          size="lg"
+          variant="outline"
           onClick={handleNext}
-          className="px-4 py-2 rounded-lg border border-slate-200 text-slate-200 light:text-theme-text-secondary light:border-theme-sidebar-border text-sm items-center flex gap-x-2 hover:bg-slate-200 hover:text-slate-800 disabled:invisible"
+          className="disabled:invisible"
           disabled={!canNext}
         >
           Next Page
-        </button>
+        </Button>
       </div>
     </>
   );

@@ -16,17 +16,14 @@ export default function PerplexityOptions({ settings }) {
   return (
     <div className="flex gap-[36px] mt-1.5">
       <div className="flex flex-col w-60">
-        <Label variant="settings" className="block mb-3">
-          Perplexity API Key
-        </Label>
+        <Label className="block mb-3">Perplexity API Key</Label>
         <Input
-          variant="settings"
           type="password"
           name="PerplexityApiKey"
           placeholder="Perplexity API Key"
           defaultValue={settings?.PerplexityApiKey ? "*".repeat(20) : ""}
           required={true}
-          autoComplete="off"
+          autoComplete="new-password"
           spellCheck={false}
         />
       </div>
@@ -54,11 +51,9 @@ function PerplexityModelSelection({ settings }) {
   if (loading || customModels.length == 0) {
     return (
       <div className="flex flex-col w-60">
-        <Label variant="settings" className="block mb-3">
-          Chat Model Selection
-        </Label>
+        <Label className="block mb-3">Chat Model Selection</Label>
         <Select name="PerplexityModelPref" disabled={true}>
-          <SelectTrigger variant="settings">
+          <SelectTrigger className="w-full">
             <SelectValue placeholder="-- loading available models --" />
           </SelectTrigger>
           <SelectContent />
@@ -69,15 +64,13 @@ function PerplexityModelSelection({ settings }) {
 
   return (
     <div className="flex flex-col w-60">
-      <Label variant="settings" className="block mb-3">
-        Chat Model Selection
-      </Label>
+      <Label className="block mb-3">Chat Model Selection</Label>
       <Select
         name="PerplexityModelPref"
         required={true}
         defaultValue={settings?.PerplexityModelPref ?? customModels?.[0]?.id}
       >
-        <SelectTrigger variant="settings">
+        <SelectTrigger className="w-full">
           <SelectValue placeholder="Select an option" />
         </SelectTrigger>
         <SelectContent>

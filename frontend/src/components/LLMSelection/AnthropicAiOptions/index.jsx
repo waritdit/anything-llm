@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import System from "@/models/system";
-import { CaretDown, CaretUp } from "@phosphor-icons/react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -21,19 +21,16 @@ export default function AnthropicAiOptions({ settings }) {
 
   return (
     <div className="w-full flex flex-col">
-      <div className="w-full flex items-center gap-[36px] mt-1.5">
+      <div className="w-full flex items-center gap-9 mt-1.5">
         <div className="flex flex-col w-60">
-          <Label variant="settings" className="block mb-3">
-            Anthropic API Key
-          </Label>
+          <Label className="block mb-3">Anthropic API Key</Label>
           <Input
-            variant="settings"
             type="password"
             name="AnthropicApiKey"
             placeholder="Anthropic API Key"
             defaultValue={settings?.AnthropicApiKey ? "*".repeat(20) : ""}
             required={true}
-            autoComplete="off"
+            autoComplete="new-password"
             spellCheck={false}
             onChange={(e) => setInputValue(e.target.value)}
             onBlur={() => setAnthropicApiKey(inputValue)}
@@ -48,7 +45,8 @@ export default function AnthropicAiOptions({ settings }) {
       </div>
       <div className="flex justify-start mt-4">
         <Button
-          variant="inline"
+          variant="link"
+          size="sm"
           onClick={(e) => {
             e.preventDefault();
             setShowAdvancedControls(!showAdvancedControls);
@@ -56,9 +54,9 @@ export default function AnthropicAiOptions({ settings }) {
         >
           {showAdvancedControls ? "Hide" : "Show"} advanced settings
           {showAdvancedControls ? (
-            <CaretUp size={14} className="ml-1" />
+            <ChevronUp size={14} className="ml-1" />
           ) : (
-            <CaretDown size={14} className="ml-1" />
+            <ChevronDown size={14} className="ml-1" />
           )}
         </Button>
       </div>
@@ -66,13 +64,13 @@ export default function AnthropicAiOptions({ settings }) {
         <div className="w-full flex items-start gap-4 mt-1.5">
           <div className="flex flex-col w-60">
             <div className="flex justify-between items-center mb-2">
-              <Label variant="settings">Prompt Caching</Label>
+              <Label>Prompt Caching</Label>
             </div>
             <Select
               name="AnthropicCacheControl"
               defaultValue={settings?.AnthropicCacheControl ?? "none"}
             >
-              <SelectTrigger variant="settings">
+              <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select an option" />
               </SelectTrigger>
               <SelectContent>
@@ -108,11 +106,9 @@ function AnthropicModelSelection({ apiKey, settings }) {
   if (loading) {
     return (
       <div className="flex flex-col w-60">
-        <Label variant="settings" className="block mb-3">
-          Chat Model Selection
-        </Label>
+        <Label className="block mb-3">Chat Model Selection</Label>
         <Select name="AnthropicModelPref" disabled={true}>
-          <SelectTrigger variant="settings">
+          <SelectTrigger className="w-full">
             <SelectValue placeholder="-- loading available models --" />
           </SelectTrigger>
           <SelectContent />
@@ -123,15 +119,13 @@ function AnthropicModelSelection({ apiKey, settings }) {
 
   return (
     <div className="flex flex-col w-60">
-      <Label variant="settings" className="block mb-3">
-        Chat Model Selection
-      </Label>
+      <Label className="block mb-3">Chat Model Selection</Label>
       <Select
         name="AnthropicModelPref"
         required={true}
         defaultValue={settings?.AnthropicModelPref ?? models?.[0]?.id}
       >
-        <SelectTrigger variant="settings">
+        <SelectTrigger className="w-full">
           <SelectValue placeholder="Select an option" />
         </SelectTrigger>
         <SelectContent>

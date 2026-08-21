@@ -8,10 +8,9 @@ export default function OpenAiGenericTextToSpeechOptions({ settings }) {
       <div className="flex gap-x-4">
         <div className="flex flex-col w-60">
           <div className="flex justify-between items-start mb-2">
-            <Label variant="settings">Base URL</Label>
+            <Label>Base URL</Label>
           </div>
           <Input
-            variant="settings"
             type="url"
             name="TTSOpenAICompatibleEndpoint"
             placeholder="http://localhost:7851/v1"
@@ -20,27 +19,24 @@ export default function OpenAiGenericTextToSpeechOptions({ settings }) {
             autoComplete="off"
             spellCheck={false}
           />
-          <p className="text-xs leading-[18px] font-base text-white text-opacity-60 mt-2">
+          <p className="text-xs/60 leading-[18px] font-base text-theme-text-primary mt-2">
             This should be the base URL of the OpenAI compatible TTS service you
             will generate TTS responses from.
           </p>
         </div>
         <div className="flex flex-col w-60">
-          <Label variant="settings" className="block mb-2">
-            API Key
-          </Label>
+          <Label className="block mb-2">API Key</Label>
           <Input
-            variant="settings"
             type="password"
             name="TTSOpenAICompatibleKey"
             placeholder="API Key"
             defaultValue={
               settings?.TTSOpenAICompatibleKey ? "*".repeat(20) : ""
             }
-            autoComplete="off"
+            autoComplete="new-password"
             spellCheck={false}
           />
-          <p className="text-xs leading-[18px] font-base text-white text-opacity-60 mt-2">
+          <p className="text-xs/60 leading-[18px] font-base text-theme-text-primary mt-2">
             Some TTS services require an API key to generate TTS responses -
             this is optional if your service does not require one.
           </p>
@@ -48,11 +44,8 @@ export default function OpenAiGenericTextToSpeechOptions({ settings }) {
       </div>
       <div className="flex gap-x-4">
         <div className="flex flex-col w-60">
-          <Label variant="settings" className="block mb-3">
-            TTS Model
-          </Label>
+          <Label className="block mb-3">TTS Model</Label>
           <Input
-            variant="settings"
             type="text"
             name="TTSOpenAICompatibleModel"
             placeholder="Your TTS model identifier"
@@ -61,18 +54,15 @@ export default function OpenAiGenericTextToSpeechOptions({ settings }) {
             autoComplete="off"
             spellCheck={false}
           />
-          <p className="text-xs leading-[18px] font-base text-white text-opacity-60 mt-2">
+          <p className="text-xs/60 leading-[18px] font-base text-theme-text-primary mt-2">
             Most TTS services will have several models available. This is the{" "}
             <code>model</code> parameter you will use to select the model you
             want to use. Note: This is not the same as the voice model.
           </p>
         </div>
         <div className="flex flex-col w-60">
-          <Label variant="settings" className="block mb-3">
-            Voice Model
-          </Label>
+          <Label className="block mb-3">Voice Model</Label>
           <Input
-            variant="settings"
             type="text"
             name="TTSOpenAICompatibleVoiceModel"
             placeholder="Your voice model identifier"
@@ -81,7 +71,7 @@ export default function OpenAiGenericTextToSpeechOptions({ settings }) {
             autoComplete="off"
             spellCheck={false}
           />
-          <p className="text-xs leading-[18px] font-base text-white text-opacity-60 mt-2">
+          <p className="text-xs/60 leading-[18px] font-base text-theme-text-primary mt-2">
             Most TTS services will have several voice models available, this is
             the identifier for the voice model you want to use.
           </p>

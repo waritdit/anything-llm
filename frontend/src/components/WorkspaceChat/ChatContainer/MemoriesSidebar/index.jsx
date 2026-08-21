@@ -1,4 +1,4 @@
-import { X } from "@phosphor-icons/react";
+import { X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import ChatSidebar from "../ChatSidebar";
 import { MemoriesProvider, useMemoriesContext } from "./MemoriesContext";
@@ -38,7 +38,7 @@ function MemoriesSidebarContent() {
 function SidebarPanel({ children }) {
   return (
     <div
-      className="w-[366px] flex-shrink-0 flex flex-col gap-5 mt-[72px] px-5 overflow-y-auto no-scroll"
+      className="w-[366px] shrink-0 flex flex-col gap-5 mt-[72px] px-5 overflow-y-auto no-scroll"
       style={{ maxHeight: "calc(100% - 88px)" }}
     >
       {children}
@@ -113,7 +113,7 @@ function SidebarHeader() {
         type="button"
         className="text-zinc-50 light:text-slate-900 hover:text-white light:hover:text-slate-400 transition-colors border-none bg-transparent cursor-pointer"
       >
-        <X size={16} weight="bold" />
+        <X size={16} />
       </button>
     </div>
   );

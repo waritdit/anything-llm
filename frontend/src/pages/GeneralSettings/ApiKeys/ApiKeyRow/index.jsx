@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
 import Admin from "@/models/admin";
-import { Trash } from "@phosphor-icons/react";
+import { Copy, Trash2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
 import ConfirmDialog from "@/components/ConfirmDialog";
+import TableRowActions from "@/components/lib/TableRowActions";
+import {
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 
 export default function ApiKeyRow({ apiKey, removeApiKey }) {
   const { t } = useTranslation();
@@ -41,48 +45,29 @@ export default function ApiKeyRow({ apiKey, removeApiKey }) {
 
   return (
     <>
-      <TableRow
-        variant="none"
-        className="bg-transparent text-white text-opacity-80 text-xs font-medium border-b border-white/10"
-      >
-        <TableCell
-          variant="none"
-          scope="row"
-          className="px-6 py-3 whitespace-nowrap align-middle"
-        >
-          {apiKey.name || t("api.row.unnamed")}
-        </TableCell>
-        <TableCell
-          variant="none"
-          scope="row"
-          className="px-6 py-3 align-middle"
-        >
+      <TableRow>
+        <TableCell scope="row">{apiKey.name || t("api.row.unnamed")}</TableCell>
+        <TableCell scope="row">
           <code className="font-mono text-[11px] break-all text-theme-text-primary">
             {apiKey.secret}
           </code>
         </TableCell>
-        <TableCell variant="none" className="px-6 py-3 text-left align-middle">
+        <TableCell className="text-left">
           {apiKey.createdBy?.username || "--"}
         </TableCell>
-        <TableCell
-          variant="none"
-          className="px-6 py-3 whitespace-nowrap align-middle"
-        >
-          {new Date(apiKey.createdAt).toLocaleString()}
-        </TableCell>
-        <TableCell variant="none" className="px-6 py-3 align-middle">
-          <div className="flex items-center gap-x-6">
-            <button
-              onClick={copyApiKey}
-              disabled={copied}
-              className="text-xs font-medium text-blue-300 rounded-lg hover:text-white hover:light:text-blue-500 hover:text-opacity-60 hover:underline"
-            >
+        <TableCell>{new Date(apiKey.createdAt).toLocaleString()}</TableCell>
+        <TableCell className="text-right">
+          <TableRowActions>
+            <DropdownMenuItem onClick={copyApiKey} disabled={copied}>
+              <Copy />
               {copied ? t("api.row.copied") : t("api.row.copy")}
-            </button>
-            <Button variant="danger" onClick={handleDelete}>
-              <Trash className="h-5 w-5" />
-            </Button>
-          </div>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem variant="destructive" onClick={handleDelete}>
+              <Trash2 />
+              Delete
+            </DropdownMenuItem>
+          </TableRowActions>
         </TableCell>
       </TableRow>
       <ConfirmDialog config={confirm} onClose={() => setConfirm(null)} />

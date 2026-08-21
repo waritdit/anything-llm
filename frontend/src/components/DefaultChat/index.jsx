@@ -78,7 +78,7 @@ export default function DefaultChatContainer() {
           alt="Custom Logo"
           className=" w-[200px] h-fit mb-5 rounded-lg"
         />
-        <h1 className="text-white text-2xl font-semibold">
+        <h1 className="text-theme-text-primary text-2xl font-semibold">
           {t("home.welcome")}, {user.username}!
         </h1>
         <p className="text-theme-home-text-secondary text-base text-center whitespace-pre-line">
@@ -107,7 +107,7 @@ const Layout = ({ children }) => {
   return (
     <div
       style={{ height: "100%" }}
-      className={`relative bg-theme-bg-secondary light:border-[1px] light:border-theme-sidebar-border w-full h-full overflow-y-scroll ${showScrollbar ? "show-scrollbar" : "no-scroll"}`}
+      className={`relative bg-theme-bg-secondary light:border light:border-theme-sidebar-border w-full h-full overflow-y-scroll ${showScrollbar ? "show-scrollbar" : "no-scroll"}`}
     >
       {children}
     </div>

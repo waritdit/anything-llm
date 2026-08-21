@@ -29,7 +29,7 @@ export default function ModelRouterOptions({ settings }) {
   if (loading) {
     return (
       <div className="w-full flex flex-col gap-y-4">
-        <p className="text-sm text-white text-opacity-60">
+        <p className="text-sm/60 text-theme-text-primary">
           {t("model-router.router-selection.loading-routers")}
         </p>
       </div>
@@ -39,11 +39,11 @@ export default function ModelRouterOptions({ settings }) {
   if (routers.length === 0) {
     return (
       <div className="w-full flex flex-col gap-y-4">
-        <p className="text-sm text-white text-opacity-60">
+        <p className="text-sm/60 text-theme-text-primary">
           {t("model-router.router-selection.no-routers-prefix-settings")}{" "}
           <Link
             to={paths.settings.modelRouters()}
-            className="underline text-white"
+            className="underline text-theme-text-primary"
           >
             {t("model-router.router-selection.no-routers-link")}
           </Link>
@@ -57,7 +57,7 @@ export default function ModelRouterOptions({ settings }) {
     <div className="w-full flex flex-col gap-y-4">
       <div className="w-full flex items-center gap-[36px]">
         <div className="flex flex-col w-60">
-          <Label variant="settings" className="block mb-3">
+          <Label className="block mb-3">
             {t("model-router.router-selection.model-router-label")}
           </Label>
           <Select
@@ -67,7 +67,7 @@ export default function ModelRouterOptions({ settings }) {
             defaultValue={settings?.ModelRouterId || undefined}
             required
           >
-            <SelectTrigger variant="settings">
+            <SelectTrigger className="w-full">
               <SelectValue
                 placeholder={t("model-router.router-selection.select-router")}
               />

@@ -9,12 +9,11 @@ export default function WorkspaceName({ workspace, setHasChanges }) {
         <label htmlFor="name" className="block input-label">
           {t("common.workspaces-name")}
         </label>
-        <p className="text-white text-opacity-60 text-xs font-medium">
+        <p className="text-theme-text-primary/60 text-xs font-medium">
           {t("general.names.description")}
         </p>
       </div>
       <Input
-        variant="settings"
         name="name"
         type="text"
         minLength={2}

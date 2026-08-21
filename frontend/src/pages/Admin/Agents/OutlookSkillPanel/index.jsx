@@ -6,18 +6,18 @@ import React, {
   useCallback,
 } from "react";
 import Toggle, { SimpleToggleSwitch } from "@/components/lib/Toggle";
+import { Spinner } from "@/components/ui/spinner";
 import { Trans, useTranslation } from "react-i18next";
 import debounce from "lodash.debounce";
 import {
-  MagnifyingGlass,
-  CircleNotch,
-  Warning,
-  CaretDown,
-  CheckCircle,
+  ChevronDown,
+  CircleCheck,
+  CircleX,
   Info,
-  ArrowSquareOut,
-  XCircle,
-} from "@phosphor-icons/react";
+  Search,
+  SquareArrowOutUpRight,
+  TriangleAlert,
+} from "lucide-react";
 import Admin from "@/models/admin";
 import OutlookAgent from "@/models/outlookAgent";
 import { getOutlookSkills, filterSkillCategories } from "./utils";
@@ -217,8 +217,7 @@ export default function OutlookSkillPanel({
           />
         </div>
 
-
-        <p className="text-theme-text-secondary text-opacity-60 text-xs font-medium">
+        <p className="text-theme-text-secondary/60 text-xs font-medium">
           <Trans
             i18nKey="agent.skill.outlook.description"
             components={{
@@ -239,10 +238,7 @@ export default function OutlookSkillPanel({
 
             {loading ? (
               <div className="flex items-center justify-center py-4">
-                <CircleNotch
-                  size={24}
-                  className="animate-spin text-theme-text-primary"
-                />
+                <Spinner size="lg" className="text-theme-text-primary" />
               </div>
             ) : (
               <>
@@ -316,14 +312,14 @@ function ConfigurationSection({
           </span>
           {isConfigured && (
             <div className="flex items-center gap-x-1">
-              <CheckCircle size={14} weight="fill" className="text-green-500" />
+              <CircleCheck size={14} className="text-green-500 fill-current" />
               <span className="text-xs text-green-500">
                 {t("agent.skill.outlook.configured")}
               </span>
             </div>
           )}
         </div>
-        <CaretDown
+        <ChevronDown
           size={16}
           className={`text-theme-text-secondary transition-transform ${expanded ? "rotate-180" : ""}`}
         />
@@ -333,11 +329,13 @@ function ConfigurationSection({
         <div className="p-3 flex flex-col gap-y-4 border-t border-theme-sidebar-border/50">
           <div className="flex flex-col gap-y-2">
             <div className="flex items-center gap-x-2">
-              <Label variant="field">{t("agent.skill.outlook.authType")}</Label>
+              <Label>{t("agent.skill.outlook.authType")}</Label>
               <Tooltip>
-                <TooltipTrigger asChild>
-                  <Info size={16} className="text-theme-text-secondary" />
-                </TooltipTrigger>
+                <TooltipTrigger
+                  render={
+                    <Info size={16} className="text-theme-text-secondary" />
+                  }
+                ></TooltipTrigger>
                 <TooltipContent side="top" className="max-w-[250px] text-xs">
                   {t("agent.skill.outlook.authTypeHelp")}
                 </TooltipContent>
@@ -369,11 +367,13 @@ function ConfigurationSection({
 
           <div className="flex flex-col gap-y-2">
             <div className="flex items-center gap-x-2">
-              <Label variant="field">{t("agent.skill.outlook.clientId")}</Label>
+              <Label>{t("agent.skill.outlook.clientId")}</Label>
               <Tooltip>
-                <TooltipTrigger asChild>
-                  <Info size={16} className="text-theme-text-secondary" />
-                </TooltipTrigger>
+                <TooltipTrigger
+                  render={
+                    <Info size={16} className="text-theme-text-secondary" />
+                  }
+                ></TooltipTrigger>
                 <TooltipContent side="top" className="max-w-[250px] text-xs">
                   {t("agent.skill.outlook.clientIdHelp")}
                 </TooltipContent>
@@ -394,13 +394,13 @@ function ConfigurationSection({
           {showTenantId && (
             <div className="flex flex-col gap-y-2">
               <div className="flex items-center gap-x-2">
-                <Label variant="field">
-                  {t("agent.skill.outlook.tenantId")}
-                </Label>
+                <Label>{t("agent.skill.outlook.tenantId")}</Label>
                 <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Info size={16} className="text-theme-text-secondary" />
-                  </TooltipTrigger>
+                  <TooltipTrigger
+                    render={
+                      <Info size={16} className="text-theme-text-secondary" />
+                    }
+                  ></TooltipTrigger>
                   <TooltipContent side="top" className="max-w-[250px] text-xs">
                     {t("agent.skill.outlook.tenantIdHelp")}
                   </TooltipContent>
@@ -421,13 +421,13 @@ function ConfigurationSection({
 
           <div className="flex flex-col gap-y-2">
             <div className="flex items-center gap-x-2">
-              <Label variant="field">
-                {t("agent.skill.outlook.clientSecret")}
-              </Label>
+              <Label>{t("agent.skill.outlook.clientSecret")}</Label>
               <Tooltip>
-                <TooltipTrigger asChild>
-                  <Info size={16} className="text-theme-text-secondary" />
-                </TooltipTrigger>
+                <TooltipTrigger
+                  render={
+                    <Info size={16} className="text-theme-text-secondary" />
+                  }
+                ></TooltipTrigger>
                 <TooltipContent side="top" className="max-w-[250px] text-xs">
                   {t("agent.skill.outlook.clientSecretHelp")}
                 </TooltipContent>
@@ -447,7 +447,7 @@ function ConfigurationSection({
 
           {!hasCredentials && (
             <div className="flex items-center gap-x-2 p-3 bg-orange-500/10 border border-orange-500/30 rounded-lg">
-              <Warning size={20} className="text-orange-500 shrink-0" />
+              <TriangleAlert size={20} className="text-orange-500 shrink-0" />
               <p className="text-orange-500 text-xs">
                 {t("agent.skill.outlook.configurationRequired")}
               </p>
@@ -466,12 +466,12 @@ function ConfigurationSection({
                 type="button"
                 onClick={onStartAuth}
                 disabled={authLoading}
-                className="flex items-center justify-center gap-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-600/50 text-white text-sm font-medium rounded-lg transition-colors"
+                className="flex items-center justify-center gap-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-600/50 text-theme-text-primary text-sm font-medium rounded-lg transition-colors"
               >
                 {authLoading ? (
-                  <CircleNotch size={16} className="animate-spin" />
+                  <Spinner />
                 ) : (
-                  <ArrowSquareOut size={16} />
+                  <SquareArrowOutUpRight size={16} />
                 )}
                 {t("agent.skill.outlook.authenticateWithMicrosoft")}
               </button>
@@ -481,10 +481,9 @@ function ConfigurationSection({
           {hasCredentials && isAuthenticated && (
             <div className="flex flex-col gap-y-3">
               <div className="flex items-center gap-x-2 p-3 bg-green-500/10 border border-green-500/30 rounded-lg">
-                <CheckCircle
+                <CircleCheck
                   size={20}
-                  weight="fill"
-                  className="text-green-500 shrink-0"
+                  className="text-green-500 shrink-0 fill-current"
                 />
                 <p className="text-green-500 text-xs">
                   {t("agent.skill.outlook.authenticated")}
@@ -496,11 +495,7 @@ function ConfigurationSection({
                 disabled={authLoading}
                 className="flex items-center justify-center gap-x-2 px-4 py-2 bg-red-600/20 hover:bg-red-600/30 border border-red-600/50 text-red-500 text-sm font-medium rounded-lg transition-colors"
               >
-                {authLoading ? (
-                  <CircleNotch size={16} className="animate-spin" />
-                ) : (
-                  <XCircle size={16} />
-                )}
+                {authLoading ? <Spinner /> : <CircleX size={16} />}
                 {t("agent.skill.outlook.revokeAccess")}
               </button>
             </div>
@@ -542,10 +537,9 @@ function SkillSearchInput({ onSearch }) {
         onChange={handleChange}
         className="w-full pl-9 pr-3 py-2 bg-theme-bg-primary border border-theme-sidebar-border rounded-lg text-theme-text-primary text-sm placeholder:text-theme-text-secondary/50 search-input"
       />
-      <MagnifyingGlass
+      <Search
         size={16}
         className="absolute left-3 top-1/2 -translate-y-1/2 text-theme-text-secondary"
-        weight="bold"
       />
     </div>
   );

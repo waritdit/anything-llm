@@ -4,7 +4,7 @@ import useQuery from "@/hooks/useQuery";
 import ChatRow from "./ChatRow";
 import Embed from "@/models/embed";
 import { useTranslation } from "react-i18next";
-import { CaretDown, Download } from "@phosphor-icons/react";
+import { ChevronDown, Download } from "lucide-react";
 import showToast from "@/utils/toast";
 import { saveAs } from "file-saver";
 import System from "@/models/system";
@@ -150,9 +150,9 @@ export default function EmbedChatsView() {
               onClick={toggleMenu}
               className="flex items-center gap-x-2 px-4 py-1 rounded-lg text-theme-bg-chat bg-primary-button hover:bg-secondary hover:text-white text-xs font-semibold h-[34px] w-fit"
             >
-              <Download size={18} weight="bold" />
+              <Download size={18} />
               {t("embed-chats.export")}
-              <CaretDown size={18} weight="bold" />
+              <ChevronDown size={18} />
             </button>
             <div
               ref={menuRef}
@@ -168,7 +168,7 @@ export default function EmbedChatsView() {
                       handleDumpChats(key);
                       setShowMenu(false);
                     }}
-                    className="w-full text-left px-4 py-2 text-white text-sm hover:bg-[#3D4147] light:hover:bg-theme-sidebar-item-hover"
+                    className="w-full text-left px-4 py-2 text-theme-text-primary text-sm hover:bg-[#3D4147] light:hover:bg-theme-sidebar-item-hover"
                   >
                     {data.name}
                   </button>
@@ -182,38 +182,22 @@ export default function EmbedChatsView() {
         </p>
       </div>
       <div className="overflow-x-auto mt-6">
-        <Table variant="settings">
-          <TableHeader variant="settings">
-            <TableRow variant="none">
-              <TableHead
-                variant="none"
-                scope="col"
-                className="px-6 py-3 rounded-tl-lg"
-              >
-                {t("embed-chats.table.embed")}
-              </TableHead>
-              <TableHead variant="none" scope="col" className="px-6 py-3">
-                {t("embed-chats.table.sender")}
-              </TableHead>
-              <TableHead variant="none" scope="col" className="px-6 py-3">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead scope="col">{t("embed-chats.table.embed")}</TableHead>
+              <TableHead scope="col">{t("embed-chats.table.sender")}</TableHead>
+              <TableHead scope="col">
                 {t("embed-chats.table.message")}
               </TableHead>
-              <TableHead variant="none" scope="col" className="px-6 py-3">
+              <TableHead scope="col">
                 {t("embed-chats.table.response")}
               </TableHead>
-              <TableHead variant="none" scope="col" className="px-6 py-3">
-                {t("embed-chats.table.at")}
-              </TableHead>
-              <TableHead
-                variant="none"
-                scope="col"
-                className="px-6 py-3 rounded-tr-lg"
-              >
-                {" "}
-              </TableHead>
+              <TableHead scope="col">{t("embed-chats.table.at")}</TableHead>
+              <TableHead scope="col"> </TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody variant="none">
+          <TableBody>
             {chats.map((chat) => (
               <ChatRow key={chat.id} chat={chat} onDelete={handleDeleteChat} />
             ))}

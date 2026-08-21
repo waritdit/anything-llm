@@ -1,16 +1,13 @@
 import {
-  CircleNotch,
   FileCode,
-  FileCsv,
-  FileDoc,
-  FileHtml,
-  FileText,
   FileImage,
-  FilePdf,
-  WarningOctagon,
+  FileSpreadsheet,
+  FileText,
+  OctagonAlert,
   X,
-} from "@phosphor-icons/react";
+} from "lucide-react";
 import { REMOVE_ATTACHMENT_EVENT } from "../../DnDWrapper";
+import { Spinner } from "@/components/ui/spinner";
 import { openImageLightbox } from "@/components/ImageLightbox";
 import {
   Tooltip,
@@ -66,13 +63,9 @@ function AttachmentItem({ attachment, onImageClick }) {
     return (
       <div className="relative flex items-center gap-x-1 rounded-lg bg-theme-attachment-bg border-none w-[180px] group">
         <div
-          className={`bg-theme-attachment-icon-spinner-bg rounded-md flex items-center justify-center flex-shrink-0 h-[32px] w-[32px] m-1`}
+          className={`bg-theme-attachment-icon-spinner-bg rounded-md flex items-center justify-center shrink-0 h-[32px] w-[32px] m-1`}
         >
-          <CircleNotch
-            size={18}
-            weight="bold"
-            className="text-theme-attachment-icon-spinner animate-spin"
-          />
+          <Spinner className="text-theme-attachment-icon-spinner" />
         </div>
         <div className="flex flex-col w-[125px]">
           <p className="text-theme-attachment-text text-xs font-semibold truncate">
@@ -89,35 +82,34 @@ function AttachmentItem({ attachment, onImageClick }) {
   if (status === "failed") {
     return (
       <Tooltip>
-        <TooltipTrigger asChild>
-          <div
-            className={`relative flex items-center gap-x-1 rounded-lg bg-theme-attachment-error-bg border-none w-[180px] group`}
-          >
-            <div className="invisible group-hover:visible absolute -top-[5px] -right-[5px] w-fit h-fit z-[10]">
-              <button
-                onClick={removeFileFromQueue}
-                type="button"
-                className="bg-white hover:bg-error hover:text-theme-attachment-text rounded-full p-1 flex items-center justify-center hover:border-transparent border border-theme-attachment-bg"
-              >
-                <X size={10} className="flex-shrink-0" />
-              </button>
-            </div>
+        <TooltipTrigger
+          render={
             <div
-              className={`bg-error rounded-md flex items-center justify-center flex-shrink-0 h-[32px] w-[32px] m-1`}
+              className={`relative flex items-center gap-x-1 rounded-lg bg-theme-attachment-error-bg border-none w-[180px] group`}
+            />
+          }
+        >
+          <div className="invisible group-hover:visible absolute top-[-5px] right-[-5px] w-fit h-fit z-10">
+            <button
+              onClick={removeFileFromQueue}
+              type="button"
+              className="bg-white hover:bg-error hover:text-theme-attachment-text rounded-full p-1 flex items-center justify-center hover:border-transparent border border-theme-attachment-bg"
             >
-              <WarningOctagon
-                size={24}
-                className="text-theme-attachment-icon"
-              />
-            </div>
-            <div className="flex flex-col w-[125px]">
-              <p className="text-theme-attachment-text text-xs font-semibold truncate">
-                {file.name}
-              </p>
-              <p className="text-theme-attachment-text-secondary text-[10px] leading-[14px] font-medium truncate">
-                {error ?? "File not embedded!"}
-              </p>
-            </div>
+              <X size={10} className="shrink-0" />
+            </button>
+          </div>
+          <div
+            className={`bg-error rounded-md flex items-center justify-center shrink-0 h-[32px] w-[32px] m-1`}
+          >
+            <OctagonAlert size={24} className="text-theme-attachment-icon" />
+          </div>
+          <div className="flex flex-col w-[125px]">
+            <p className="text-theme-attachment-text text-xs font-semibold truncate">
+              {file.name}
+            </p>
+            <p className="text-theme-attachment-text-secondary text-[10px] leading-[14px] font-medium truncate">
+              {error ?? "File not embedded!"}
+            </p>
           </div>
         </TooltipTrigger>
         <TooltipContent side="top" className="max-w-[250px] text-xs">
@@ -131,32 +123,34 @@ function AttachmentItem({ attachment, onImageClick }) {
     if (contentString) {
       return (
         <Tooltip>
-          <TooltipTrigger asChild>
-            <div
-              className={`relative flex items-center gap-x-1 rounded-lg border-none group`}
-            >
-              <div className="invisible group-hover:visible absolute -top-[5px] -right-[5px] w-fit h-fit z-[10]">
-                <button
-                  onClick={removeFileFromQueue}
-                  type="button"
-                  className="bg-white hover:bg-error hover:text-theme-attachment-text rounded-full p-1 flex items-center justify-center hover:border-transparent border border-theme-attachment-bg"
-                >
-                  <X size={10} className="flex-shrink-0" />
-                </button>
-              </div>
+          <TooltipTrigger
+            render={
+              <div
+                className={`relative flex items-center gap-x-1 rounded-lg border-none group`}
+              />
+            }
+          >
+            <div className="invisible group-hover:visible absolute top-[-5px] right-[-5px] w-fit h-fit z-10">
               <button
+                onClick={removeFileFromQueue}
                 type="button"
-                onClick={onImageClick}
-                className="p-0 border-none bg-transparent cursor-pointer"
+                className="bg-white hover:bg-error hover:text-theme-attachment-text rounded-full p-1 flex items-center justify-center hover:border-transparent border border-theme-attachment-bg"
               >
-                <img
-                  alt={`Preview of ${file.name}`}
-                  src={contentString}
-                  style={{ objectFit: "cover", objectPosition: "center" }}
-                  className={`${iconBgColor} w-[40px] h-[40px] rounded-lg flex items-center justify-center`}
-                />
+                <X size={10} className="shrink-0" />
               </button>
             </div>
+            <button
+              type="button"
+              onClick={onImageClick}
+              className="p-0 border-none bg-transparent cursor-pointer"
+            >
+              <img
+                alt={`Preview of ${file.name}`}
+                src={contentString}
+                style={{ objectFit: "cover", objectPosition: "center" }}
+                className={`${iconBgColor} w-[40px] h-[40px] rounded-lg flex items-center justify-center`}
+              />
+            </button>
           </TooltipTrigger>
           <TooltipContent
             side="top"
@@ -168,32 +162,34 @@ function AttachmentItem({ attachment, onImageClick }) {
 
     return (
       <Tooltip>
-        <TooltipTrigger asChild>
-          <div
-            className={`relative flex items-center gap-x-1 rounded-lg bg-theme-attachment-success-bg border-none w-[180px] group`}
-          >
-            <div className="invisible group-hover:visible absolute -top-[5px] -right-[5px] w-fit h-fit z-[10]">
-              <button
-                onClick={removeFileFromQueue}
-                type="button"
-                className="bg-white hover:bg-error hover:text-theme-attachment-text rounded-full p-1 flex items-center justify-center hover:border-transparent border border-theme-attachment-bg"
-              >
-                <X size={10} className="flex-shrink-0" />
-              </button>
-            </div>
+        <TooltipTrigger
+          render={
             <div
-              className={`${iconBgColor} rounded-md flex items-center justify-center flex-shrink-0 h-[32px] w-[32px] m-1`}
+              className={`relative flex items-center gap-x-1 rounded-lg bg-theme-attachment-success-bg border-none w-[180px] group`}
+            />
+          }
+        >
+          <div className="invisible group-hover:visible absolute top-[-5px] right-[-5px] w-fit h-fit z-10">
+            <button
+              onClick={removeFileFromQueue}
+              type="button"
+              className="bg-white hover:bg-error hover:text-theme-attachment-text rounded-full p-1 flex items-center justify-center hover:border-transparent border border-theme-attachment-bg"
             >
-              <Icon size={24} className="text-theme-attachment-icon" />
-            </div>
-            <div className="flex flex-col w-[125px]">
-              <p className="text-theme-attachment-text text-xs font-semibold truncate">
-                {file.name}
-              </p>
-              <p className="text-theme-attachment-text-secondary text-[10px] leading-[14px] font-medium">
-                Image attached!
-              </p>
-            </div>
+              <X size={10} className="shrink-0" />
+            </button>
+          </div>
+          <div
+            className={`${iconBgColor} rounded-md flex items-center justify-center shrink-0 h-[32px] w-[32px] m-1`}
+          >
+            <Icon size={24} className="text-theme-attachment-icon" />
+          </div>
+          <div className="flex flex-col w-[125px]">
+            <p className="text-theme-attachment-text text-xs font-semibold truncate">
+              {file.name}
+            </p>
+            <p className="text-theme-attachment-text-secondary text-[10px] leading-[14px] font-medium">
+              Image attached!
+            </p>
           </div>
         </TooltipTrigger>
         <TooltipContent
@@ -206,36 +202,34 @@ function AttachmentItem({ attachment, onImageClick }) {
 
   return (
     <Tooltip>
-      <TooltipTrigger asChild>
-        <div
-          className={`relative flex items-center gap-x-1 rounded-lg bg-theme-attachment-bg border-none w-[180px] group`}
-        >
-          <div className="invisible group-hover:visible absolute -top-[5px] -right-[5px] w-fit h-fit z-[10]">
-            <button
-              onClick={removeFileFromQueue}
-              type="button"
-              className="bg-white hover:bg-error hover:text-theme-attachment-text rounded-full p-1 flex items-center justify-center hover:border-transparent border border-theme-attachment-bg"
-            >
-              <X size={10} className="flex-shrink-0" />
-            </button>
-          </div>
+      <TooltipTrigger
+        render={
           <div
-            className={`${iconBgColor} rounded-md flex items-center justify-center flex-shrink-0 h-[32px] w-[32px] m-1`}
+            className={`relative flex items-center gap-x-1 rounded-lg bg-theme-attachment-bg border-none w-[180px] group`}
+          />
+        }
+      >
+        <div className="invisible group-hover:visible absolute top-[-5px] right-[-5px] w-fit h-fit z-10">
+          <button
+            onClick={removeFileFromQueue}
+            type="button"
+            className="bg-white hover:bg-error hover:text-theme-attachment-text rounded-full p-1 flex items-center justify-center hover:border-transparent border border-theme-attachment-bg"
           >
-            <Icon
-              size={24}
-              weight="light"
-              className="text-theme-attachment-icon"
-            />
-          </div>
-          <div className="flex flex-col w-[125px]">
-            <p className="text-white text-xs font-semibold truncate">
-              {file.name}
-            </p>
-            <p className="text-theme-attachment-text-secondary text-[10px] leading-[14px] font-medium">
-              {status === "embedded" ? "File embedded!" : "Added as context!"}
-            </p>
-          </div>
+            <X size={10} className="shrink-0" />
+          </button>
+        </div>
+        <div
+          className={`${iconBgColor} rounded-md flex items-center justify-center shrink-0 h-[32px] w-[32px] m-1`}
+        >
+          <Icon size={24} className="text-theme-attachment-icon" />
+        </div>
+        <div className="flex flex-col w-[125px]">
+          <p className="text-theme-text-primary text-xs font-semibold truncate">
+            {file.name}
+          </p>
+          <p className="text-theme-attachment-text-secondary text-[10px] leading-[14px] font-medium">
+            {status === "embedded" ? "File embedded!" : "Added as context!"}
+          </p>
         </div>
       </TooltipTrigger>
       <TooltipContent side="top" className="max-w-[250px] text-xs">
@@ -255,15 +249,15 @@ function displayFromFile(file) {
   const extension = file?.name?.split(".")?.pop()?.toLowerCase() ?? "txt";
   switch (extension) {
     case "pdf":
-      return { iconBgColor: "bg-magenta", Icon: FilePdf };
+      return { iconBgColor: "bg-magenta", Icon: FileText };
     case "doc":
     case "docx":
-      return { iconBgColor: "bg-royalblue", Icon: FileDoc };
+      return { iconBgColor: "bg-royalblue", Icon: FileText };
     case "html":
-      return { iconBgColor: "bg-purple", Icon: FileHtml };
+      return { iconBgColor: "bg-purple", Icon: FileCode };
     case "csv":
     case "xlsx":
-      return { iconBgColor: "bg-success", Icon: FileCsv };
+      return { iconBgColor: "bg-success", Icon: FileSpreadsheet };
     case "json":
     case "sql":
     case "js":

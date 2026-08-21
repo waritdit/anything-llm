@@ -1,15 +1,15 @@
 import React from "react";
 import {
-  X,
-  CaretUp,
-  CaretDown,
-  Globe,
-  Browser,
+  AppWindow,
+  Braces,
   Brain,
+  ChevronDown,
+  ChevronUp,
   Flag,
+  Globe,
   Info,
-  BracketsCurly,
-} from "@phosphor-icons/react";
+  X,
+} from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -51,7 +51,7 @@ const BLOCK_INFO = {
   },
   [BLOCK_TYPES.START]: {
     label: "Flow Variables",
-    icon: <BracketsCurly className="w-5 h-5 text-theme-text-primary" />,
+    icon: <Braces className="w-5 h-5 text-theme-text-primary" />,
     description: "Configure agent variables and settings",
     getSummary: (config) => {
       const varCount = config.variables?.filter((v) => v.name)?.length || 0;
@@ -78,7 +78,7 @@ const BLOCK_INFO = {
   // TODO: Implement website, file, and code blocks
   /* [BLOCK_TYPES.WEBSITE]: {
     label: "Open Website",
-    icon: <Browser className="w-5 h-5 text-theme-text-primary" />,
+    icon: <AppWindow className="w-5 h-5 text-theme-text-primary" />,
     description: "Navigate to a URL",
     defaultConfig: {
       url: "",
@@ -128,7 +128,7 @@ const BLOCK_INFO = {
   },
   [BLOCK_TYPES.WEB_SCRAPING]: {
     label: "Web Scraping",
-    icon: <Browser className="w-5 h-5 text-theme-text-primary" />,
+    icon: <AppWindow className="w-5 h-5 text-theme-text-primary" />,
     description: "Scrape content from a webpage",
     defaultConfig: {
       url: "",
@@ -177,7 +177,7 @@ export default function BlockList({
       return (
         <div className="space-y-4">
           {renderBlockConfigContent(block, props)}
-          <div className="pt-4 border-t border-white/10">
+          <div className="pt-4 border-t border-theme-sidebar-border">
             <Toggle
               size="md"
               variant="horizontal"
@@ -229,7 +229,7 @@ export default function BlockList({
       {blocks.map((block, index) => (
         <div key={block.id} className="flex flex-col">
           <div
-            className={`bg-theme-action-menu-bg border border-white/10 rounded-lg overflow-hidden transition-all duration-300 ${
+            className={`bg-theme-action-menu-bg border border-theme-sidebar-border rounded-lg overflow-hidden transition-all duration-300 ${
               block.isExpanded ? "w-full" : "w-[280px] mx-auto"
             }`}
           >
@@ -240,15 +240,15 @@ export default function BlockList({
               <div className="flex items-center gap-3">
                 <div className="w-7 h-7 rounded-lg bg-white/10 light:bg-white flex items-center justify-center">
                   {React.cloneElement(BLOCK_INFO[block.type].icon, {
-                    className: "w-4 h-4 text-white",
+                    className: "w-4 h-4 text-theme-text-primary",
                   })}
                 </div>
                 <div className="flex-1 text-left min-w-0 max-w-[115px]">
-                  <span className="text-sm font-medium text-white block">
+                  <span className="text-sm font-medium text-theme-text-primary block">
                     {BLOCK_INFO[block.type].label}
                   </span>
                   {!block.isExpanded && (
-                    <p className="text-xs text-white/60 truncate">
+                    <p className="text-xs text-theme-text-secondary truncate">
                       {BLOCK_INFO[block.type].getSummary(block.config)}
                     </p>
                   )}
@@ -261,16 +261,18 @@ export default function BlockList({
                     <div className="flex items-center gap-1">
                       {index > 2 && (
                         <Tooltip>
-                          <TooltipTrigger asChild>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                moveBlock(index, index - 1);
-                              }}
-                              className="w-7 h-7 flex items-center justify-center rounded-lg bg-theme-bg-primary border border-white/5 text-white hover:bg-theme-action-menu-item-hover transition-colors duration-300"
-                            >
-                              <CaretUp className="w-3.5 h-3.5" />
-                            </button>
+                          <TooltipTrigger
+                            render={
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  moveBlock(index, index - 1);
+                                }}
+                                className="w-7 h-7 flex items-center justify-center rounded-lg bg-theme-bg-primary border border-white/5 text-theme-text-primary hover:bg-theme-action-menu-item-hover transition-colors duration-300"
+                              />
+                            }
+                          >
+                            <ChevronUp className="w-3.5 h-3.5" />
                           </TooltipTrigger>
                           <TooltipContent
                             side="bottom"
@@ -282,16 +284,18 @@ export default function BlockList({
                       )}
                       {index < blocks.length - 2 && (
                         <Tooltip>
-                          <TooltipTrigger asChild>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                moveBlock(index, index + 1);
-                              }}
-                              className="w-7 h-7 flex items-center justify-center rounded-lg bg-theme-bg-primary border border-white/5 text-white hover:bg-theme-action-menu-item-hover transition-colors duration-300"
-                            >
-                              <CaretDown className="w-3.5 h-3.5" />
-                            </button>
+                          <TooltipTrigger
+                            render={
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  moveBlock(index, index + 1);
+                                }}
+                                className="w-7 h-7 flex items-center justify-center rounded-lg bg-theme-bg-primary border border-white/5 text-theme-text-primary hover:bg-theme-action-menu-item-hover transition-colors duration-300"
+                              />
+                            }
+                          >
+                            <ChevronDown className="w-3.5 h-3.5" />
                           </TooltipTrigger>
                           <TooltipContent
                             side="bottom"
@@ -302,16 +306,18 @@ export default function BlockList({
                         </Tooltip>
                       )}
                       <Tooltip>
-                        <TooltipTrigger asChild>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              removeBlock(block.id);
-                            }}
-                            className="w-7 h-7 flex items-center justify-center rounded-lg bg-theme-bg-primary border border-white/5 text-red-400 hover:bg-red-500/10 hover:border-red-500/20 transition-colors duration-300"
-                          >
-                            <X className="w-3.5 h-3.5" />
-                          </button>
+                        <TooltipTrigger
+                          render={
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                removeBlock(block.id);
+                              }}
+                              className="w-7 h-7 flex items-center justify-center rounded-lg bg-theme-bg-primary border border-white/5 text-red-400 hover:bg-red-500/10 hover:border-red-500/20 transition-colors duration-300"
+                            />
+                          }
+                        >
+                          <X className="w-3.5 h-3.5" />
                         </TooltipTrigger>
                         <TooltipContent
                           side="bottom"
@@ -331,7 +337,7 @@ export default function BlockList({
                   : "max-h-0 opacity-0"
               }`}
             >
-              <div className="border-t border-white/10 p-4 bg-theme-bg-secondary rounded-b-lg">
+              <div className="border-t border-theme-sidebar-border p-4 bg-theme-bg-secondary rounded-b-lg">
                 {renderBlockConfig(block)}
               </div>
             </div>

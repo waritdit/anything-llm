@@ -1,5 +1,5 @@
 import showToast from "@/utils/toast";
-import { DownloadSimple, Key } from "@phosphor-icons/react";
+import { Download, Key } from "lucide-react";
 import { saveAs } from "file-saver";
 import { useState } from "react";
 import {
@@ -41,29 +41,24 @@ export default function RecoveryCodeModal({
 
   return (
     <Dialog open={true}>
-      <DialogContent
-        className="max-w-2xl bg-theme-bg-secondary border-theme-modal-border [&>button]:hidden"
-        onEscapeKeyDown={(e) => e.preventDefault()}
-        onPointerDownOutside={(e) => e.preventDefault()}
-        onInteractOutside={(e) => e.preventDefault()}
-      >
-        <DialogHeader className="p-0">
+      <DialogContent showCloseButton={false}>
+        <DialogHeader>
           <div className="w-full flex gap-x-2 items-center">
-            <Key size={18} className="text-white" weight="bold" />
+            <Key size={18} className="text-theme-text-primary" />
             <DialogTitle className="text-sm font-semibold">
               Recovery Codes
             </DialogTitle>
           </div>
         </DialogHeader>
         <div className="space-y-2 flex-col">
-          <p className="text-sm text-white flex flex-col">
+          <p className="text-sm text-theme-text-primary flex flex-col">
             In order to reset your password in the future, you will need these
             recovery codes. Download or copy your recovery codes to save them.{" "}
             <br />
             <b className="mt-4">These recovery codes are only shown once!</b>
           </p>
           <div
-            className="border-none bg-theme-settings-input-bg text-white hover:text-primary-button
+            className="border-none bg-theme-settings-input-bg text-theme-text-primary hover:text-primary-button
                  flex items-center justify-center rounded-md mt-6 cursor-pointer"
             onClick={handleCopyToClipboard}
           >
@@ -76,7 +71,7 @@ export default function RecoveryCodeModal({
             </ul>
           </div>
         </div>
-        <DialogFooter className="p-0">
+        <DialogFooter>
           <Button
             variant="default"
             type="button"
@@ -86,7 +81,7 @@ export default function RecoveryCodeModal({
               "Close"
             ) : (
               <>
-                <DownloadSimple weight="bold" size={18} />
+                <Download size={18} />
                 Download
               </>
             )}

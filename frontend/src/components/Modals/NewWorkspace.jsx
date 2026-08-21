@@ -33,8 +33,8 @@ export default function NewWorkspaceModal({ hideModal = noop }) {
 
   return (
     <Dialog open={true} onOpenChange={(open) => !open && hideModal()}>
-      <DialogContent className="max-w-2xl bg-theme-bg-secondary border-theme-modal-border">
-        <DialogHeader className="p-0">
+      <DialogContent>
+        <DialogHeader>
           <DialogTitle className="text-sm font-semibold">
             {t("new-workspace.title")}
           </DialogTitle>
@@ -43,11 +43,10 @@ export default function NewWorkspaceModal({ hideModal = noop }) {
           <div className="space-y-2 flex-col">
             <div className="w-full flex flex-col gap-y-4">
               <div>
-                <Label variant="field" htmlFor="name" className="block mb-2">
+                <Label htmlFor="name" className="block mb-2">
                   {t("common.workspaces-name")}
                 </Label>
                 <Input
-                  variant="settings"
                   name="name"
                   type="text"
                   id="name"
@@ -60,7 +59,7 @@ export default function NewWorkspaceModal({ hideModal = noop }) {
               {error && <p className="text-red-400 text-sm">Error: {error}</p>}
             </div>
           </div>
-          <DialogFooter className="mt-6 p-0">
+          <DialogFooter>
             <Button variant="default" type="submit">
               Save
             </Button>

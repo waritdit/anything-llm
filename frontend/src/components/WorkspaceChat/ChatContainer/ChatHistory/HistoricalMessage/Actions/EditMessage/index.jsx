@@ -1,4 +1,4 @@
-import { Info, Pencil } from "@phosphor-icons/react";
+import { Info, Pencil } from "lucide-react";
 import { useRef, useEffect } from "react";
 import Appearance from "@/models/appearance";
 import { useTranslation } from "react-i18next";
@@ -30,18 +30,20 @@ export function EditMessageAction({ chatId = null, role, isEditing }) {
   return (
     <div
       className={`mt-3 relative ${
-        role === "user" && !isEditing ? "" : "!opacity-100"
+        role === "user" && !isEditing ? "" : "opacity-100!"
       }`}
     >
       <Tooltip>
-        <TooltipTrigger asChild>
-          <button
-            onClick={handleEditClick}
-            className="border-none text-zinc-300 light:text-slate-500 px-0"
-            aria-label={`Edit ${role === "user" ? t("chat_window.edit_prompt") : t("chat_window.edit_response")}`}
-          >
-            <Pencil size={21} className="mb-1" />
-          </button>
+        <TooltipTrigger
+          render={
+            <button
+              onClick={handleEditClick}
+              className="border-none text-zinc-300 light:text-slate-500 px-0"
+              aria-label={`Edit ${role === "user" ? t("chat_window.edit_prompt") : t("chat_window.edit_response")}`}
+            />
+          }
+        >
+          <Pencil size={21} className="mb-1" />
         </TooltipTrigger>
         <TooltipContent side="bottom" className="max-w-[250px] text-xs">{`${
           role === "user"
@@ -109,7 +111,7 @@ export function EditMessageForm({
           ref={formRef}
           name="editedMessage"
           spellCheck={Appearance.get("enableSpellCheck")}
-          className="text-white light:text-slate-900 w-full rounded-2xl bg-zinc-800 light:bg-slate-100 border border-sky-300 focus:border-sky-300 active:outline-none focus:outline-none focus:ring-0 px-4 py-3 resize-none overflow-hidden"
+          className="text-theme-text-primary light:text-slate-900 w-full rounded-2xl bg-zinc-800 light:bg-slate-100 border border-sky-300 focus:border-sky-300 active:outline-none focus:outline-none focus:ring-0 px-4 py-3 resize-none overflow-hidden"
           defaultValue={message}
           onChange={adjustTextArea}
         />
@@ -131,7 +133,7 @@ export function EditMessageForm({
         ref={formRef}
         name="editedMessage"
         spellCheck={Appearance.get("enableSpellCheck")}
-        className="text-white light:text-slate-900 w-full rounded-2xl bg-zinc-800 light:bg-slate-100 border border-sky-300 focus:border-sky-300 active:outline-none focus:outline-none focus:ring-0 px-4 py-3 resize-none overflow-hidden"
+        className="text-theme-text-primary light:text-slate-900 w-full rounded-2xl bg-zinc-800 light:bg-slate-100 border border-sky-300 focus:border-sky-300 active:outline-none focus:outline-none focus:ring-0 px-4 py-3 resize-none overflow-hidden"
         defaultValue={message}
         onChange={adjustTextArea}
       />
@@ -159,7 +161,7 @@ function EditActionBar({ onCancel, onSave, isUserMessage = false }) {
         <button
           type="button"
           onClick={onCancel}
-          className="border-none text-white light:text-slate-900 text-sm font-medium w-[70px] h-9 rounded-lg hover:bg-white/5 light:hover:bg-slate-300"
+          className="border-none text-theme-text-primary light:text-slate-900 text-sm font-medium w-[70px] h-9 rounded-lg hover:bg-white/5 light:hover:bg-slate-300"
         >
           {t("chat_window.cancel")}
         </button>
@@ -167,7 +169,7 @@ function EditActionBar({ onCancel, onSave, isUserMessage = false }) {
           <button
             type="button"
             onClick={onSave}
-            className="border border-zinc-600 light:border-slate-600 text-white light:text-slate-900 text-sm font-medium w-[70px] h-9 rounded-lg hover:bg-white/5 light:hover:bg-slate-300"
+            className="border border-zinc-600 light:border-slate-600 text-theme-text-primary light:text-slate-900 text-sm font-medium w-[70px] h-9 rounded-lg hover:bg-white/5 light:hover:bg-slate-300"
           >
             {t("chat_window.save")}
           </button>

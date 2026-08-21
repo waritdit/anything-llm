@@ -13,6 +13,7 @@ import MarkdownRenderer from "../MarkdownRenderer";
 import { safeJsonParse } from "@/utils/request";
 import { TableCell, TableRow } from "@/components/ui/table";
 import ConfirmDialog from "@/components/ConfirmDialog";
+import { Button } from "@/components/ui/button";
 
 export default function ChatRow({ chat, onDelete }) {
   const {
@@ -47,61 +48,42 @@ export default function ChatRow({ chat, onDelete }) {
 
   return (
     <>
-      <TableRow
-        variant="none"
-        className="bg-transparent text-white text-opacity-80 text-xs font-medium border-b border-white/10 h-10"
-      >
-        <TableCell
-          variant="none"
-          className="px-6 font-medium whitespace-nowrap text-white"
-        >
+      <TableRow>
+        <TableCell className="font-medium">
           <a
             href={paths.settings.embedChatWidgets()}
             target="_blank"
             rel="noreferrer"
-            className="text-white flex items-center hover:underline"
+            className="text-theme-text-primary flex items-center hover:underline"
           >
             {chat.embed_config.workspace.name}
           </a>
         </TableCell>
         <TableCell
-          variant="none"
           onClick={openConnectionDetailsModal}
-          className="px-6 cursor-pointer hover:shadow-lg"
+          className="cursor-pointer hover:shadow-lg"
         >
           <div className="flex flex-col">
             <p>{truncate(chat.session_id, 20)}</p>
           </div>
         </TableCell>
         <TableCell
-          variant="none"
           onClick={openPromptModal}
-          className="px-6 border-transparent cursor-pointer hover:shadow-lg"
+          className="border-transparent cursor-pointer hover:shadow-lg"
         >
           {truncate(chat.prompt, 40)}
         </TableCell>
         <TableCell
-          variant="none"
           onClick={openResponseModal}
-          className="px-6 cursor-pointer hover:shadow-lg"
+          className="cursor-pointer hover:shadow-lg"
         >
           {truncate(safeJsonParse(chat.response, {})?.text, 40)}
         </TableCell>
-        <TableCell variant="none" className="px-6">
-          {chat.createdAt}
-        </TableCell>
-        <TableCell
-          variant="none"
-          className="px-6 flex items-center gap-x-6 h-full mt-1"
-        >
-          <button
-            onClick={handleDelete}
-            className="group text-xs font-medium text-theme-text-secondary px-2 py-1 rounded-lg hover:bg-theme-button-delete-hover-bg"
-          >
-            <span className="group-hover:text-theme-button-delete-hover-text">
-              Delete
-            </span>
-          </button>
+        <TableCell>{chat.createdAt}</TableCell>
+        <TableCell className="text-right">
+          <Button variant="destructive" size="sm" onClick={handleDelete}>
+            Delete
+          </Button>
         </TableCell>
       </TableRow>
       <Dialog
@@ -147,13 +129,13 @@ export default function ChatRow({ chat, onDelete }) {
 
 const TextPreview = ({ text }) => {
   return (
-    <DialogContent className="max-w-2xl bg-theme-bg-secondary border-theme-modal-border">
-      <DialogHeader className="p-0">
+    <DialogContent>
+      <DialogHeader>
         <DialogTitle className="text-sm font-semibold">
           Viewing Text
         </DialogTitle>
       </DialogHeader>
-      <div className="w-full h-[60vh] py-2 px-4 whitespace-pre-line overflow-auto rounded-lg bg-zinc-900 light:bg-theme-bg-secondary border border-gray-500 text-white text-sm">
+      <div className="w-full h-[60vh] py-2 px-4 whitespace-pre-line overflow-auto rounded-lg bg-zinc-900 light:bg-theme-bg-secondary border border-gray-500 text-theme-text-primary text-sm">
         {text}
       </div>
     </DialogContent>

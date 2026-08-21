@@ -1,4 +1,4 @@
-import { Plus } from "@phosphor-icons/react";
+import { Plus } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import {
   Tooltip,
@@ -24,23 +24,25 @@ export default function MemoryTabs() {
     <div className="flex items-center justify-between shrink-0 gap-2">
       <div className="flex items-center gap-1 min-w-0">
         <Tooltip>
-          <TooltipTrigger asChild>
-            <button
-              type="button"
-              onClick={() => setActiveTab("workspace")}
-              className={`flex items-center gap-0.5 h-6 px-3 rounded-full border-none cursor-pointer text-xs font-medium uppercase tracking-[1.2px] whitespace-nowrap transition-colors min-w-0 shrink ${
-                activeTab === "workspace"
-                  ? "bg-zinc-800 light:bg-slate-300"
-                  : "bg-transparent hover:bg-zinc-800/50 light:hover:bg-slate-200"
-              }`}
-            >
-              <span className="text-zinc-200 light:text-slate-800 truncate max-w-[140px]">
-                {workspaceName}
-              </span>
-              <span className="text-zinc-400 light:text-slate-600 font-normal">
-                ({workspaceCount}/{LIMITS.workspace})
-              </span>
-            </button>
+          <TooltipTrigger
+            render={
+              <button
+                type="button"
+                onClick={() => setActiveTab("workspace")}
+                className={`flex items-center gap-0.5 h-6 px-3 rounded-full border-none cursor-pointer text-xs font-medium uppercase tracking-[1.2px] whitespace-nowrap transition-colors min-w-0 shrink ${
+                  activeTab === "workspace"
+                    ? "bg-zinc-800 light:bg-slate-300"
+                    : "bg-transparent hover:bg-zinc-800/50 light:hover:bg-slate-200"
+                }`}
+              />
+            }
+          >
+            <span className="text-zinc-200 light:text-slate-800 truncate max-w-[140px]">
+              {workspaceName}
+            </span>
+            <span className="text-zinc-400 light:text-slate-600 font-normal">
+              ({workspaceCount}/{LIMITS.workspace})
+            </span>
           </TooltipTrigger>
           <TooltipContent side="bottom" className="max-w-[250px] text-xs">
             {workspaceName}
@@ -69,7 +71,7 @@ export default function MemoryTabs() {
         disabled={atLimit}
         className="-mr-1 flex items-center justify-center size-6 rounded-lg border-none bg-transparent cursor-pointer text-zinc-50 light:text-slate-900 hover:bg-zinc-800 light:hover:bg-slate-200 transition-colors disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent"
       >
-        <Plus size={16} weight="bold" />
+        <Plus size={16} />
       </button>
     </div>
   );

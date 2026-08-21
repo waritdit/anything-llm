@@ -41,7 +41,7 @@ export default function EditVariableModal({ variable, closeModal, onRefresh }) {
 
   return (
     <>
-      <DialogHeader className="p-0">
+      <DialogHeader>
         <DialogTitle className="text-sm font-semibold">
           Edit {variable.key}
         </DialogTitle>
@@ -49,11 +49,10 @@ export default function EditVariableModal({ variable, closeModal, onRefresh }) {
       <form onSubmit={handleUpdate}>
         <div className="space-y-4">
           <div>
-            <Label variant="field" htmlFor="key" className="block mb-2">
+            <Label htmlFor="key" className="block mb-2">
               Key
             </Label>
             <Input
-              variant="settings"
               name="key"
               minLength={3}
               maxLength={255}
@@ -64,17 +63,16 @@ export default function EditVariableModal({ variable, closeModal, onRefresh }) {
               autoComplete="off"
               pattern="^[a-zA-Z0-9_]+$"
             />
-            <p className="mt-2 text-xs text-white/60">
+            <p className="mt-2 text-xs text-theme-text-secondary">
               Key must be unique and will be used in prompts as {"{key}"}. Only
               letters, numbers and underscores are allowed.
             </p>
           </div>
           <div>
-            <Label variant="field" htmlFor="value" className="block mb-2">
+            <Label htmlFor="value" className="block mb-2">
               Value
             </Label>
             <Input
-              variant="settings"
               name="value"
               type="text"
               placeholder="e.g., Acme Corp"
@@ -84,11 +82,10 @@ export default function EditVariableModal({ variable, closeModal, onRefresh }) {
             />
           </div>
           <div>
-            <Label variant="field" htmlFor="description" className="block mb-2">
+            <Label htmlFor="description" className="block mb-2">
               Description
             </Label>
             <Input
-              variant="settings"
               name="description"
               type="text"
               placeholder="Optional description"
@@ -98,11 +95,9 @@ export default function EditVariableModal({ variable, closeModal, onRefresh }) {
           </div>
           {error && <p className="text-red-400 text-sm">Error: {error}</p>}
         </div>
-        <DialogFooter className="p-0 mt-4">
-          <DialogClose asChild>
-            <Button variant="outline" type="button">
-              Cancel
-            </Button>
+        <DialogFooter>
+          <DialogClose render={<Button variant="outline" type="button" />}>
+            Cancel
           </DialogClose>
           <Button variant="default" type="submit">
             Update variable

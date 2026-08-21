@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { Spinner } from "@/components/ui/spinner";
 import FileRow from "../FileRow";
-import { ChevronDown, Folder, FolderOpen, Loader2 } from "lucide-react";
+import { ChevronDown, Folder, FolderOpen } from "lucide-react";
 import { middleTruncate } from "@/utils/directories";
 import { useTranslation } from "react-i18next";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
 
 /**
  * A folder in the document picker. Purely presentational - every piece of
@@ -89,14 +91,13 @@ export default function FolderRow({
           a whole-row click is too easy to hit by accident for something that
           can stage hundreds of files for embedding. */}
       <TableRow
-        variant="none"
         onClick={() => onToggleExpanded(item.name)}
         onMouseEnter={() => onPrefetch(item.name)}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-        className={`text-theme-text-primary text-xs grid grid-cols-12 py-2 pl-3.5 pr-8 hover:bg-theme-file-picker-hover cursor-pointer file-row ${
-          selected || partial ? "selected light:text-white !text-white" : ""
+        className={`grid grid-cols-12 py-2 pl-3.5 pr-8 hover:bg-theme-file-picker-hover cursor-pointer file-row ${
+          selected || partial ? "selected light:text-white text-white!" : ""
         } ${
           isDropTarget
             ? "outline-dashed outline-2 -outline-offset-2 outline-sky-400 bg-sky-400/10"
@@ -105,7 +106,7 @@ export default function FolderRow({
       >
         <div
           className={`col-span-6 flex gap-x-2 items-center ${
-            selected || partial ? "!text-white" : "text-theme-text-primary"
+            selected || partial ? "text-white!" : "text-theme-text-primary"
           }`}
         >
           <Checkbox
@@ -133,29 +134,23 @@ export default function FolderRow({
           {displayCount > 0 && (
             <span
               className={`text-theme-text-secondary text-[10px] font-medium ml-1.5 shrink-0 ${
-                selected || partial ? "light:!text-white" : ""
+                selected || partial ? "light:text-white!" : ""
               }`}
             >
               ({displayCount})
             </span>
           )}
           {loading && files.length > 0 && (
-            <Loader2 className="h-3 w-3 animate-spin ml-1 shrink-0" />
+            <Spinner size="xs" className="ml-1 shrink-0" />
           )}
         </div>
         <p className="col-span-2 pl-3.5" />
         <p className="col-span-2 pl-2" />
       </TableRow>
       {expanded && loading && files.length === 0 && (
-        <TableRow
-          variant="none"
-          className="text-theme-text-secondary text-xs py-2 pl-8 pr-8"
-        >
-          <TableCell
-            variant="none"
-            className="flex items-center gap-x-2 py-2 pl-8"
-          >
-            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+        <TableRow className="text-theme-text-secondary py-2 pl-8 pr-8">
+          <TableCell className="flex items-center gap-x-2 pl-8">
+            <Spinner size="xs" />
             <span>{t("common.loading")}...</span>
           </TableCell>
         </TableRow>
@@ -171,23 +166,21 @@ export default function FolderRow({
           />
         ))}
       {expanded && hasMore && (
-        <TableRow
-          variant="none"
-          className="text-theme-text-secondary text-xs py-1 pl-8 pr-8"
-        >
-          <TableCell variant="none" className="py-1 pl-8">
-            <button
+        <TableRow className="text-theme-text-secondary py-1 pl-8 pr-8">
+          <TableCell className="py-1 pl-8">
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={(event) => {
                 event.stopPropagation();
                 onLoadMore(item.name);
               }}
               disabled={loading}
-              className="border-none bg-transparent text-xs text-theme-text-secondary hover:text-white cursor-pointer underline disabled:opacity-50 p-0"
             >
               {loading
                 ? `${t("common.loading")}...`
                 : `Load more (${files.length} of ${totalCount})`}
-            </button>
+            </Button>
           </TableCell>
         </TableRow>
       )}

@@ -1,4 +1,4 @@
-import { Warning } from "@phosphor-icons/react";
+import { TriangleAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DialogHeader,
@@ -14,16 +14,16 @@ export default function ChangeWarningModal({
 }) {
   return (
     <>
-      <DialogHeader className="p-0">
+      <DialogHeader>
         <div className="flex items-center gap-2">
-          <Warning className="text-red-500 w-5 h-5" weight="fill" />
+          <TriangleAlert className="text-red-500 w-5 h-5 fill-current" />
           <DialogTitle className="text-sm font-semibold text-red-500">
             WARNING - This action is irreversible
           </DialogTitle>
         </div>
       </DialogHeader>
       <div className="space-y-2">
-        <p className="text-white text-sm">
+        <p className="text-theme-text-primary text-sm">
           {warningText.split("\\n").map((line, index) => (
             <span key={index}>
               {line}
@@ -34,11 +34,11 @@ export default function ChangeWarningModal({
           Are you sure you want to proceed?
         </p>
       </div>
-      <DialogFooter className="p-0">
-        <DialogClose asChild>
-          <Button variant="outline" onClick={onClose} type="button">
-            Cancel
-          </Button>
+      <DialogFooter>
+        <DialogClose
+          render={<Button variant="outline" onClick={onClose} type="button" />}
+        >
+          Cancel
         </DialogClose>
         <Button variant="destructive" onClick={onConfirm} type="button">
           Confirm

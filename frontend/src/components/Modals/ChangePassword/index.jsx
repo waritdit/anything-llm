@@ -81,15 +81,10 @@ export function ChangePasswordForm({
     <form onSubmit={handleSubmit} className="space-y-4">
       {requireCurrentPassword && (
         <div>
-          <Label
-            variant="field"
-            htmlFor="currentPassword"
-            className="block mb-2"
-          >
+          <Label htmlFor="currentPassword" className="block mb-2">
             {t("password_change.current_password")}
           </Label>
           <Input
-            variant="settings"
             name="currentPassword"
             type="password"
             required={true}
@@ -98,27 +93,25 @@ export function ChangePasswordForm({
         </div>
       )}
       <div>
-        <Label variant="field" htmlFor="newPassword" className="block mb-2">
+        <Label htmlFor="newPassword" className="block mb-2">
           {t("password_change.new_password")}
         </Label>
         <Input
-          variant="settings"
           name="newPassword"
           type="password"
           required={true}
           minLength={8}
           autoComplete="new-password"
         />
-        <p className="mt-2 text-xs text-white/60">
+        <p className="mt-2 text-xs text-theme-text-secondary">
           {t("password_change.password_requirements")}
         </p>
       </div>
       <div>
-        <Label variant="field" htmlFor="confirmPassword" className="block mb-2">
+        <Label htmlFor="confirmPassword" className="block mb-2">
           {t("password_change.confirm_password")}
         </Label>
         <Input
-          variant="settings"
           name="confirmPassword"
           type="password"
           required={true}
@@ -128,11 +121,9 @@ export function ChangePasswordForm({
       </div>
       {error && <p className="text-red-400 text-sm">Error: {error}</p>}
       {actions?.({ loading }) ?? (
-        <DialogFooter className="pt-2">
-          <DialogClose asChild>
-            <Button variant="outline" type="button">
-              {t("password_change.cancel")}
-            </Button>
+        <DialogFooter>
+          <DialogClose render={<Button variant="outline" type="button" />}>
+            {t("password_change.cancel")}
           </DialogClose>
           <Button variant="default" type="submit" disabled={loading}>
             {loading
@@ -154,7 +145,7 @@ export default function ChangePasswordModal({ open, onClose }) {
 
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
-      <DialogContent className="max-w-lg bg-theme-bg-secondary border-theme-modal-border">
+      <DialogContent size="md">
         <DialogHeader>
           <DialogTitle>{t("password_change.title")}</DialogTitle>
         </DialogHeader>

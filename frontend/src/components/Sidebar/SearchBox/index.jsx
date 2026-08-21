@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Plus, MagnifyingGlass } from "@phosphor-icons/react";
+import { Plus, Search } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import paths from "@/utils/paths";
@@ -68,10 +68,9 @@ export default function SearchBox({ user, showNewWsModal }) {
           onFocus={(e) => e.target.select()}
           className="border-none w-full h-full rounded-lg bg-theme-sidebar-item-default pl-9 focus:pl-4 pr-1 placeholder:text-white/50 light:placeholder:text-slate-500 placeholder:font-semibold outline-none text-theme-text-primary search-input peer text-sm"
         />
-        <MagnifyingGlass
+        <Search
           size={14}
           className="absolute left-3 top-1/2 transform -translate-y-1/2 text-theme-settings-input-placeholder peer-focus:invisible"
-          weight="bold"
           hidden={!!searchTerm}
         />
       </div>
@@ -178,7 +177,7 @@ function SearchResultItem({ to, name, hint }) {
     <Link
       to={to}
       onClick={() => window.dispatchEvent(new Event(SEARCH_RESULT_SELECTED))}
-      className="hover:bg-[#FFF]/10 light:hover:bg-[#000]/10 transition-all duration-300 rounded-sm px-[8px] py-[2px]"
+      className="hover:bg-white/10 light:hover:bg-black/10 transition-all duration-300 rounded-sm px-[8px] py-[2px]"
     >
       <p className="text-theme-text-primary text-sm truncate w-[80%]">
         {name}
@@ -199,17 +198,15 @@ function ShortWidthNewWorkspaceButton({ user, showNewWsModal }) {
   return (
     <>
       <Tooltip>
-        <TooltipTrigger asChild>
-          <button
-            onClick={showNewWsModal}
-            className="border-none flex items-center justify-center bg-white  rounded-lg p-[8px] hover:bg-white/80 light:hover:bg-slate-300 transition-all duration-300"
-          >
-            <Plus
-              size={16}
-              weight="bold"
-              className="text-black light:text-slate-500"
+        <TooltipTrigger
+          render={
+            <button
+              onClick={showNewWsModal}
+              className="border-none flex items-center justify-center bg-white  rounded-lg p-[8px] hover:bg-white/80 light:hover:bg-slate-300 transition-all duration-300"
             />
-          </button>
+          }
+        >
+          <Plus size={16} className="text-black light:text-slate-500" />
         </TooltipTrigger>
         <TooltipContent side="top" className="max-w-[250px] text-xs">
           {t("new-workspace.title")}

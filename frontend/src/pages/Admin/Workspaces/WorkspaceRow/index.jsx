@@ -5,10 +5,14 @@ import Workspace from "@/models/workspace";
 import showToast from "@/utils/toast";
 import paths from "@/utils/paths";
 import { Settings, Link2, Trash2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { TableCell, TableHead, TableRow } from "@/components/ui/table";
 import ConfirmDialog from "@/components/ConfirmDialog";
+import TableRowActions from "@/components/lib/TableRowActions";
+import {
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 
 export default function WorkspaceRow({
   workspace,
@@ -75,70 +79,65 @@ export default function WorkspaceRow({
 
   return (
     <>
-      <TableRow
-        variant="none"
-        ref={rowRef}
-        className={`bg-transparent text-white text-opacity-80 text-xs font-medium border-b border-white/10 h-10 ${
-          active ? "" : "opacity-60"
-        }`}
-      >
-        <TableHead
-          variant="none"
-          scope="row"
-          className="px-6 whitespace-nowrap"
-        >
-          {workspace.name}
-        </TableHead>
-        <TableCell variant="none" className="px-6">
+      <TableRow ref={rowRef} className={`${active ? "" : "opacity-60"}`}>
+        <TableHead scope="row">{workspace.name}</TableHead>
+        <TableCell>
           <a
             href={paths.workspace.chat(workspace.slug)}
             target="_blank"
             rel="noreferrer"
-            className="text-white flex items-center hover:underline"
+            className="text-theme-text-primary flex items-center hover:underline"
           >
             <Link2 className="mr-2 w-4 h-4" /> {workspace.slug}
           </a>
         </TableCell>
-        <TableCell variant="none" className="px-6">
+        <TableCell>
           <a
             href={paths.workspace.settings.members(workspace.slug)}
-            className="text-white flex items-center underline"
+            className="text-theme-text-primary flex items-center underline"
           >
             {workspace.userIds?.length}
           </a>
         </TableCell>
-        <TableCell variant="none" className="px-6">
+        <TableCell>
           <div className="flex items-center gap-x-2">
             <Switch
               checked={active}
               disabled={saving}
               onCheckedChange={handleToggleActive}
               aria-label={`${active ? "Deactivate" : "Activate"} ${workspace.name}`}
-              className="h-5 w-9 [&>span]:h-4 [&>span]:w-4 [&>span]:data-[state=checked]:translate-x-4"
+              size="lg"
             />
             <span className="whitespace-nowrap">
               {active ? "Active" : "Inactive"}
             </span>
           </div>
         </TableCell>
-        <TableCell variant="none" className="px-6">
-          {workspace.createdAt}
-        </TableCell>
-        <TableCell variant="none" className="px-6">
-          <div className="flex items-center gap-x-2">
-            <a
-              href={paths.workspace.settings.generalAppearance(workspace.slug)}
-              title="Workspace settings"
-              className="text-xs font-medium text-white/80 light:text-black/80 hover:text-white light:hover:text-black rounded-lg p-2 hover:bg-white hover:light:bg-black/10 hover:bg-opacity-10 inline-flex items-center"
+        <TableCell>{workspace.createdAt}</TableCell>
+        <TableCell className="text-right">
+          <TableRowActions>
+            <DropdownMenuItem
+              render={
+                <a
+                  href={paths.workspace.settings.generalAppearance(
+                    workspace.slug
+                  )}
+                />
+              }
             >
-              <Settings className="h-5 w-5" />
-            </a>
+              <Settings />
+              Workspace settings
+            </DropdownMenuItem>
             {!deletionProtected && (
-              <Button variant="danger" onClick={handleDelete}>
-                <Trash2 className="h-5 w-5" />
-              </Button>
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem variant="destructive" onClick={handleDelete}>
+                  <Trash2 />
+                  Delete
+                </DropdownMenuItem>
+              </>
             )}
-          </div>
+          </TableRowActions>
         </TableCell>
       </TableRow>
       <ConfirmDialog config={confirm} onClose={() => setConfirm(null)} />

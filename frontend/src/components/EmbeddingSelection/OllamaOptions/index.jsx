@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import System from "@/models/system";
 import PreLoader from "@/components/Preloader";
 import { OLLAMA_COMMON_URLS } from "@/utils/constants";
-import { CaretDown, CaretUp, Info } from "@phosphor-icons/react";
+import { ChevronDown, ChevronUp, Info } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -62,23 +62,20 @@ export default function OllamaEmbeddingOptions({ settings }) {
         />
         <div className="flex flex-col w-60">
           <Tooltip>
-            <TooltipTrigger asChild>
-              <div className="flex gap-x-1 items-center mb-3">
-                <Label variant="settings" className="block">
-                  Max embedding chunk length
-                </Label>
-                <Info
-                  size={16}
-                  className="text-theme-text-secondary cursor-pointer"
-                />
-              </div>
+            <TooltipTrigger
+              render={<div className="flex gap-x-1 items-center mb-3" />}
+            >
+              <Label className="block">Max embedding chunk length</Label>
+              <Info
+                size={16}
+                className="text-theme-text-secondary cursor-pointer"
+              />
             </TooltipTrigger>
             <TooltipContent side="top" className="max-w-[250px] text-xs">
               Maximum length of text chunks, in characters, for embedding.
             </TooltipContent>
           </Tooltip>
           <Input
-            variant="settings"
             type="number"
             name="EmbeddingModelMaxChunkLength"
             placeholder="8192"
@@ -93,17 +90,18 @@ export default function OllamaEmbeddingOptions({ settings }) {
       </div>
       <div className="flex justify-start mt-4">
         <Button
-          variant="inline"
+          variant="link"
+          size="sm"
           onClick={(e) => {
             e.preventDefault();
             setShowAdvancedControls(!showAdvancedControls);
           }}
         >
-          {showAdvancedControls ? "Hide" : "Show"} Advanced Settings
+          {showAdvancedControls ? "Hide" : "Show"} advanced settings
           {showAdvancedControls ? (
-            <CaretUp size={14} className="ml-1" />
+            <ChevronUp size={14} className="ml-1" />
           ) : (
-            <CaretDown size={14} className="ml-1" />
+            <ChevronDown size={14} className="ml-1" />
           )}
         </Button>
       </div>
@@ -112,13 +110,17 @@ export default function OllamaEmbeddingOptions({ settings }) {
         <div className="w-full flex items-start gap-4">
           <div className="flex flex-col w-60">
             <div className="flex justify-between items-center mb-2">
-              <Label variant="settings">Ollama Base URL</Label>
+              <Label>Ollama Base URL</Label>
               {loading ? (
                 <PreLoader size="6" />
               ) : (
                 <>
                   {!basePathValue.value && (
-                    <Button variant="chip" onClick={handleAutoDetectClick}>
+                    <Button
+                      variant="secondary"
+                      size="xs"
+                      onClick={handleAutoDetectClick}
+                    >
                       Auto-Detect
                     </Button>
                   )}
@@ -126,7 +128,6 @@ export default function OllamaEmbeddingOptions({ settings }) {
               )}
             </div>
             <Input
-              variant="settings"
               type="url"
               name="EmbeddingBasePath"
               placeholder="http://127.0.0.1:11434"
@@ -137,22 +138,20 @@ export default function OllamaEmbeddingOptions({ settings }) {
               onChange={basePath.onChange}
               onBlur={basePath.onBlur}
             />
-            <p className="text-xs leading-[18px] font-base text-white text-opacity-60 mt-2">
+            <p className="text-xs/60 leading-[18px] font-base text-theme-text-primary mt-2">
               Enter the URL where Ollama is running.
             </p>
           </div>
           <div className="flex flex-col w-60">
             <Tooltip>
-              <TooltipTrigger asChild>
-                <div className="flex gap-x-1 items-center mb-3">
-                  <Label variant="settings" className="block">
-                    Embedding batch size
-                  </Label>
-                  <Info
-                    size={16}
-                    className="text-theme-text-secondary cursor-pointer"
-                  />
-                </div>
+              <TooltipTrigger
+                render={<div className="flex gap-x-1 items-center mb-3" />}
+              >
+                <Label className="block">Embedding batch size</Label>
+                <Info
+                  size={16}
+                  className="text-theme-text-secondary cursor-pointer"
+                />
               </TooltipTrigger>
               <TooltipContent side="top" className="max-w-[250px] text-xs">
                 Number of text chunks to embed in parallel. Higher values
@@ -160,7 +159,6 @@ export default function OllamaEmbeddingOptions({ settings }) {
               </TooltipContent>
             </Tooltip>
             <Input
-              variant="settings"
               type="number"
               name="OllamaEmbeddingBatchSize"
               placeholder="1"
@@ -171,17 +169,14 @@ export default function OllamaEmbeddingOptions({ settings }) {
               required={true}
               autoComplete="off"
             />
-            <p className="text-xs leading-[18px] font-base text-white text-opacity-60 mt-2">
+            <p className="text-xs/60 leading-[18px] font-base text-theme-text-primary mt-2">
               Increase this value to process multiple chunks simultaneously for
               faster embedding.
             </p>
           </div>
           <div>
-            <Label variant="settings" className="block mb-3">
-              Auth Token (optional)
-            </Label>
+            <Label className="block mb-3">Auth Token (optional)</Label>
             <Input
-              variant="settings"
               type="password"
               name="OllamaLLMAuthToken"
               placeholder="Enter your Auth Token"
@@ -193,7 +188,7 @@ export default function OllamaEmbeddingOptions({ settings }) {
               autoComplete="off"
               spellCheck={false}
             />
-            <p className="text-xs leading-[18px] font-base text-white text-opacity-60 mt-2">
+            <p className="text-xs/60 leading-[18px] font-base text-theme-text-primary mt-2">
               Enter a <code>Bearer</code> Auth Token for interacting with your
               Ollama server.
               <br />
@@ -234,11 +229,9 @@ function OllamaEmbeddingModelSelection({ settings, basePath = null }) {
   if (loading || customModels.length == 0) {
     return (
       <div className="flex flex-col w-60">
-        <Label variant="settings" className="block mb-2">
-          Ollama Embedding Model
-        </Label>
+        <Label className="block mb-2">Ollama Embedding Model</Label>
         <Select name="EmbeddingModelPref" disabled={true}>
-          <SelectTrigger variant="settings">
+          <SelectTrigger className="w-full">
             <SelectValue
               placeholder={
                 !!basePath
@@ -249,7 +242,7 @@ function OllamaEmbeddingModelSelection({ settings, basePath = null }) {
           </SelectTrigger>
           <SelectContent />
         </Select>
-        <p className="text-xs leading-[18px] font-base text-white text-opacity-60 mt-2">
+        <p className="text-xs/60 leading-[18px] font-base text-theme-text-primary mt-2">
           Select the Ollama model for embeddings. Models will load after
           entering a valid Ollama URL.
         </p>
@@ -259,15 +252,13 @@ function OllamaEmbeddingModelSelection({ settings, basePath = null }) {
 
   return (
     <div className="flex flex-col w-60">
-      <Label variant="settings" className="block mb-2">
-        Ollama Embedding Model
-      </Label>
+      <Label className="block mb-2">Ollama Embedding Model</Label>
       <Select
         name="EmbeddingModelPref"
         required={true}
         defaultValue={settings.EmbeddingModelPref ?? customModels?.[0]?.id}
       >
-        <SelectTrigger variant="settings">
+        <SelectTrigger className="w-full">
           <SelectValue placeholder="Select an option" />
         </SelectTrigger>
         <SelectContent>
@@ -285,7 +276,7 @@ function OllamaEmbeddingModelSelection({ settings, basePath = null }) {
           )}
         </SelectContent>
       </Select>
-      <p className="text-xs leading-[18px] font-base text-white text-opacity-60 mt-2">
+      <p className="text-xs/60 leading-[18px] font-base text-theme-text-primary mt-2">
         Choose the Ollama model you want to use for generating embeddings.
       </p>
     </div>

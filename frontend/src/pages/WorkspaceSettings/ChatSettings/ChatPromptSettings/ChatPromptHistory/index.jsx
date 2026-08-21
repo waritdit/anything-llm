@@ -1,6 +1,6 @@
 import { useEffect, useState, forwardRef } from "react";
 import { useTranslation } from "react-i18next";
-import { X } from "@phosphor-icons/react";
+import { X } from "lucide-react";
 import PromptHistory from "@/models/promptHistory";
 import PromptHistoryItem from "./PromptHistoryItem";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -56,7 +56,7 @@ export default forwardRef(function ChatPromptHistory(
     <>
       <div
         ref={ref}
-        className={`fixed right-3 top-3 bottom-3 w-[375px] bg-theme-action-menu-bg light:bg-theme-home-update-card-bg rounded-xl py-4 px-4 z-[9999] overflow-y-hidden ${
+        className={`fixed right-3 top-3 bottom-3 w-[375px] bg-theme-action-menu-bg light:bg-theme-home-update-card-bg rounded-xl py-4 px-4 z-9999 overflow-y-hidden ${
           show
             ? "translate-x-0 opacity-100 visible"
             : "translate-x-full opacity-0 invisible"
@@ -81,7 +81,7 @@ export default forwardRef(function ChatPromptHistory(
               className="text-theme-text-secondary cursor-pointer hover:text-primary-button border-none"
               onClick={onClose}
             >
-              <X size={16} weight="bold" />
+              <X size={16} />
             </button>
           </div>
         </div>
@@ -89,7 +89,7 @@ export default forwardRef(function ChatPromptHistory(
           {loading ? (
             <LoaderSkeleton />
           ) : history.length === 0 ? (
-            <div className="flex text-theme-text-secondary text-sm text-center w-full h-full flex items-center justify-center">
+            <div className="text-theme-text-secondary text-sm text-center w-full h-full flex items-center justify-center">
               {t("chat.prompt.history.noHistory")}
             </div>
           ) : (

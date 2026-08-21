@@ -35,7 +35,7 @@ export default function CopyLinkToChatRow() {
 
   return (
     <>
-      <DropdownMenuItem onSelect={handleClick}>
+      <DropdownMenuItem onClick={handleClick}>
         {copied ? "Link copied!" : "Copy chat link"}
       </DropdownMenuItem>
       <CopyLinkModal
@@ -50,8 +50,8 @@ export default function CopyLinkToChatRow() {
 function CopyLinkModal({ isOpen, closeModal, url }) {
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && closeModal()}>
-      <DialogContent className="max-w-[500px] bg-theme-bg-sidebar border-white/10">
-        <DialogTitle className="text-white text-left font-medium text-sm">
+      <DialogContent size="md">
+        <DialogTitle className="text-theme-text-primary text-left font-medium text-sm">
           Chat link copied!
         </DialogTitle>
         <div className="flex flex-col w-full">
@@ -62,7 +62,7 @@ function CopyLinkModal({ isOpen, closeModal, url }) {
             This <strong>does not</strong> change permissions on the chat and is
             simply a way for you to quick link to you own chats.
           </p>
-          <div className="mt-3 px-3 py-2 rounded-md bg-theme-bg-primary border border-white/10 text-sm text-white break-all select-all">
+          <div className="mt-3 px-3 py-2 rounded-md bg-theme-bg-primary border border-theme-sidebar-border text-sm text-theme-text-primary break-all select-all">
             {url}
           </div>
         </div>

@@ -1,10 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { titleCase } from "text-case";
 import Admin from "@/models/admin";
-import { Trash } from "@phosphor-icons/react";
-import { Button } from "@/components/ui/button";
+import { Copy, Trash2 } from "lucide-react";
 import { TableCell, TableRow } from "@/components/ui/table";
 import ConfirmDialog from "@/components/ConfirmDialog";
+import TableRowActions from "@/components/lib/TableRowActions";
+import {
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 
 export default function InviteRow({ invite }) {
   const rowRef = useRef(null);
@@ -15,7 +19,7 @@ export default function InviteRow({ invite }) {
     setConfirm({
       title: "Deactivate this invite?",
       description:
-        "After you do this it will no longer be useable. This action is irreversible.",
+        "After you do this it will no longer be usable. This action is irreversible.",
       confirmText: "Deactivate",
       variant: "destructive",
       onConfirm: async () => {
@@ -47,47 +51,31 @@ export default function InviteRow({ invite }) {
 
   return (
     <>
-      <TableRow
-        variant="none"
-        ref={rowRef}
-        className="bg-transparent text-white text-opacity-80 text-xs font-medium border-b border-white/10 h-10"
-      >
-        <TableCell
-          variant="none"
-          scope="row"
-          className="px-6 whitespace-nowrap"
-        >
-          {titleCase(status)}
-        </TableCell>
-        <TableCell variant="none" className="px-6">
+      <TableRow ref={rowRef}>
+        <TableCell scope="row">{titleCase(status)}</TableCell>
+        <TableCell>
           {invite.claimedBy
             ? invite.claimedBy?.username || "deleted user"
             : "--"}
         </TableCell>
-        <TableCell variant="none" className="px-6">
-          {invite.createdBy?.username || "deleted user"}
-        </TableCell>
-        <TableCell variant="none" className="px-6">
-          {invite.createdAt}
-        </TableCell>
-        <TableCell
-          variant="none"
-          className="px-6 flex items-center gap-x-6 h-full mt-1"
-        >
-          {status === "pending" && (
-            <>
-              <button
-                onClick={copyInviteLink}
-                disabled={copied}
-                className="text-xs font-medium text-blue-300 rounded-lg hover:text-blue-400 hover:underline"
-              >
-                {copied ? "Copied" : "Copy Invite Link"}
-              </button>
-              <Button variant="danger" onClick={handleDelete}>
-                <Trash className="h-5 w-5" />
-              </Button>
-            </>
-          )}
+        <TableCell>{invite.createdBy?.username || "deleted user"}</TableCell>
+        <TableCell>{invite.createdAt}</TableCell>
+        <TableCell className="text-right">
+          <TableRowActions>
+            {status === "pending" && (
+              <>
+                <DropdownMenuItem onClick={copyInviteLink} disabled={copied}>
+                  <Copy />
+                  {copied ? "Copied" : "Copy invite link"}
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem variant="destructive" onClick={handleDelete}>
+                  <Trash2 />
+                  Delete
+                </DropdownMenuItem>
+              </>
+            )}
+          </TableRowActions>
         </TableCell>
       </TableRow>
       <ConfirmDialog config={confirm} onClose={() => setConfirm(null)} />

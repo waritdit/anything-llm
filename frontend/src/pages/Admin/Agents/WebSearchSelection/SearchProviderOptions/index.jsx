@@ -22,7 +22,7 @@ const SerpApiEngines = [
 export function SerpApiOptions({ settings }) {
   return (
     <>
-      <p className="text-sm text-white/60 my-2">
+      <p className="text-sm text-theme-text-secondary my-2">
         Get a free API key{" "}
         <a
           href="https://serpapi.com/"
@@ -35,11 +35,8 @@ export function SerpApiOptions({ settings }) {
       </p>
       <div className="flex gap-x-4">
         <div className="flex flex-col w-60">
-          <Label variant="settings" className="block mb-3">
-            API Key
-          </Label>
+          <Label className="block mb-3">API Key</Label>
           <Input
-            variant="settings"
             type="password"
             name="env::AgentSerpApiKey"
             placeholder="SerpApi API Key"
@@ -50,15 +47,13 @@ export function SerpApiOptions({ settings }) {
           />
         </div>
         <div className="flex flex-col w-60">
-          <Label variant="settings" className="block mb-3">
-            Engine
-          </Label>
+          <Label className="block mb-3">Engine</Label>
           <Select
             name="env::AgentSerpApiEngine"
             required={true}
             defaultValue={settings?.AgentSerpApiEngine || "google"}
           >
-            <SelectTrigger variant="settings">
+            <SelectTrigger>
               <SelectValue placeholder="Select an option" />
             </SelectTrigger>
             <SelectContent>
@@ -72,7 +67,7 @@ export function SerpApiOptions({ settings }) {
           {/* <input
             type="text"
             name="env::AgentSerpApiEngine"
-            className="border-none bg-theme-settings-input-bg text-white placeholder:text-theme-settings-input-placeholder text-sm rounded-lg focus:outline-primary-button active:outline-primary-button outline-none block w-full p-2.5"
+            className="border-none bg-theme-settings-input-bg text-theme-text-primary placeholder:text-theme-settings-input-placeholder text-sm rounded-lg focus:outline-primary-button active:outline-primary-button outline-none block w-full p-2.5"
             placeholder="SerpApi engine (Google, Amazon...)"
             defaultValue={settings?.AgentSerpApiEngine || "google"}
             required={true}
@@ -103,7 +98,7 @@ const SearchApiEngines = [
 export function SearchApiOptions({ settings }) {
   return (
     <>
-      <p className="text-sm text-white/60 my-2">
+      <p className="text-sm text-theme-text-secondary my-2">
         You can get a free API key{" "}
         <a
           href="https://www.searchapi.io/"
@@ -116,11 +111,8 @@ export function SearchApiOptions({ settings }) {
       </p>
       <div className="flex gap-x-4">
         <div className="flex flex-col w-60">
-          <Label variant="settings" className="block mb-3">
-            API Key
-          </Label>
+          <Label className="block mb-3">API Key</Label>
           <Input
-            variant="settings"
             type="password"
             name="env::AgentSearchApiKey"
             placeholder="SearchApi API Key"
@@ -131,15 +123,13 @@ export function SearchApiOptions({ settings }) {
           />
         </div>
         <div className="flex flex-col w-60">
-          <Label variant="settings" className="block mb-3">
-            Engine
-          </Label>
+          <Label className="block mb-3">Engine</Label>
           <Select
             name="env::AgentSearchApiEngine"
             required={true}
             defaultValue={settings?.AgentSearchApiEngine || "google"}
           >
-            <SelectTrigger variant="settings">
+            <SelectTrigger>
               <SelectValue placeholder="Select an option" />
             </SelectTrigger>
             <SelectContent>
@@ -153,7 +143,7 @@ export function SearchApiOptions({ settings }) {
           {/* <input
             type="text"
             name="env::AgentSearchApiEngine"
-            className="border-none bg-theme-settings-input-bg text-white placeholder:text-theme-settings-input-placeholder text-sm rounded-lg focus:outline-primary-button active:outline-primary-button outline-none block w-full p-2.5"
+            className="border-none bg-theme-settings-input-bg text-theme-text-primary placeholder:text-theme-settings-input-placeholder text-sm rounded-lg focus:outline-primary-button active:outline-primary-button outline-none block w-full p-2.5"
             placeholder="SearchApi engine (Google, Bing...)"
             defaultValue={settings?.AgentSearchApiEngine || "google"}
             required={true}
@@ -169,7 +159,7 @@ export function SearchApiOptions({ settings }) {
 export function SerperDotDevOptions({ settings }) {
   return (
     <>
-      <p className="text-sm text-white/60 my-2">
+      <p className="text-sm text-theme-text-secondary my-2">
         You can get a free API key{" "}
         <a
           href="https://serper.dev"
@@ -182,11 +172,8 @@ export function SerperDotDevOptions({ settings }) {
       </p>
       <div className="flex gap-x-4">
         <div className="flex flex-col w-60">
-          <Label variant="settings" className="block mb-3">
-            API Key
-          </Label>
+          <Label className="block mb-3">API Key</Label>
           <Input
-            variant="settings"
             type="password"
             name="env::AgentSerperApiKey"
             placeholder="Serper.dev API Key"
@@ -204,7 +191,7 @@ export function SerperDotDevOptions({ settings }) {
 export function BingSearchOptions({ settings }) {
   return (
     <>
-      <p className="text-sm text-white/60 my-2">
+      <p className="text-sm text-theme-text-secondary my-2">
         You can get a Bing Web Search API subscription key{" "}
         <a
           href="https://portal.azure.com/"
@@ -217,11 +204,8 @@ export function BingSearchOptions({ settings }) {
       </p>
       <div className="flex gap-x-4">
         <div className="flex flex-col w-60">
-          <Label variant="settings" className="block mb-3">
-            API Key
-          </Label>
+          <Label className="block mb-3">API Key</Label>
           <Input
-            variant="settings"
             type="password"
             name="env::AgentBingSearchApiKey"
             placeholder="Bing Web Search API Key"
@@ -232,10 +216,10 @@ export function BingSearchOptions({ settings }) {
           />
         </div>
       </div>
-      <p className="text-sm text-white/60 my-2">
+      <p className="text-sm text-theme-text-secondary my-2">
         To set up a Bing Web Search API subscription:
       </p>
-      <ol className="list-decimal text-sm text-white/60 ml-6">
+      <ol className="list-decimal text-sm text-theme-text-secondary ml-6">
         <li>
           Go to the Azure portal:{" "}
           <a
@@ -268,7 +252,7 @@ export function BingSearchOptions({ settings }) {
 export function BaiduSearchOptions({ settings }) {
   return (
     <>
-      <p className="text-sm text-white/60 my-2">
+      <p className="text-sm text-theme-text-secondary my-2">
         You can get an API key{" "}
         <a
           href="https://cloud.baidu.com/doc/qianfan-api/s/Wmbq4z7e5"
@@ -281,11 +265,8 @@ export function BaiduSearchOptions({ settings }) {
       </p>
       <div className="flex gap-x-4">
         <div className="flex flex-col w-60">
-          <Label variant="settings" className="block mb-3">
-            API Key
-          </Label>
+          <Label className="block mb-3">API Key</Label>
           <Input
-            variant="settings"
             type="password"
             name="env::AgentBaiduSearchApiKey"
             placeholder="Baidu Search API Key"
@@ -305,7 +286,7 @@ export function BaiduSearchOptions({ settings }) {
 export function SerplySearchOptions({ settings }) {
   return (
     <>
-      <p className="text-sm text-white/60 my-2">
+      <p className="text-sm text-theme-text-secondary my-2">
         You can get a free API key{" "}
         <a
           href="https://serply.io"
@@ -318,11 +299,8 @@ export function SerplySearchOptions({ settings }) {
       </p>
       <div className="flex gap-x-4">
         <div className="flex flex-col w-60">
-          <Label variant="settings" className="block mb-3">
-            API Key
-          </Label>
+          <Label className="block mb-3">API Key</Label>
           <Input
-            variant="settings"
             type="password"
             name="env::AgentSerplyApiKey"
             placeholder="Serply API Key"
@@ -341,11 +319,8 @@ export function SearXNGOptions({ settings }) {
   return (
     <div className="flex gap-x-4">
       <div className="flex flex-col w-60">
-        <Label variant="settings" className="block mb-3">
-          SearXNG API Base URL
-        </Label>
+        <Label className="block mb-3">SearXNG API Base URL</Label>
         <Input
-          variant="settings"
           type="url"
           name="env::AgentSearXNGApiUrl"
           placeholder="SearXNG API Base URL"
@@ -362,7 +337,7 @@ export function SearXNGOptions({ settings }) {
 export function TavilySearchOptions({ settings }) {
   return (
     <>
-      <p className="text-sm text-white/60 my-2">
+      <p className="text-sm text-theme-text-secondary my-2">
         You can get an API key{" "}
         <a
           href="https://tavily.com/"
@@ -375,11 +350,8 @@ export function TavilySearchOptions({ settings }) {
       </p>
       <div className="flex gap-x-4">
         <div className="flex flex-col w-60">
-          <Label variant="settings" className="block mb-3">
-            API Key
-          </Label>
+          <Label className="block mb-3">API Key</Label>
           <Input
-            variant="settings"
             type="password"
             name="env::AgentTavilyApiKey"
             placeholder="Tavily API Key"
@@ -397,7 +369,7 @@ export function TavilySearchOptions({ settings }) {
 export function CrwSearchOptions({ settings }) {
   return (
     <>
-      <p className="text-sm text-white/60 my-2">
+      <p className="text-sm text-theme-text-secondary my-2">
         You can get an API key{" "}
         <a
           href="https://fastcrw.com/"
@@ -419,11 +391,8 @@ export function CrwSearchOptions({ settings }) {
       </p>
       <div className="flex gap-x-4">
         <div className="flex flex-col w-60">
-          <Label variant="settings" className="block mb-3">
-            API Key
-          </Label>
+          <Label className="block mb-3">API Key</Label>
           <Input
-            variant="settings"
             type="password"
             name="env::AgentCrwApiKey"
             placeholder="fastCRW API Key"
@@ -434,11 +403,8 @@ export function CrwSearchOptions({ settings }) {
           />
         </div>
         <div className="flex flex-col w-60">
-          <Label variant="settings" className="block mb-3">
-            Base URL (optional)
-          </Label>
+          <Label className="block mb-3">Base URL (optional)</Label>
           <Input
-            variant="settings"
             type="url"
             name="env::AgentCrwApiUrl"
             placeholder="https://fastcrw.com/api"
@@ -455,7 +421,7 @@ export function CrwSearchOptions({ settings }) {
 export function DuckDuckGoOptions() {
   return (
     <>
-      <p className="text-sm text-white/60 my-2">
+      <p className="text-sm text-theme-text-secondary my-2">
         DuckDuckGo is ready to use without any additional configuration.
       </p>
     </>
@@ -465,7 +431,7 @@ export function DuckDuckGoOptions() {
 export function ExaSearchOptions({ settings }) {
   return (
     <>
-      <p className="text-sm text-white/60 my-2">
+      <p className="text-sm text-theme-text-secondary my-2">
         You can get an API key{" "}
         <a
           href="https://exa.ai"
@@ -478,11 +444,8 @@ export function ExaSearchOptions({ settings }) {
       </p>
       <div className="flex gap-x-4">
         <div className="flex flex-col w-60">
-          <Label variant="settings" className="block mb-3">
-            API Key
-          </Label>
+          <Label className="block mb-3">API Key</Label>
           <Input
-            variant="settings"
             type="password"
             name="env::AgentExaApiKey"
             placeholder="Exa API Key"
@@ -500,7 +463,7 @@ export function ExaSearchOptions({ settings }) {
 export function PerplexitySearchOptions({ settings }) {
   return (
     <>
-      <p className="text-sm text-white/60 my-2">
+      <p className="text-sm text-theme-text-secondary my-2">
         You can get an API key{" "}
         <a
           href="https://console.perplexity.ai"
@@ -513,11 +476,8 @@ export function PerplexitySearchOptions({ settings }) {
       </p>
       <div className="flex gap-x-4">
         <div className="flex flex-col w-60">
-          <Label variant="settings" className="block mb-3">
-            API Key
-          </Label>
+          <Label className="block mb-3">API Key</Label>
           <Input
-            variant="settings"
             type="password"
             name="env::AgentPerplexityApiKey"
             placeholder="Perplexity API Key"
@@ -535,7 +495,7 @@ export function PerplexitySearchOptions({ settings }) {
 export function BraveSearchOptions({ settings }) {
   return (
     <>
-      <p className="text-sm text-white/60 my-2">
+      <p className="text-sm text-theme-text-secondary my-2">
         You can get an API key{" "}
         <a
           href="https://brave.com/search/api"
@@ -548,11 +508,8 @@ export function BraveSearchOptions({ settings }) {
       </p>
       <div className="flex gap-x-4">
         <div className="flex flex-col w-60">
-          <Label variant="settings" className="block mb-3">
-            API Key
-          </Label>
+          <Label className="block mb-3">API Key</Label>
           <Input
-            variant="settings"
             type="password"
             name="env::AgentBraveApiKey"
             placeholder="Brave API Key"
@@ -570,7 +527,7 @@ export function BraveSearchOptions({ settings }) {
 export function YouSearchOptions({ settings }) {
   return (
     <>
-      <p className="text-sm text-white/60 my-2">
+      <p className="text-sm text-theme-text-secondary my-2">
         You.com works without an API key (free tier, IP rate-limited). For
         higher limits, get an API key{" "}
         <a
@@ -585,11 +542,8 @@ export function YouSearchOptions({ settings }) {
       </p>
       <div className="flex gap-x-4">
         <div className="flex flex-col w-60">
-          <Label variant="settings" className="block mb-3">
-            API Key (optional)
-          </Label>
+          <Label className="block mb-3">API Key (optional)</Label>
           <Input
-            variant="settings"
             type="password"
             name="env::AgentYouApiKey"
             placeholder="You.com API Key"

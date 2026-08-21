@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { WarningCircle } from "@phosphor-icons/react";
+import { CircleAlert } from "lucide-react";
 import ScheduledJobs from "@/models/scheduledJobs";
 import showToast from "@/utils/toast";
 import { safeJsonParse } from "@/utils/request";
@@ -104,7 +104,7 @@ export default function JobFormModal({ job = null, onSaved }) {
 
   return (
     <>
-      <DialogHeader className="p-0 gap-1">
+      <DialogHeader className="gap-1">
         <DialogTitle className="text-sm font-semibold">
           {isEditing
             ? t("scheduledJobs.modal.titleEdit")
@@ -112,7 +112,7 @@ export default function JobFormModal({ job = null, onSaved }) {
         </DialogTitle>
         {hasErrors() && (
           <div className="flex gap-1 items-center">
-            <WarningCircle size={16} className="text-red-400 shrink-0" />
+            <CircleAlert size={16} className="text-red-400 shrink-0" />
             <p className="text-sm text-red-400">
               {t(
                 "scheduledJobs.modal.requiredFieldsBanner",

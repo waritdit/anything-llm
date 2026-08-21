@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/select";
 
 const INPUT_CLASSES =
-  "border-none bg-theme-settings-input-bg text-white placeholder:text-theme-settings-input-placeholder text-sm rounded-lg focus:outline-primary-button active:outline-primary-button outline-none block w-full p-2.5";
+  "border-none bg-theme-settings-input-bg text-theme-text-primary placeholder:text-theme-settings-input-placeholder text-sm rounded-lg focus:outline-primary-button active:outline-primary-button outline-none block w-full p-2.5";
 
 /**
  * Model picker for image generation providers. Fetches the provider's
@@ -67,7 +67,7 @@ export default function ImageModelSelection({
     return (
       <ModelSelectionWrapper>
         <Select name="ImageGenerationModelPref" disabled={true}>
-          <SelectTrigger variant="settings">
+          <SelectTrigger className="w-full">
             <SelectValue
               placeholder={
                 needsBasePath
@@ -103,7 +103,7 @@ export default function ImageModelSelection({
   return (
     <ModelSelectionWrapper>
       <Select name="ImageGenerationModelPref" required={true}>
-        <SelectTrigger variant="settings">
+        <SelectTrigger className="w-full">
           <SelectValue placeholder="Select an option" />
         </SelectTrigger>
         <SelectContent>
@@ -132,12 +132,10 @@ export default function ImageModelSelection({
 function ModelSelectionWrapper({ children, hint = null }) {
   return (
     <div className="flex flex-col w-60">
-      <Label variant="settings" className="block mb-3">
-        Model
-      </Label>
+      <Label className="block mb-3">Model</Label>
       {children}
       {hint && (
-        <p className="text-xs leading-[18px] font-base text-white text-opacity-60 mt-2">
+        <p className="text-xs/60 leading-[18px] font-base text-theme-text-primary mt-2">
           {hint}
         </p>
       )}

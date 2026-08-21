@@ -1,7 +1,8 @@
 import useProviderEndpointAutoDiscovery from "@/hooks/useProviderEndpointAutoDiscovery";
+import { Spinner } from "@/components/ui/spinner";
 import System from "@/models/system";
 import { OMLX_COMMON_URLS } from "@/utils/constants";
-import { CaretDown, CaretUp, CircleNotch, Info } from "@phosphor-icons/react";
+import { ChevronDown, ChevronUp, Info } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
   Tooltip,
@@ -51,7 +52,8 @@ export default function OMLXOptions({ settings }) {
       </div>
       <div className="flex justify-start mt-4">
         <Button
-          variant="inline"
+          variant="link"
+          size="sm"
           onClick={(e) => {
             e.preventDefault();
             setShowAdvancedControls(!showAdvancedControls);
@@ -59,9 +61,9 @@ export default function OMLXOptions({ settings }) {
         >
           {showAdvancedControls ? "Hide" : "Show"} advanced settings
           {showAdvancedControls ? (
-            <CaretUp size={14} className="ml-1" />
+            <ChevronUp size={14} className="ml-1" />
           ) : (
-            <CaretDown size={14} className="ml-1" />
+            <ChevronDown size={14} className="ml-1" />
           )}
         </Button>
       </div>
@@ -72,14 +74,16 @@ export default function OMLXOptions({ settings }) {
             <div className="flex flex-col w-60">
               <div className="flex justify-between items-center mb-2">
                 <div className="flex items-center gap-1">
-                  <Label variant="settings">OMLX Base URL</Label>
+                  <Label>OMLX Base URL</Label>
                   <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Info
-                        size={18}
-                        className="text-theme-text-secondary cursor-pointer"
-                      />
-                    </TooltipTrigger>
+                    <TooltipTrigger
+                      render={
+                        <Info
+                          size={18}
+                          className="text-theme-text-secondary cursor-pointer"
+                        />
+                      }
+                    ></TooltipTrigger>
                     <TooltipContent
                       side="top"
                       className="max-w-[250px] text-xs"
@@ -89,14 +93,15 @@ export default function OMLXOptions({ settings }) {
                   </Tooltip>
                 </div>
                 {loading ? (
-                  <CircleNotch
-                    size={16}
-                    className="text-theme-text-secondary animate-spin"
-                  />
+                  <Spinner className="text-theme-text-secondary" />
                 ) : (
                   <>
                     {!basePathValue.value && (
-                      <Button variant="chip" onClick={handleAutoDetectClick}>
+                      <Button
+                        variant="secondary"
+                        size="xs"
+                        onClick={handleAutoDetectClick}
+                      >
                         Auto-Detect
                       </Button>
                     )}
@@ -104,7 +109,6 @@ export default function OMLXOptions({ settings }) {
                 )}
               </div>
               <Input
-                variant="settings"
                 type="url"
                 name="OMLXLLMBasePath"
                 placeholder="http://127.0.0.1:8000"
@@ -120,16 +124,16 @@ export default function OMLXOptions({ settings }) {
           <div className="w-full flex items-start gap-4">
             <div className="flex flex-col w-60">
               <div className="flex items-center mb-2 gap-x-1">
-                <Label variant="settings" className="block">
-                  Model context window
-                </Label>
+                <Label className="block">Model context window</Label>
                 <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Info
-                      size={18}
-                      className="text-theme-text-secondary cursor-pointer"
-                    />
-                  </TooltipTrigger>
+                  <TooltipTrigger
+                    render={
+                      <Info
+                        size={18}
+                        className="text-theme-text-secondary cursor-pointer"
+                      />
+                    }
+                  ></TooltipTrigger>
                   <TooltipContent side="top" className="max-w-[250px] text-xs">
                     <p className="text-xs leading-[18px] font-base">
                       Specify the maximum number of tokens that can be used for
@@ -154,7 +158,6 @@ export default function OMLXOptions({ settings }) {
                 </Tooltip>
               </div>
               <Input
-                variant="settings"
                 type="number"
                 name="OMLXLLMTokenLimit"
                 placeholder="Automatically managed"
@@ -173,14 +176,16 @@ export default function OMLXOptions({ settings }) {
 
             <div className="flex flex-col w-60">
               <div className="flex items-center mb-2 gap-x-1">
-                <Label variant="settings">Authentication Token</Label>
+                <Label>Authentication Token</Label>
                 <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Info
-                      size={18}
-                      className="text-theme-text-secondary cursor-pointer"
-                    />
-                  </TooltipTrigger>
+                  <TooltipTrigger
+                    render={
+                      <Info
+                        size={18}
+                        className="text-theme-text-secondary cursor-pointer"
+                      />
+                    }
+                  ></TooltipTrigger>
                   <TooltipContent side="top" className="max-w-[250px] text-xs">
                     <p className="text-xs leading-[18px] font-base">
                       Enter a <code>Bearer</code> Auth Token for interacting
@@ -191,7 +196,6 @@ export default function OMLXOptions({ settings }) {
                 </Tooltip>
               </div>
               <Input
-                variant="settings"
                 type="password"
                 name="OMLXLLMApiKey"
                 placeholder="OMLX API Key"
@@ -200,7 +204,7 @@ export default function OMLXOptions({ settings }) {
                 onChange={authToken.onChange}
                 onBlur={authToken.onBlur}
                 required={false}
-                autoComplete="off"
+                autoComplete="new-password"
                 spellCheck={false}
               />
             </div>
@@ -242,11 +246,9 @@ function OMLXModelSelection({ settings, basePath = null, authToken = null }) {
   if (loading || customModels.length === 0) {
     return (
       <div className="flex flex-col w-60">
-        <Label variant="settings" className="block mb-2">
-          OMLX Model
-        </Label>
+        <Label className="block mb-2">OMLX Model</Label>
         <Select name="OMLXLLMModelPref" disabled={true}>
-          <SelectTrigger variant="settings">
+          <SelectTrigger className="w-full">
             <SelectValue
               placeholder={
                 !!basePath
@@ -257,7 +259,7 @@ function OMLXModelSelection({ settings, basePath = null, authToken = null }) {
           </SelectTrigger>
           <SelectContent />
         </Select>
-        <p className="text-xs leading-[18px] font-base text-white text-opacity-60 mt-2">
+        <p className="text-xs/60 leading-[18px] font-base text-theme-text-primary mt-2">
           Select the OMLX model you want to use. Models will load after entering
           a valid OMLX URL.
         </p>
@@ -267,15 +269,13 @@ function OMLXModelSelection({ settings, basePath = null, authToken = null }) {
 
   return (
     <div className="flex flex-col w-60">
-      <Label variant="settings" className="block mb-2">
-        OMLX Model
-      </Label>
+      <Label className="block mb-2">OMLX Model</Label>
       <Select
         name="OMLXLLMModelPref"
         required={true}
         defaultValue={settings.OMLXLLMModelPref ?? customModels?.[0]?.id}
       >
-        <SelectTrigger variant="settings">
+        <SelectTrigger className="w-full">
           <SelectValue placeholder="Select an option" />
         </SelectTrigger>
         <SelectContent>
@@ -293,7 +293,7 @@ function OMLXModelSelection({ settings, basePath = null, authToken = null }) {
           )}
         </SelectContent>
       </Select>
-      <p className="text-xs leading-[18px] font-base text-white text-opacity-60 mt-2">
+      <p className="text-xs/60 leading-[18px] font-base text-theme-text-primary mt-2">
         Choose the OMLX model you want to use for your conversations.
       </p>
     </div>

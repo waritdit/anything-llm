@@ -1,11 +1,13 @@
-import Sidebar from "@/components/SettingsSidebar";
+import SettingsLayout from "@/components/layout/SettingsLayout";
+import PageHeader from "@/components/layout/PageHeader";
+import ConfirmDialog from "@/components/ConfirmDialog";
 import useQuery from "@/hooks/useQuery";
 import System from "@/models/system";
 import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import LogRow from "./LogRow";
 import showToast from "@/utils/toast";
-import CTAButton from "@/components/lib/CTAButton";
+import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import {
   Table,
@@ -14,7 +16,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import ConfirmDialog from "@/components/ConfirmDialog";
 
 export default function AdminLogs() {
   const query = useQuery();
@@ -64,45 +65,28 @@ export default function AdminLogs() {
   };
 
   return (
-    <div className="w-screen h-screen overflow-hidden bg-theme-bg-container flex">
-      <Sidebar />
-      <div
-        style={{ height: "100%" }}
-        className="relative bg-theme-bg-secondary w-full h-full overflow-y-scroll p-4 md:p-0"
-      >
-        <div className="flex flex-col w-full px-1 md:pl-6 md:pr-[50px] md:py-6 py-16">
-          <div className="w-full flex flex-col gap-y-1 pb-6 border-white/10 border-b-2">
-            <div className="flex gap-x-4 items-center">
-              <p className="text-lg leading-6 font-bold text-theme-text-primary">
-                {t("event.title")}
-              </p>
-            </div>
-            <p className="text-xs leading-[18px] font-base text-theme-text-secondary mt-2">
-              {t("event.description")}
-            </p>
-          </div>
-          <div className="w-full justify-end flex">
-            <CTAButton
-              onClick={handleResetLogs}
-              className="mt-3 mr-0 mb-4 md:-mb-14 z-10"
-            >
-              {t("event.clear")}
-            </CTAButton>
-          </div>
-          <div className="overflow-x-auto mt-6">
-            <LogsContainer
-              loading={loading}
-              logs={logs}
-              offset={offset}
-              canNext={canNext}
-              handleNext={handleNext}
-              handlePrevious={handlePrevious}
-            />
-          </div>
-        </div>
+    <SettingsLayout>
+      <PageHeader
+        title={t("event.title")}
+        description={t("event.description")}
+      />
+      <div className="w-full justify-end flex">
+        <Button size="lg" onClick={handleResetLogs} className="mt-3 mb-4">
+          {t("event.clear")}
+        </Button>
+      </div>
+      <div className="overflow-x-auto mt-6">
+        <LogsContainer
+          loading={loading}
+          logs={logs}
+          offset={offset}
+          canNext={canNext}
+          handleNext={handleNext}
+          handlePrevious={handlePrevious}
+        />
       </div>
       <ConfirmDialog config={confirm} onClose={() => setConfirm(null)} />
-    </div>
+    </SettingsLayout>
   );
 }
 
@@ -131,32 +115,16 @@ function LogsContainer({
 
   return (
     <>
-      <Table variant="settings">
-        <TableHeader variant="settings">
-          <TableRow variant="none">
-            <TableHead
-              variant="none"
-              scope="col"
-              className="px-6 py-3 rounded-tl-lg"
-            >
-              {t("event.table.type")}
-            </TableHead>
-            <TableHead variant="none" scope="col" className="px-6 py-3">
-              {t("event.table.user")}
-            </TableHead>
-            <TableHead variant="none" scope="col" className="px-6 py-3">
-              {t("event.table.occurred")}
-            </TableHead>
-            <TableHead
-              variant="none"
-              scope="col"
-              className="px-6 py-3 rounded-tr-lg"
-            >
-              {" "}
-            </TableHead>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead scope="col">{t("event.table.type")}</TableHead>
+            <TableHead scope="col">{t("event.table.user")}</TableHead>
+            <TableHead scope="col">{t("event.table.occurred")}</TableHead>
+            <TableHead scope="col"> </TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody variant="none">
+        <TableBody>
           {!!logs && logs.map((log) => <LogRow key={log.id} log={log} />)}
         </TableBody>
       </Table>

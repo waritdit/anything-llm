@@ -1,4 +1,5 @@
 import PreLoader from "@/components/Preloader";
+import { Spinner } from "@/components/ui/spinner";
 import WorkspaceFileRow from "./WorkspaceFileRow";
 import { memo, useEffect, useState } from "react";
 import {
@@ -8,15 +9,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import {
-  Eye,
-  Pin,
-  CheckCircle2,
-  XCircle,
-  Loader2,
-  Clock,
-  X,
-} from "lucide-react";
+import { Eye, Pin, CheckCircle2, XCircle, Clock, X } from "lucide-react";
 import { SEEN_DOC_PIN_ALERT, SEEN_WATCH_ALERT } from "@/utils/constants";
 import paths from "@/utils/paths";
 import { Link } from "react-router-dom";
@@ -188,7 +181,7 @@ function WorkspaceDirectory({
         <div className={`relative w-full ${PANEL_HEIGHT}`}>
           <div
             className={`absolute inset-0 rounded-lg ${
-              highlightWorkspace ? "border-4 border-cyan-300/80 z-[999]" : ""
+              highlightWorkspace ? "border-4 border-cyan-300/80 z-999" : ""
             }`}
           />
           <div className="relative w-full h-full bg-theme-settings-input-bg rounded-lg overflow-hidden border border-theme-modal-border">
@@ -316,8 +309,8 @@ const PinAlert = memo(() => {
 
   return (
     <Dialog open={showAlert} onOpenChange={(open) => !open && dismissAlert()}>
-      <DialogContent className="max-w-2xl bg-theme-bg-secondary border-theme-modal-border">
-        <DialogHeader className="p-0">
+      <DialogContent>
+        <DialogHeader>
           <div className="flex items-center gap-2">
             <Pin className="text-theme-text-primary w-5 h-5" />
             <DialogTitle className="text-sm font-semibold">
@@ -326,7 +319,7 @@ const PinAlert = memo(() => {
           </div>
         </DialogHeader>
         <div className="space-y-2 flex-col">
-          <div className="w-full text-white text-md flex flex-col gap-y-2">
+          <div className="w-full text-theme-text-primary text-md flex flex-col gap-y-2">
             <p>
               <span
                 dangerouslySetInnerHTML={{
@@ -344,7 +337,7 @@ const PinAlert = memo(() => {
             <p>{t("connectors.pinning.pin_explained_block3")}</p>
           </div>
         </div>
-        <DialogFooter className="p-0">
+        <DialogFooter>
           <Button variant="default" onClick={dismissAlert}>
             {t("connectors.pinning.accept")}
           </Button>
@@ -375,8 +368,8 @@ const DocumentWatchAlert = memo(() => {
 
   return (
     <Dialog open={showAlert} onOpenChange={(open) => !open && dismissAlert()}>
-      <DialogContent className="max-w-2xl bg-theme-bg-secondary border-theme-modal-border">
-        <DialogHeader className="p-0">
+      <DialogContent>
+        <DialogHeader>
           <div className="flex items-center gap-2">
             <Eye className="text-theme-text-primary w-5 h-5" />
             <DialogTitle className="text-sm font-semibold">
@@ -385,7 +378,7 @@ const DocumentWatchAlert = memo(() => {
           </div>
         </DialogHeader>
         <div className="space-y-2 flex-col">
-          <div className="w-full text-white text-md flex flex-col gap-y-2">
+          <div className="w-full text-theme-text-primary text-md flex flex-col gap-y-2">
             <p>
               <span
                 dangerouslySetInnerHTML={{
@@ -406,7 +399,7 @@ const DocumentWatchAlert = memo(() => {
             </p>
           </div>
         </div>
-        <DialogFooter className="p-0">
+        <DialogFooter>
           <Button variant="default" onClick={dismissAlert}>
             {t("connectors.watching.accept")}
           </Button>
@@ -462,7 +455,10 @@ const STATUS_STYLES = {
   },
   embedding: {
     icon: (
-      <Loader2 className="h-4 w-4 text-slate-100 light:text-slate-900/40 animate-spin shrink-0" />
+      <Spinner
+        size="sm"
+        className="text-slate-100 light:text-slate-900/40 shrink-0"
+      />
     ),
     textColor: "text-slate-100 light:text-slate-900/70",
     label: "Embedding",

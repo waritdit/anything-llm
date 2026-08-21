@@ -1,5 +1,5 @@
 import truncate from "truncate";
-import { Trash } from "@phosphor-icons/react";
+import { Trash2 } from "lucide-react";
 import System from "@/models/system";
 import { useState } from "react";
 import { useModal } from "@/hooks/useModal";
@@ -43,48 +43,26 @@ export default function ChatRow({ chat, onDelete }) {
 
   return (
     <>
-      <TableRow
-        variant="none"
-        className="bg-transparent text-white text-opacity-80 text-xs font-medium border-b border-white/10 h-10"
-      >
+      <TableRow>
+        <TableCell className="font-medium">{chat.id}</TableCell>
+        <TableCell className="font-medium">{chat.user?.username}</TableCell>
+        <TableCell>{chat.workspace?.name}</TableCell>
         <TableCell
-          variant="none"
-          className="px-6 font-medium whitespace-nowrap text-white"
-        >
-          {chat.id}
-        </TableCell>
-        <TableCell
-          variant="none"
-          className="px-6 font-medium whitespace-nowrap text-white"
-        >
-          {chat.user?.username}
-        </TableCell>
-        <TableCell variant="none" className="px-6">
-          {chat.workspace?.name}
-        </TableCell>
-        <TableCell
-          variant="none"
           onClick={openPromptModal}
-          className="px-6 border-transparent cursor-pointer transform transition-transform duration-200 hover:scale-105 hover:shadow-lg"
+          className="border-transparent cursor-pointer transform transition-transform duration-200 hover:scale-105 hover:shadow-lg"
         >
           {truncate(chat.prompt, 40)}
         </TableCell>
         <TableCell
-          variant="none"
           onClick={openResponseModal}
-          className="px-6 cursor-pointer transform transition-transform duration-200 hover:scale-105 hover:shadow-lg"
+          className="cursor-pointer transform transition-transform duration-200 hover:scale-105 hover:shadow-lg"
         >
           {truncate(safeJsonParse(chat.response, {})?.text, 40)}
         </TableCell>
-        <TableCell variant="none" className="px-6">
-          {chat.createdAt}
-        </TableCell>
-        <TableCell
-          variant="none"
-          className="px-6 flex items-center gap-x-6 h-full mt-1"
-        >
-          <Button variant="danger" onClick={handleDelete}>
-            <Trash className="h-5 w-5" />
+        <TableCell>{chat.createdAt}</TableCell>
+        <TableCell className="flex items-center gap-x-6 h-full mt-1">
+          <Button size="icon-sm" variant="destructive" onClick={handleDelete}>
+            <Trash2 className="h-5 w-5" />
           </Button>
         </TableCell>
       </TableRow>
@@ -92,7 +70,7 @@ export default function ChatRow({ chat, onDelete }) {
         open={isPromptOpen}
         onOpenChange={(open) => !open && closePromptModal()}
       >
-        <DialogContent className="max-w-2xl bg-theme-bg-secondary border-theme-modal-border">
+        <DialogContent>
           <TextPreview text={chat.prompt} />
         </DialogContent>
       </Dialog>
@@ -100,7 +78,7 @@ export default function ChatRow({ chat, onDelete }) {
         open={isResponseOpen}
         onOpenChange={(open) => !open && closeResponseModal()}
       >
-        <DialogContent className="max-w-2xl bg-theme-bg-secondary border-theme-modal-border">
+        <DialogContent>
           <TextPreview
             text={
               <MarkdownRenderer
@@ -117,13 +95,13 @@ export default function ChatRow({ chat, onDelete }) {
 const TextPreview = ({ text }) => {
   return (
     <>
-      <DialogHeader className="p-0">
+      <DialogHeader>
         <DialogTitle className="text-sm font-semibold">
           Viewing Text
         </DialogTitle>
       </DialogHeader>
       <div className="w-full">
-        <pre className="w-full h-[200px] py-2 px-4 whitespace-pre-line overflow-auto rounded-lg bg-zinc-900 light:bg-theme-bg-secondary border border-gray-500 text-white text-sm">
+        <pre className="w-full h-[200px] py-2 px-4 whitespace-pre-line overflow-auto rounded-lg bg-zinc-900 light:bg-theme-bg-secondary border border-gray-500 text-theme-text-primary text-sm">
           {text}
         </pre>
       </div>

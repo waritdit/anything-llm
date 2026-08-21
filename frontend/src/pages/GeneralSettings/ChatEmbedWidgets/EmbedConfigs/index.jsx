@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Skeleton } from "@/components/ui/skeleton";
-import { CodeBlock } from "@phosphor-icons/react";
+import { Code } from "lucide-react";
 import EmbedRow from "./EmbedRow";
 import NewEmbedModal from "./NewEmbedModal";
 import { useModal } from "@/hooks/useModal";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import Embed from "@/models/embed";
-import CTAButton from "@/components/lib/CTAButton";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -63,43 +63,31 @@ export default function EmbedConfigsView() {
             open={isOpen}
             onOpenChange={(open) => (open ? openModal() : closeModal())}
           >
-            <DialogTrigger asChild>
-              <CTAButton className="text-theme-bg-chat">
-                <CodeBlock className="h-4 w-4" weight="bold" />{" "}
-                {t("embeddable.create")}
-              </CTAButton>
+            <DialogTrigger
+              render={<Button size="lg" className="text-theme-bg-chat" />}
+            >
+              <Code className="h-4 w-4" /> {t("embeddable.create")}
             </DialogTrigger>
-            <DialogContent className="max-w-2xl bg-theme-bg-secondary border-theme-modal-border">
+            <DialogContent>
               <NewEmbedModal />
             </DialogContent>
           </Dialog>
         </div>
       </div>
       <div className="overflow-x-auto">
-        <Table variant="settings">
-          <TableHeader
-            variant="none"
-            className="text-theme-text-secondary text-xs leading-[18px] uppercase border-white/10 border-b"
-          >
-            <TableRow variant="none">
-              <TableHead variant="none" scope="col" className="px-6 py-3">
+        <Table>
+          <TableHeader className="text-theme-text-secondary leading-[18px] uppercase">
+            <TableRow>
+              <TableHead scope="col">
                 {t("embeddable.table.workspace")}
               </TableHead>
-              <TableHead variant="none" scope="col" className="px-6 py-3">
-                {t("embeddable.table.chats")}
-              </TableHead>
-              <TableHead variant="none" scope="col" className="px-6 py-3">
-                {t("embeddable.table.active")}
-              </TableHead>
-              <TableHead variant="none" scope="col" className="px-6 py-3">
-                {t("embeddable.table.created")}
-              </TableHead>
-              <TableHead variant="none" scope="col" className="px-6 py-3">
-                {" "}
-              </TableHead>
+              <TableHead scope="col">{t("embeddable.table.chats")}</TableHead>
+              <TableHead scope="col">{t("embeddable.table.active")}</TableHead>
+              <TableHead scope="col">{t("embeddable.table.created")}</TableHead>
+              <TableHead scope="col"> </TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody variant="none">
+          <TableBody>
             {embeds.map((embed) => (
               <EmbedRow key={embed.id} embed={embed} />
             ))}

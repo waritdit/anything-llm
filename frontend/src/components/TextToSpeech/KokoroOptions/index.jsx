@@ -20,7 +20,7 @@ export default function KokoroTTSOptions({ settings }) {
 
   return (
     <div className="w-full flex flex-col gap-y-7">
-      <p className="text-sm font-base text-white text-opacity-60">
+      <p className="text-sm/60 font-base text-theme-text-primary">
         Connect to a self-hosted{" "}
         <a
           href="https://github.com/remsky/Kokoro-FastAPI"
@@ -34,11 +34,8 @@ export default function KokoroTTSOptions({ settings }) {
       </p>
       <div className="flex gap-x-4">
         <div className="flex flex-col w-60">
-          <Label variant="settings" className="block mb-2">
-            Base URL
-          </Label>
+          <Label className="block mb-2">Base URL</Label>
           <Input
-            variant="settings"
             type="url"
             name="TTSKokoroEndpoint"
             placeholder="http://localhost:8880/v1"
@@ -49,26 +46,23 @@ export default function KokoroTTSOptions({ settings }) {
             onChange={(e) => setInputEndpoint(e.target.value)}
             onBlur={() => setEndpoint(inputEndpoint)}
           />
-          <p className="text-xs leading-[18px] font-base text-white text-opacity-60 mt-2">
+          <p className="text-xs/60 leading-[18px] font-base text-theme-text-primary mt-2">
             The OpenAI-compatible base URL of your kokoro-fastapi server.
           </p>
         </div>
         <div className="flex flex-col w-60">
-          <Label variant="settings" className="block mb-2">
-            API Key
-          </Label>
+          <Label className="block mb-2">API Key</Label>
           <Input
-            variant="settings"
             type="password"
             name="TTSKokoroKey"
             placeholder="Optional API Key"
             defaultValue={settings?.TTSKokoroKey ? "*".repeat(20) : ""}
-            autoComplete="off"
+            autoComplete="new-password"
             spellCheck={false}
             onChange={(e) => setInputApiKey(e.target.value)}
             onBlur={() => setApiKey(inputApiKey)}
           />
-          <p className="text-xs leading-[18px] font-base text-white text-opacity-60 mt-2">
+          <p className="text-xs/60 leading-[18px] font-base text-theme-text-primary mt-2">
             Optional — only required if you front your Kokoro server with auth.
           </p>
         </div>
@@ -115,11 +109,9 @@ function KokoroVoiceSelection({ settings, endpoint, apiKey = null }) {
   if (loading) {
     return (
       <div className="flex flex-col w-60">
-        <Label variant="settings" className="block mb-3">
-          Voice Model
-        </Label>
+        <Label className="block mb-3">Voice Model</Label>
         <Select name="TTSKokoroVoiceModel" disabled={true}>
-          <SelectTrigger variant="settings">
+          <SelectTrigger className="w-full">
             <SelectValue placeholder="-- loading available voices --" />
           </SelectTrigger>
           <SelectContent />
@@ -131,11 +123,8 @@ function KokoroVoiceSelection({ settings, endpoint, apiKey = null }) {
   if (voices.length === 0) {
     return (
       <div className="flex flex-col w-60">
-        <Label variant="settings" className="block mb-3">
-          Voice Model
-        </Label>
+        <Label className="block mb-3">Voice Model</Label>
         <Input
-          variant="settings"
           type="text"
           name="TTSKokoroVoiceModel"
           placeholder="af_bella"
@@ -144,7 +133,7 @@ function KokoroVoiceSelection({ settings, endpoint, apiKey = null }) {
           autoComplete="off"
           spellCheck={false}
         />
-        <p className="text-xs leading-[18px] font-base text-white text-opacity-60 mt-2">
+        <p className="text-xs/60 leading-[18px] font-base text-theme-text-primary mt-2">
           Could not reach the Kokoro server to load voices. Enter a voice id
           manually.
         </p>
@@ -154,15 +143,13 @@ function KokoroVoiceSelection({ settings, endpoint, apiKey = null }) {
 
   return (
     <div className="flex flex-col w-60">
-      <Label variant="settings" className="block mb-3">
-        Voice Model
-      </Label>
+      <Label className="block mb-3">Voice Model</Label>
       <Select
         name="TTSKokoroVoiceModel"
         required={true}
         defaultValue={settings?.TTSKokoroVoiceModel ?? "af_bella"}
       >
-        <SelectTrigger variant="settings">
+        <SelectTrigger className="w-full">
           <SelectValue placeholder="Select an option" />
         </SelectTrigger>
         <SelectContent>

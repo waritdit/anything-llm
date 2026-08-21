@@ -17,7 +17,7 @@ export default function MobileCitationModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-[calc(100%-40px)] max-h-[70vh] rounded-[16px] bg-zinc-800 light:bg-white light:border-2 light:border-slate-300 flex flex-col gap-4">
+      <DialogContent className="max-h-[70vh] rounded-[16px] flex flex-col gap-4">
         {selectedSource ? (
           <>
             <DialogTitle className="sr-only">
@@ -31,7 +31,7 @@ export default function MobileCitationModal({
         ) : (
           <>
             <div className="flex items-center justify-between">
-              <DialogTitle className="text-sm font-semibold text-white light:text-slate-900">
+              <DialogTitle className="text-sm font-semibold text-theme-text-primary light:text-slate-900">
                 {t("chat_window.sources")}
               </DialogTitle>
             </div>

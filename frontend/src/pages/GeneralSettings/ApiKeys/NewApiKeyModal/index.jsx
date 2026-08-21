@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Copy, Check } from "@phosphor-icons/react";
+import { Check, Copy } from "lucide-react";
 import Admin from "@/models/admin";
 import paths from "@/utils/paths";
 import { useTranslation } from "react-i18next";
@@ -50,7 +50,7 @@ export default function NewApiKeyModal({ onSuccess }) {
 
   return (
     <>
-      <DialogHeader className="p-0">
+      <DialogHeader>
         <DialogTitle className="text-sm font-semibold">
           {t("api.modal.title")}
         </DialogTitle>
@@ -64,17 +64,15 @@ export default function NewApiKeyModal({ onSuccess }) {
           )}
           {!apiKey && (
             <div>
-              <Label variant="field" className="block mb-2">
-                {t("api.modal.name.label")}
-              </Label>
+              <Label className="block mb-2">{t("api.modal.name.label")}</Label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder={t("api.modal.name.placeholder")}
-                className="border-none bg-theme-settings-input-bg text-white placeholder:text-theme-settings-input-placeholder text-sm rounded-lg outline-none block w-full p-2.5"
+                className="border-none bg-theme-settings-input-bg text-theme-text-primary placeholder:text-theme-settings-input-placeholder text-sm rounded-lg outline-none block w-full p-2.5"
               />
-              <p className="text-white text-opacity-60 text-xs md:text-sm mt-2">
+              <p className="text-theme-text-primary/60 text-xs md:text-sm mt-2">
                 {t("api.modal.name.helper")}
               </p>
             </div>
@@ -85,7 +83,7 @@ export default function NewApiKeyModal({ onSuccess }) {
                 type="text"
                 defaultValue={`${apiKey.secret}`}
                 disabled={true}
-                className="border-none bg-theme-settings-input-bg text-white placeholder:text-theme-settings-input-placeholder text-sm rounded-lg outline-none block w-full p-2.5 pr-10"
+                className="border-none bg-theme-settings-input-bg text-theme-text-primary placeholder:text-theme-settings-input-placeholder text-sm rounded-lg outline-none block w-full p-2.5 pr-10"
               />
               <button
                 type="button"
@@ -94,14 +92,14 @@ export default function NewApiKeyModal({ onSuccess }) {
                 className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-md hover:bg-theme-modal-border transition-all duration-300"
               >
                 {copied ? (
-                  <Check size={20} className="text-green-400" weight="bold" />
+                  <Check size={20} className="text-green-400" />
                 ) : (
-                  <Copy size={20} className="text-white" weight="bold" />
+                  <Copy size={20} className="text-theme-text-primary" />
                 )}
               </button>
             </div>
           )}
-          <p className="text-white text-opacity-60 text-xs md:text-sm">
+          <p className="text-theme-text-primary/60 text-xs md:text-sm">
             {t("api.modal.helper")}
           </p>
           <a
@@ -113,23 +111,19 @@ export default function NewApiKeyModal({ onSuccess }) {
             Read the API documentation &rarr;
           </a>
         </div>
-        <DialogFooter className="p-0 mt-4">
+        <DialogFooter>
           {!apiKey ? (
             <>
-              <DialogClose asChild>
-                <Button variant="outline" type="button">
-                  {t("api.modal.cancel")}
-                </Button>
+              <DialogClose render={<Button variant="outline" type="button" />}>
+                {t("api.modal.cancel")}
               </DialogClose>
               <Button variant="default" type="submit">
                 {t("api.modal.create")}
               </Button>
             </>
           ) : (
-            <DialogClose asChild>
-              <Button variant="default" type="button">
-                {t("api.modal.close")}
-              </Button>
+            <DialogClose render={<Button variant="default" type="button" />}>
+              {t("api.modal.close")}
             </DialogClose>
           )}
         </DialogFooter>

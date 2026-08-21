@@ -6,10 +6,14 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import EditVariableModal from "./EditVariableModal";
 import { titleCase } from "text-case";
 import truncate from "truncate";
-import { Trash } from "@phosphor-icons/react";
-import { Button } from "@/components/ui/button";
+import { Pencil, Trash2 } from "lucide-react";
 import { TableCell, TableHead, TableRow } from "@/components/ui/table";
 import ConfirmDialog from "@/components/ConfirmDialog";
+import TableRowActions from "@/components/lib/TableRowActions";
+import {
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 
 /**
  * A row component for displaying a system prompt variable
@@ -74,57 +78,44 @@ export default function VariableRow({ variable, onRefresh }) {
 
   return (
     <>
-      <TableRow
-        variant="none"
-        ref={rowRef}
-        className="bg-transparent text-white text-opacity-80 text-xs font-medium border-b border-white/10 h-10"
-      >
-        <TableHead
-          variant="none"
-          scope="row"
-          className="px-4 py-2 whitespace-nowrap"
-        >
-          {variable.key}
-        </TableHead>
-        <TableCell variant="none" className="px-4 py-2">
+      <TableRow ref={rowRef}>
+        <TableHead scope="row">{variable.key}</TableHead>
+        <TableCell>
           {typeof variable.value === "function"
             ? variable.value()
             : truncate(variable.value, 50)}
         </TableCell>
-        <TableCell variant="none" className="px-4 py-2">
-          {truncate(variable.description || "-", 50)}
-        </TableCell>
-        <TableCell variant="none" className="px-4 py-2">
+        <TableCell>{truncate(variable.description || "-", 50)}</TableCell>
+        <TableCell>
           <span
-            className={`rounded-full ${colorTheme.bg} px-2 py-0.5 text-xs leading-5 font-semibold ${colorTheme.text} shadow-sm`}
+            className={`rounded-full ${colorTheme.bg} px-2 py-0.5 text-xs leading-5 font-semibold ${colorTheme.text} shadow-xs`}
           >
             {titleCase(variable?.type ?? "static")}
           </span>
         </TableCell>
-        <TableCell
-          variant="none"
-          className="px-4 py-2 flex items-center justify-end gap-x-4"
-        >
-          {variable.type === "static" && (
-            <>
-              <button
-                onClick={openModal}
-                className="text-xs font-medium text-white/80 light:text-black/80 rounded-lg hover:text-white hover:light:text-gray-500 px-2 py-1 hover:bg-white hover:bg-opacity-10"
-              >
-                Edit
-              </button>
-              <Button variant="danger" onClick={handleDelete}>
-                <Trash className="h-4 w-4" />
-              </Button>
-            </>
-          )}
+        <TableCell className="text-right">
+          <TableRowActions>
+            {variable.type === "static" && (
+              <>
+                <DropdownMenuItem onClick={openModal}>
+                  <Pencil />
+                  Edit
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem variant="destructive" onClick={handleDelete}>
+                  <Trash2 />
+                  Delete
+                </DropdownMenuItem>
+              </>
+            )}
+          </TableRowActions>
         </TableCell>
       </TableRow>
       <Dialog
         open={isOpen}
         onOpenChange={(open) => (open ? openModal() : closeModal())}
       >
-        <DialogContent className="max-w-2xl bg-theme-bg-secondary border-theme-modal-border">
+        <DialogContent>
           <EditVariableModal
             variable={variable}
             closeModal={closeModal}

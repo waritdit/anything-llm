@@ -1,5 +1,5 @@
 import System from "@/models/system";
-import { CaretDown, CaretUp } from "@phosphor-icons/react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,17 +10,14 @@ export default function CometApiLLMOptions({ settings }) {
     <div className="w-full flex flex-col gap-y-7">
       <div className="w-full flex items-start gap-[36px] mt-1.5">
         <div className="flex flex-col w-60">
-          <Label variant="settings" className="block mb-3">
-            CometAPI API Key
-          </Label>
+          <Label className="block mb-3">CometAPI API Key</Label>
           <Input
-            variant="settings"
             type="password"
             name="CometApiLLMApiKey"
             placeholder="CometAPI API Key"
             defaultValue={settings?.CometApiLLMApiKey ? "*".repeat(20) : ""}
             required={true}
-            autoComplete="off"
+            autoComplete="new-password"
             spellCheck={false}
           />
         </div>
@@ -40,25 +37,23 @@ function AdvancedControls({ settings }) {
     <div className="flex flex-col gap-y-4">
       <div className="flex justify-start">
         <Button
-          variant="inline"
+          variant="link"
+          size="sm"
           type="button"
           onClick={() => setShowAdvancedControls(!showAdvancedControls)}
         >
           {showAdvancedControls ? "Hide" : "Show"} advanced settings
           {showAdvancedControls ? (
-            <CaretUp size={14} className="ml-1" />
+            <ChevronUp size={14} className="ml-1" />
           ) : (
-            <CaretDown size={14} className="ml-1" />
+            <ChevronDown size={14} className="ml-1" />
           )}
         </Button>
       </div>
       <div hidden={!showAdvancedControls}>
         <div className="flex flex-col w-60">
-          <Label variant="settings" className="block mb-3">
-            Stream Timeout (ms)
-          </Label>
+          <Label className="block mb-3">Stream Timeout (ms)</Label>
           <Input
-            variant="settings"
             type="number"
             name="CometApiLLMTimeout"
             placeholder="Timeout value between token responses to auto-timeout the stream"
@@ -68,7 +63,7 @@ function AdvancedControls({ settings }) {
             min={500}
             step={1}
           />
-          <p className="text-xs leading-[18px] font-base text-theme-text-primary text-opacity-60 mt-2">
+          <p className="text-xs/60 leading-[18px] font-base text-theme-text-primary mt-2">
             Timeout value between token responses to auto-timeout the stream.
           </p>
         </div>
@@ -113,11 +108,8 @@ function CometApiModelSelection({ settings }) {
   if (loading || models.length === 0) {
     return (
       <div className="flex flex-col w-60">
-        <Label variant="settings" className="block mb-3">
-          Chat Model Selection
-        </Label>
+        <Label className="block mb-3">Chat Model Selection</Label>
         <Input
-          variant="settings"
           type="text"
           name="CometApiLLMModelPref"
           placeholder="-- loading available models --"
@@ -129,11 +121,8 @@ function CometApiModelSelection({ settings }) {
 
   return (
     <div className="flex flex-col w-60">
-      <Label variant="settings" className="block mb-3">
-        Chat Model Selection
-      </Label>
+      <Label className="block mb-3">Chat Model Selection</Label>
       <Input
-        variant="settings"
         type="text"
         name="CometApiLLMModelPref"
         list="cometapi-models-list"
@@ -150,7 +139,7 @@ function CometApiModelSelection({ settings }) {
           </option>
         ))}
       </datalist>
-      <p className="text-xs leading-[18px] font-base text-theme-text-primary text-opacity-60 mt-2">
+      <p className="text-xs/60 leading-[18px] font-base text-theme-text-primary mt-2">
         You can type the model id directly or pick from suggestions.
       </p>
     </div>

@@ -9,14 +9,12 @@ import {
 } from "@/components/ui/dialog";
 import {
   FileText,
-  Info,
-  ArrowSquareOut,
-  GithubLogo,
-  YoutubeLogo,
-  LinkSimple,
-  GitlabLogo,
   GitBranch,
-} from "@phosphor-icons/react";
+  Info,
+  Link,
+  SquareArrowOutUpRight,
+} from "lucide-react";
+import { GithubLogo, GitlabLogo, YoutubeLogo } from "@phosphor-icons/react";
 import GmailLogo from "@/pages/Admin/Agents/GMailSkillPanel/gmail.png";
 import GoogleCalendarLogo from "@/pages/Admin/Agents/GoogleCalendarSkillPanel/google-calendar.png";
 import OutlookLogo from "@/pages/Admin/Agents/OutlookSkillPanel/outlook.png";
@@ -31,12 +29,12 @@ import {
 
 const CIRCLE_ICONS = {
   file: FileText,
-  link: LinkSimple,
+  link: Link,
   youtube: YoutubeLogo,
   github: GithubLogo,
   gitlab: GitlabLogo,
   gitea: GitBranch,
-  confluence: LinkSimple,
+  confluence: Link,
   drupalwiki: FileText,
   obsidian: FileText,
   paperlessNgx: FileText,
@@ -112,7 +110,7 @@ export function SourceTypeCircle({
           className="object-contain bg-transparent"
         />
       ) : (
-        <Icon size={iconSize} weight="bold" className="text-black" />
+        <Icon size={iconSize} className="text-black" />
       )}
     </div>
   );
@@ -164,7 +162,7 @@ export default function Citations({ sources = [] }) {
       className="w-fit flex items-center gap-[5px] px-[10px] py-[4px] rounded-full hover:bg-white/5 light:hover:bg-black/5 transition-colors"
       type="button"
     >
-      <span className="text-xs text-white light:text-slate-800">
+      <span className="text-xs text-theme-text-primary light:text-slate-800">
         {t("chat_window.sources")}
       </span>
       <div
@@ -192,7 +190,7 @@ export default function Citations({ sources = [] }) {
         })}
       </div>
       {remainingCount > 0 && (
-        <span className="text-xs text-white light:text-slate-800">
+        <span className="text-xs text-theme-text-primary light:text-slate-800">
           + {remainingCount}
         </span>
       )}
@@ -212,25 +210,25 @@ export function CitationDetailModal({ source, onClose }) {
 
   return (
     <Dialog open={!!source} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-2xl bg-zinc-900 light:bg-white border-zinc-700 light:border-slate-300">
-        <DialogHeader className="p-0">
+      <DialogContent>
+        <DialogHeader>
           <div className="w-full flex gap-x-2 items-center">
             {isUrl ? (
               <a
                 href={linkTo}
                 target="_blank"
                 rel="noreferrer"
-                className="text-sm w-[90%] font-semibold text-white light:text-slate-900 whitespace-nowrap hover:underline hover:text-blue-300 light:hover:text-blue-600 flex items-center gap-x-1"
+                className="text-sm w-[90%] font-semibold text-theme-text-primary light:text-slate-900 whitespace-nowrap hover:underline hover:text-blue-300 light:hover:text-blue-600 flex items-center gap-x-1"
               >
                 <div className="flex items-center gap-x-1 max-w-full overflow-hidden">
                   <DialogTitle className="truncate text-ellipsis whitespace-nowrap overflow-hidden w-full text-sm font-semibold">
                     {webpageUrl}
                   </DialogTitle>
-                  <ArrowSquareOut className="flex-shrink-0" />
+                  <SquareArrowOutUpRight className="shrink-0" />
                 </div>
               </a>
             ) : (
-              <DialogTitle className="text-sm font-semibold text-white light:text-slate-900 overflow-hidden overflow-ellipsis whitespace-nowrap">
+              <DialogTitle className="text-sm font-semibold text-theme-text-primary light:text-slate-900 overflow-hidden text-ellipsis whitespace-nowrap">
                 {truncate(title, 45)}
               </DialogTitle>
             )}
@@ -244,23 +242,23 @@ export function CitationDetailModal({ source, onClose }) {
         <div className="space-y-2 flex-col">
           {chunks.map(({ text, score }, idx) => (
             <Fragment key={idx}>
-              <div className="pt-6 text-white light:text-slate-900">
+              <div className="pt-6 text-theme-text-primary light:text-slate-900">
                 <div className="flex flex-col w-full justify-start pb-6 gap-y-1">
-                  <p className="text-white light:text-slate-900 whitespace-pre-line">
+                  <p className="text-theme-text-primary light:text-slate-900 whitespace-pre-line">
                     {HTMLDecode(omitChunkHeader(text))}
                   </p>
 
                   {!!score && (
-                    <div className="w-full flex items-center text-xs text-white/60 light:text-slate-500 gap-x-2 cursor-default">
+                    <div className="w-full flex items-center text-xs text-theme-text-secondary light:text-slate-500 gap-x-2 cursor-default">
                       <Tooltip>
-                        <TooltipTrigger asChild>
-                          <div className="flex items-center gap-x-1">
-                            <Info size={14} />
-                            <p>
-                              {toPercentString(score)}{" "}
-                              {t("chat_window.similarity_match")}
-                            </p>
-                          </div>
+                        <TooltipTrigger
+                          render={<div className="flex items-center gap-x-1" />}
+                        >
+                          <Info size={14} />
+                          <p>
+                            {toPercentString(score)}{" "}
+                            {t("chat_window.similarity_match")}
+                          </p>
                         </TooltipTrigger>
                         <TooltipContent
                           side="top"

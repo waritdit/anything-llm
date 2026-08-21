@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TableCell, TableHead, TableRow } from "@/components/ui/table";
 import {
   Select,
@@ -20,10 +20,27 @@ export default function WorkspaceMemberRow({
   workspaceRoles = [],
   canManage = false,
 }) {
+  const memberRoleId =
+    member.workspaceRole?.id ??
+    member.workspace_role_id ??
+    member.workspaceRoleId ??
+    null;
+  const assignedRole =
+    workspaceRoles.find((role) => String(role.id) === String(memberRoleId)) ??
+    workspaceRoles.find((role) => role.isDefault) ??
+    null;
   const [roleId, setRoleId] = useState(
-    member.workspaceRole?.id ? String(member.workspaceRole.id) : ""
+    memberRoleId
+      ? String(memberRoleId)
+      : assignedRole
+        ? String(assignedRole.id)
+        : ""
   );
   const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    if (!roleId && assignedRole?.id) setRoleId(String(assignedRole.id));
+  }, [assignedRole?.id, roleId]);
 
   async function handleRoleChange(nextRoleId) {
     const previous = roleId;
@@ -43,26 +60,26 @@ export default function WorkspaceMemberRow({
   }
 
   return (
-    <TableRow
-      variant="none"
-      className="bg-transparent text-theme-text-primary text-sm font-medium"
-    >
-      <TableHead
-        variant="none"
-        scope="row"
-        className="px-6 py-4 whitespace-nowrap"
-      >
-        {member.username}
-      </TableHead>
-      <TableCell variant="none" className="px-6 py-4">
+    <TableRow>
+      <TableHead scope="row">{member.username}</TableHead>
+      <TableCell>
         {canManage ? (
           <Select
             value={roleId}
             onValueChange={handleRoleChange}
             disabled={saving}
           >
-            <SelectTrigger variant="settings" className="w-[190px]">
-              <SelectValue placeholder="Select a role" />
+            <SelectTrigger className="w-[190px]">
+              <SelectValue placeholder="Select a role">
+                {(selectedRoleId) =>
+                  workspaceRoles.find(
+                    (role) => String(role.id) === String(selectedRoleId)
+                  )?.displayName ??
+                  assignedRole?.displayName ??
+                  member.workspaceRole?.displayName ??
+                  "Select a role"
+                }
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
               {workspaceRoles.map((role) => (
@@ -73,12 +90,12 @@ export default function WorkspaceMemberRow({
             </SelectContent>
           </Select>
         ) : (
-          (member.workspaceRole?.displayName ?? "—")
+          (assignedRole?.displayName ??
+          member.workspaceRole?.displayName ??
+          "—")
         )}
       </TableCell>
-      <TableCell variant="none" className="px-6 py-4">
-        {member.createdAt}
-      </TableCell>
+      <TableCell>{member.createdAt}</TableCell>
     </TableRow>
   );
 }

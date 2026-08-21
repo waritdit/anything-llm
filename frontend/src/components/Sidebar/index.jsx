@@ -1,5 +1,5 @@
 import React from "react";
-import { Menu, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import NewWorkspaceModal, {
@@ -27,6 +27,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { PERMISSIONS, userCan } from "@/utils/permissions";
+import MobileSidebarTopbar from "./MobileTopbar";
 
 /**
  * Wraps a page's sidebar + main content in shadcn's SidebarProvider, which is
@@ -59,28 +60,12 @@ export function SidebarPageLayout({ className, children }) {
  * than per-page, so it's always in sync with the shared sidebar state.
  */
 function MobileTopbar() {
-  const { logo } = useLogo();
-  const { toggleSidebar } = useSidebar();
+  const { setOpenMobile } = useSidebar();
 
-  return (
-    <div className="md:hidden fixed top-0 inset-x-0 z-40 flex items-center justify-between gap-2 h-14 px-4 bg-theme-bg-sidebar light:bg-white light:border-b light:border-theme-sidebar-border">
-      <button
-        type="button"
-        onClick={toggleSidebar}
-        aria-label="Toggle sidebar"
-        className="flex h-9 w-9 items-center justify-center rounded-md text-theme-text-secondary hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors"
-      >
-        <Menu className="h-5 w-5" />
-      </button>
-      <img
-        src={logo}
-        alt="Logo"
-        className="h-6 w-auto object-contain"
-        style={{ maxHeight: "32px" }}
-      />
-      <div className="h-9 w-9" />
-    </div>
-  );
+  // This control is only rendered for the mobile layout. Open the mobile
+  // sheet explicitly instead of routing through toggleSidebar(), whose
+  // desktop/mobile branch can briefly lag behind a CSS breakpoint resize.
+  return <MobileSidebarTopbar onToggle={() => setOpenMobile(true)} />;
 }
 
 export default function Sidebar() {
@@ -116,19 +101,21 @@ export default function Sidebar() {
         </div>
         {canCreateWorkspace && (
           <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                type="button"
-                onClick={showNewWsModal}
-                aria-label={t("new-workspace.title")}
-                className="hidden group-data-[collapsible=icon]:flex mx-auto items-center justify-center h-8 w-8 rounded-lg bg-white hover:bg-white/80 light:hover:bg-slate-300 transition-all duration-300"
-              >
-                <Plus
-                  size={16}
-                  strokeWidth={2.5}
-                  className="text-black light:text-slate-500"
+            <TooltipTrigger
+              render={
+                <button
+                  type="button"
+                  onClick={showNewWsModal}
+                  aria-label={t("new-workspace.title")}
+                  className="hidden group-data-[collapsible=icon]:flex mx-auto items-center justify-center h-8 w-8 rounded-lg bg-white hover:bg-white/80 light:hover:bg-slate-300 transition-all duration-300"
                 />
-              </button>
+              }
+            >
+              <Plus
+                size={16}
+                strokeWidth={2.5}
+                className="text-black light:text-slate-500"
+              />
             </TooltipTrigger>
             <TooltipContent side="right" className="max-w-[250px] text-xs">
               {t("new-workspace.title")}

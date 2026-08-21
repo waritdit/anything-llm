@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import Sidebar from "@/components/SettingsSidebar";
+import SettingsLayout from "@/components/layout/SettingsLayout";
+import PageHeader from "@/components/layout/PageHeader";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Plus, PencilSimple, Trash, Lock, Star } from "@phosphor-icons/react";
+import { Lock, Pencil, Plus, Star, Trash2 } from "lucide-react";
 import Role, { WorkspaceRole } from "@/models/role";
-import CTAButton from "@/components/lib/CTAButton";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
@@ -19,6 +19,11 @@ import {
 import RoleModal from "./RoleModal";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import showToast from "@/utils/toast";
+import TableRowActions from "@/components/lib/TableRowActions";
+import {
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 
 /**
  * Roles live in two scopes that never overlap. System roles decide what an account can
@@ -27,42 +32,27 @@ import showToast from "@/utils/toast";
  */
 export default function AdminRoles() {
   return (
-    <div className="w-screen h-screen overflow-hidden bg-theme-bg-container flex">
-      <Sidebar />
-      <div
-        style={{ height: "100%" }}
-        className="relative bg-theme-bg-secondary w-full h-full overflow-y-scroll p-4 md:p-0"
-      >
-        <div className="flex flex-col w-full px-1 md:pl-6 md:pr-[50px] md:py-6 py-16">
-          <div className="w-full flex flex-col gap-y-1 pb-6 border-white/10 border-b-2">
-            <div className="items-center flex gap-x-4">
-              <p className="text-lg leading-6 font-bold text-theme-text-primary">
-                Roles &amp; Permissions
-              </p>
-            </div>
-            <p className="text-xs leading-[18px] font-base text-theme-text-secondary">
-              A role is a named set of permissions. System roles control the
-              instance itself; workspace roles control what a member can do
-              inside a single workspace, so one account can be a manager of one
-              workspace and read-only in another.
-            </p>
-          </div>
+    <SettingsLayout>
+      <PageHeader
+        title={"Roles & Permissions"}
+        description={
+          "A role is a named set of permissions. System roles control the instance itself; workspace roles control what a member can do inside a single workspace, so one account can be a manager of one workspace and read-only in another."
+        }
+      />
 
-          <Tabs defaultValue="system" className="mt-6">
-            <TabsList>
-              <TabsTrigger value="system">System roles</TabsTrigger>
-              <TabsTrigger value="workspace">Workspace roles</TabsTrigger>
-            </TabsList>
-            <TabsContent value="system">
-              <RolesPanel scope="system" />
-            </TabsContent>
-            <TabsContent value="workspace">
-              <RolesPanel scope="workspace" />
-            </TabsContent>
-          </Tabs>
-        </div>
-      </div>
-    </div>
+      <Tabs defaultValue="system" className="mt-6">
+        <TabsList>
+          <TabsTrigger value="system">System roles</TabsTrigger>
+          <TabsTrigger value="workspace">Workspace roles</TabsTrigger>
+        </TabsList>
+        <TabsContent value="system">
+          <RolesPanel scope="system" />
+        </TabsContent>
+        <TabsContent value="workspace">
+          <RolesPanel scope="workspace" />
+        </TabsContent>
+      </Tabs>
+    </SettingsLayout>
   );
 }
 
@@ -150,13 +140,10 @@ function RolesPanel({ scope }) {
   return (
     <>
       <div className="w-full justify-end flex">
-        <CTAButton
-          className="mt-3 mr-0 mb-4 md:-mb-6 z-10"
-          onClick={() => setEditing({})}
-        >
-          <Plus className="h-4 w-4" weight="bold" /> New{" "}
+        <Button size="lg" className="mt-3 mb-4" onClick={() => setEditing({})}>
+          <Plus className="h-4 w-4" /> New{" "}
           {isWorkspace ? "workspace role" : "role"}
-        </CTAButton>
+        </Button>
       </div>
 
       <div className="overflow-x-auto">
@@ -171,35 +158,21 @@ function RolesPanel({ scope }) {
             containerClassName="flex w-full"
           />
         ) : (
-          <Table variant="settings">
-            <TableHeader variant="settings">
-              <TableRow variant="none">
-                <TableHead
-                  variant="none"
-                  scope="col"
-                  className="px-6 py-3 rounded-tl-lg"
-                >
-                  Role
-                </TableHead>
-                <TableHead variant="none" scope="col" className="px-6 py-3">
-                  Permissions
-                </TableHead>
-                <TableHead variant="none" scope="col" className="px-6 py-3">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead scope="col">Role</TableHead>
+                <TableHead scope="col">Permissions</TableHead>
+                <TableHead scope="col">
                   {isWorkspace ? "Members" : "Users"}
                 </TableHead>
-                <TableHead
-                  variant="none"
-                  scope="col"
-                  className="px-6 py-3 rounded-tr-lg"
-                >
-                  {" "}
-                </TableHead>
+                <TableHead scope="col"> </TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody variant="none">
+            <TableBody>
               {roles.map((role) => (
-                <TableRow key={role.id} variant="settings">
-                  <TableCell className="px-6 py-4">
+                <TableRow key={role.id}>
+                  <TableCell>
                     <div className="flex items-center gap-x-2">
                       <span className="text-theme-text-primary font-medium">
                         {role.displayName}
@@ -219,7 +192,7 @@ function RolesPanel({ scope }) {
                         >
                           {role.workspace_id === null
                             ? "Shared"
-                            : (role.workspace?.name ??
+                            : (`Workspace: ${role.workspace?.name}` ??
                               `Workspace #${role.workspace_id}`)}
                         </Badge>
                       )}
@@ -228,7 +201,7 @@ function RolesPanel({ scope }) {
                           variant="secondary"
                           className="gap-x-1 text-[10px]"
                         >
-                          <Star className="h-3 w-3" weight="fill" /> Default
+                          <Star className="h-3 w-3 fill-current" /> Default
                         </Badge>
                       )}
                     </div>
@@ -236,41 +209,38 @@ function RolesPanel({ scope }) {
                       {role.description || role.name}
                     </p>
                   </TableCell>
-                  <TableCell className="px-6 py-4 text-theme-text-secondary">
+                  <TableCell className="text-theme-text-secondary">
                     {role.permissions.length}
                   </TableCell>
-                  <TableCell className="px-6 py-4 text-theme-text-secondary">
+                  <TableCell className="text-theme-text-secondary">
                     {holderCount(role)}
                   </TableCell>
-                  <TableCell className="px-6 py-4">
-                    <div className="flex items-center gap-x-2 justify-end">
+                  <TableCell className="text-right">
+                    <TableRowActions>
                       {isWorkspace && !role.isDefault && (
-                        <Button
-                          variant="ghost"
-                          size="sm"
+                        <DropdownMenuItem
                           onClick={() => handleMakeDefault(role)}
                         >
                           Make default
-                        </Button>
+                        </DropdownMenuItem>
                       )}
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setEditing(role)}
-                      >
-                        <PencilSimple className="h-4 w-4" /> Edit
-                      </Button>
+                      <DropdownMenuItem onClick={() => setEditing(role)}>
+                        <Pencil />
+                        Edit
+                      </DropdownMenuItem>
                       {!role.isSystem && (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="text-red-400 hover:text-red-300"
-                          onClick={() => handleDelete(role)}
-                        >
-                          <Trash className="h-4 w-4" /> Delete
-                        </Button>
+                        <>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            variant="destructive"
+                            onClick={() => handleDelete(role)}
+                          >
+                            <Trash2 />
+                            Delete
+                          </DropdownMenuItem>
+                        </>
                       )}
-                    </div>
+                    </TableRowActions>
                   </TableCell>
                 </TableRow>
               ))}
@@ -283,7 +253,7 @@ function RolesPanel({ scope }) {
         open={editing !== null}
         onOpenChange={(open) => !open && setEditing(null)}
       >
-        <DialogContent className="max-w-3xl bg-theme-bg-secondary border-theme-modal-border">
+        <DialogContent size="xl">
           {editing !== null && (
             <RoleModal
               role={editing}

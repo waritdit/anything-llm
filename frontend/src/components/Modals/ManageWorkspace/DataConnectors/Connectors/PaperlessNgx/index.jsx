@@ -54,14 +54,13 @@ export default function PaperlessNgxOptions() {
             <div className="w-full flex flex-col gap-4">
               <div className="flex flex-col pr-10">
                 <div className="flex flex-col gap-y-1 mb-4">
-                  <Label variant="bold">Base URL</Label>
+                  <Label>Base URL</Label>
                   <p className="text-xs font-normal text-theme-text-secondary">
                     The URL where your Paperless-ngx instance is running (e.g.,
                     http://localhost:8000)
                   </p>
                 </div>
                 <Input
-                  variant="settings"
                   type="url"
                   name="baseUrl"
                   placeholder="http://localhost:8000"
@@ -73,8 +72,10 @@ export default function PaperlessNgxOptions() {
 
               <div className="flex flex-col pr-10">
                 <div className="flex flex-col gap-y-1 mb-4">
-                  <Label variant="bold" className="flex gap-x-2 items-center">
-                    <p className="font-bold text-white">API Token</p>
+                  <Label className="flex gap-x-2 items-center">
+                    <p className="font-bold text-theme-text-primary">
+                      API Token
+                    </p>
                   </Label>
                   <p className="text-xs font-normal text-theme-text-secondary">
                     Your Paperless-ngx API token. You can find this under
@@ -82,7 +83,6 @@ export default function PaperlessNgxOptions() {
                   </p>
                 </div>
                 <Input
-                  variant="settings"
                   type="password"
                   name="apiToken"
                   placeholder="Enter your API token"
@@ -95,7 +95,7 @@ export default function PaperlessNgxOptions() {
           </div>
 
           <div className="flex flex-col gap-y-2 w-full pr-10">
-            <div className="flex flex-col md:flex-row md:items-center gap-x-2 text-white mb-4 bg-blue-800/30 w-fit rounded-lg px-4 py-2">
+            <div className="flex flex-col md:flex-row md:items-center gap-x-2 text-theme-text-primary mb-4 bg-blue-800/30 w-fit rounded-lg px-4 py-2">
               <div className="gap-x-2 flex items-center">
                 <Info className="shrink-0" size={25} />
                 <p className="text-sm">
@@ -104,7 +104,7 @@ export default function PaperlessNgxOptions() {
                 </p>
               </div>
             </div>
-            <Button variant="homePrimary" type="submit" disabled={loading}>
+            <Button variant="default" type="submit" disabled={loading}>
               {loading ? "Importing documents..." : "Submit"}
             </Button>
             {loading && (

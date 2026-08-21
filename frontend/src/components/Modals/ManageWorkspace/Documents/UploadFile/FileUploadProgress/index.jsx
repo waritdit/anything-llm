@@ -86,14 +86,14 @@ function FileUploadProgressComponent({
           isFadingOut ? "file-upload-fadeout" : "file-upload"
         } h-14 px-2 py-2 flex items-center gap-x-4 rounded-lg bg-error/40 light:bg-error/30 light:border-solid light:border-error/40 border border-transparent`}
       >
-        <div className="w-6 h-6 flex-shrink-0">
+        <div className="w-6 h-6 shrink-0">
           <XCircle
             color="var(--theme-bg-primary)"
             className="w-6 h-6 stroke-white bg-error rounded-full p-1 w-full h-full"
           />
         </div>
         <div className="flex flex-col">
-          <p className="text-white light:text-red-600 text-xs font-semibold">
+          <p className="text-theme-text-primary light:text-red-600 text-xs font-semibold">
             {truncate(relativePath || file.name, 30)}
           </p>
           <p className="text-red-100 light:text-red-600 text-xs font-medium">
@@ -111,14 +111,14 @@ function FileUploadProgressComponent({
           isFadingOut ? "file-upload-fadeout" : "file-upload"
         } h-14 px-2 py-2 flex items-center gap-x-4 rounded-lg bg-error/40 light:bg-error/30 light:border-solid light:border-error/40 border border-transparent`}
       >
-        <div className="w-6 h-6 flex-shrink-0">
+        <div className="w-6 h-6 shrink-0">
           <XCircle
             color="var(--theme-bg-primary)"
             className="w-6 h-6 stroke-white bg-error rounded-full p-1 w-full h-full"
           />
         </div>
         <div className="flex flex-col">
-          <p className="text-white light:text-red-600 text-xs font-semibold">
+          <p className="text-theme-text-primary light:text-red-600 text-xs font-semibold">
             {truncate(relativePath || file.name, 30)}
           </p>
           <p className="text-red-100 light:text-red-600 text-xs font-medium">
@@ -135,7 +135,7 @@ function FileUploadProgressComponent({
         isFadingOut ? "file-upload-fadeout" : "file-upload"
       } h-14 px-2 py-2 flex items-center gap-x-4 rounded-lg bg-zinc-800 light:border-solid light:border-theme-modal-border light:bg-theme-bg-sidebar border border-white/20 shadow-md`}
     >
-      <div className="w-6 h-6 flex-shrink-0">
+      <div className="w-6 h-6 shrink-0">
         {status !== "complete" ? (
           <div className="flex items-center justify-center">
             <PreLoader size="6" />
@@ -148,7 +148,7 @@ function FileUploadProgressComponent({
         )}
       </div>
       <div className="flex flex-col">
-        <p className="text-white light:text-theme-text-primary text-xs font-medium">
+        <p className="text-theme-text-primary light:text-theme-text-primary text-xs font-medium">
           {truncate(relativePath || file.name, 30)}
         </p>
         <p className="text-white/80 light:text-theme-text-secondary text-xs font-medium">

@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
-import Sidebar from "@/components/SettingsSidebar";
+import SettingsLayout from "@/components/layout/SettingsLayout";
+import PageHeader from "@/components/layout/PageHeader";
 import { Skeleton } from "@/components/ui/skeleton";
-import { BookOpen } from "@phosphor-icons/react";
+import { BookOpen } from "lucide-react";
 import Admin from "@/models/admin";
 import System from "@/models/system";
 import WorkspaceRow from "./WorkspaceRow";
 import NewWorkspaceModal from "./NewWorkspaceModal";
 import { useModal } from "@/hooks/useModal";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import CTAButton from "@/components/lib/CTAButton";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -21,45 +22,30 @@ export default function AdminWorkspaces() {
   const { isOpen, openModal, closeModal } = useModal();
 
   return (
-    <div className="w-screen h-screen overflow-hidden bg-theme-bg-container flex">
-      <Sidebar />
-      <div
-        style={{ height: "100%" }}
-        className="relative bg-theme-bg-secondary w-full h-full overflow-y-scroll p-4 md:p-0"
-      >
-        <div className="flex flex-col w-full px-1 md:pl-6 md:pr-[50px] md:py-6 py-16">
-          <div className="w-full flex flex-col gap-y-1 pb-6 border-white/10 border-b-2">
-            <div className="items-center flex gap-x-4">
-              <p className="text-lg leading-6 font-bold text-theme-text-primary">
-                Instance Workspaces
-              </p>
-            </div>
-            <p className="text-xs leading-[18px] font-base text-theme-text-secondary">
-              These are all the workspaces that exist on this instance. Removing
-              a workspace will delete all of its associated chats and settings.
-            </p>
-          </div>
-          <div className="w-full justify-end flex">
-            <Dialog
-              open={isOpen}
-              onOpenChange={(open) => (open ? openModal() : closeModal())}
-            >
-              <DialogTrigger asChild>
-                <CTAButton className="mt-3 mr-0 mb-4 md:-mb-14 z-10">
-                  <BookOpen className="h-4 w-4" weight="bold" /> New Workspace
-                </CTAButton>
-              </DialogTrigger>
-              <DialogContent className="max-w-2xl bg-theme-bg-secondary border-theme-modal-border">
-                <NewWorkspaceModal />
-              </DialogContent>
-            </Dialog>
-          </div>
-          <div className="overflow-x-auto">
-            <WorkspacesContainer />
-          </div>
-        </div>
+    <SettingsLayout>
+      <PageHeader
+        title={"Instance Workspaces"}
+        description={
+          "These are all the workspaces that exist on this instance. Removing a workspace will delete all of its associated chats and settings."
+        }
+      />
+      <div className="w-full justify-end flex">
+        <Dialog
+          open={isOpen}
+          onOpenChange={(open) => (open ? openModal() : closeModal())}
+        >
+          <DialogTrigger render={<Button size="lg" className="mt-3 mb-4" />}>
+            <BookOpen className="h-4 w-4" /> New Workspace
+          </DialogTrigger>
+          <DialogContent>
+            <NewWorkspaceModal />
+          </DialogContent>
+        </Dialog>
       </div>
-    </div>
+      <div className="overflow-x-auto">
+        <WorkspacesContainer />
+      </div>
+    </SettingsLayout>
   );
 }
 
@@ -99,41 +85,18 @@ function WorkspacesContainer() {
   }
 
   return (
-    <Table
-      variant="none"
-      className="w-full text-xs text-left rounded-lg mt-6 min-w-[640px] border-spacing-0"
-    >
-      <TableHeader variant="settings">
-        <TableRow variant="none">
-          <TableHead
-            variant="none"
-            scope="col"
-            className="px-6 py-3 rounded-tl-lg"
-          >
-            Name
-          </TableHead>
-          <TableHead variant="none" scope="col" className="px-6 py-3">
-            Link
-          </TableHead>
-          <TableHead variant="none" scope="col" className="px-6 py-3">
-            Users
-          </TableHead>
-          <TableHead variant="none" scope="col" className="px-6 py-3">
-            Status
-          </TableHead>
-          <TableHead variant="none" scope="col" className="px-6 py-3">
-            Created On
-          </TableHead>
-          <TableHead
-            variant="none"
-            scope="col"
-            className="px-6 py-3 rounded-tr-lg"
-          >
-            {" "}
-          </TableHead>
+    <Table className="text-left rounded-lg mt-6 min-w-[640px] border-spacing-0">
+      <TableHeader>
+        <TableRow>
+          <TableHead scope="col">Name</TableHead>
+          <TableHead scope="col">Link</TableHead>
+          <TableHead scope="col">Users</TableHead>
+          <TableHead scope="col">Status</TableHead>
+          <TableHead scope="col">Created On</TableHead>
+          <TableHead scope="col"> </TableHead>
         </TableRow>
       </TableHeader>
-      <TableBody variant="none">
+      <TableBody>
         {workspaces.map((workspace) => (
           <WorkspaceRow
             key={workspace.id}

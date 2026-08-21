@@ -2,7 +2,7 @@ import useLogo from "@/hooks/useLogo";
 import System from "@/models/system";
 import showToast from "@/utils/toast";
 import { useEffect, useRef, useState } from "react";
-import { Plus } from "@phosphor-icons/react";
+import { Plus } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 export default function CustomLogo() {
@@ -70,10 +70,10 @@ export default function CustomLogo() {
 
   return (
     <div className="flex flex-col gap-y-0.5 my-4">
-      <p className="text-sm leading-6 font-semibold text-white">
+      <p className="text-sm leading-6 font-semibold text-theme-text-primary">
         {t("customization.items.logo.title")}
       </p>
-      <p className="text-xs text-white/60">
+      <p className="text-xs text-theme-text-secondary">
         {t("customization.items.logo.description")}
       </p>
       {isDefaultLogo ? (
@@ -91,17 +91,17 @@ export default function CustomLogo() {
                 onChange={handleFileUpload}
               />
               <div
-                className="w-80 py-4 bg-theme-settings-input-bg rounded-2xl border-2 border-dashed border-theme-text-secondary border-opacity-60 justify-center items-center inline-flex cursor-pointer"
+                className="w-80 py-4 bg-theme-settings-input-bg rounded-2xl border-2/60 border-dashed border-theme-text-secondary justify-center items-center inline-flex cursor-pointer"
                 htmlFor="logo-upload"
               >
                 <div className="flex flex-col items-center justify-center">
                   <div className="rounded-full bg-white/40">
                     <Plus className="w-6 h-6 text-black/80 m-2" />
                   </div>
-                  <div className="text-theme-text-primary text-opacity-80 text-sm font-semibold py-1">
+                  <div className="text-theme-text-primary/80 text-sm font-semibold py-1">
                     {t("customization.items.logo.add")}
                   </div>
-                  <div className="text-theme-text-secondary text-opacity-60 text-xs font-medium py-1">
+                  <div className="text-theme-text-secondary/60 text-xs font-medium py-1">
                     {t("customization.items.logo.recommended")}
                   </div>
                 </div>
@@ -115,13 +115,13 @@ export default function CustomLogo() {
             <img
               src={logo}
               alt="Uploaded Logo"
-              className="w-full h-full object-cover border-2 border-theme-text-secondary border-opacity-60 p-1 rounded-2xl"
+              className="w-full h-full object-cover border-2/60 border-theme-text-secondary p-1 rounded-2xl"
             />
 
-            <div className="absolute w-80 top-0 left-0 right-0 bottom-0 flex flex-col gap-y-3 justify-center items-center rounded-2xl mt-3 bg-black bg-opacity-80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out border-2 border-transparent hover:border-white">
+            <div className="absolute w-80 top-0 left-0 right-0 bottom-0 flex flex-col gap-y-3 justify-center items-center rounded-2xl mt-3 bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out border-2 border-transparent hover:border-white">
               <button
                 onClick={triggerFileInputClick}
-                className="text-[#FFFFFF] text-base font-medium hover:text-opacity-60 mx-2"
+                className="text-[#FFFFFF] text-base font-medium hover:text-[#FFFFFF]/60 mx-2"
               >
                 {t("customization.items.logo.replace")}
               </button>
@@ -136,7 +136,7 @@ export default function CustomLogo() {
               />
               <button
                 onClick={handleRemoveLogo}
-                className="text-[#FFFFFF] text-base font-medium hover:text-opacity-60 mx-2"
+                className="text-[#FFFFFF] text-base font-medium hover:text-[#FFFFFF]/60 mx-2"
               >
                 {t("customization.items.logo.remove")}
               </button>

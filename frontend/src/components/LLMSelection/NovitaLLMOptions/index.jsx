@@ -1,5 +1,5 @@
 import System from "@/models/system";
-import { CaretDown, CaretUp } from "@phosphor-icons/react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,17 +19,14 @@ export default function NovitaLLMOptions({ settings }) {
     <div className="w-full flex flex-col gap-y-7">
       <div className="w-full flex items-start gap-[36px] mt-1.5">
         <div className="flex flex-col w-60">
-          <Label variant="settings" className="block mb-3">
-            Novita API Key
-          </Label>
+          <Label className="block mb-3">Novita API Key</Label>
           <Input
-            variant="settings"
             type="password"
             name="NovitaLLMApiKey"
             placeholder="Novita API Key"
             defaultValue={settings?.NovitaLLMApiKey ? "*".repeat(20) : ""}
             required={true}
-            autoComplete="off"
+            autoComplete="new-password"
             spellCheck={false}
           />
         </div>
@@ -49,25 +46,23 @@ function AdvancedControls({ settings }) {
     <div className="flex flex-col gap-y-4">
       <div className="flex justify-start">
         <Button
-          variant="inline"
+          variant="link"
+          size="sm"
           type="button"
           onClick={() => setShowAdvancedControls(!showAdvancedControls)}
         >
           {showAdvancedControls ? "Hide" : "Show"} advanced settings
           {showAdvancedControls ? (
-            <CaretUp size={14} className="ml-1" />
+            <ChevronUp size={14} className="ml-1" />
           ) : (
-            <CaretDown size={14} className="ml-1" />
+            <ChevronDown size={14} className="ml-1" />
           )}
         </Button>
       </div>
       <div hidden={!showAdvancedControls}>
         <div className="flex flex-col w-60">
-          <Label variant="settings" className="block mb-3">
-            Stream Timeout (ms)
-          </Label>
+          <Label className="block mb-3">Stream Timeout (ms)</Label>
           <Input
-            variant="settings"
             type="number"
             name="NovitaLLMTimeout"
             placeholder="Timeout value between token responses to auto-timeout the stream"
@@ -77,7 +72,7 @@ function AdvancedControls({ settings }) {
             min={500}
             step={1}
           />
-          <p className="text-xs leading-[18px] font-base text-theme-text-primary text-opacity-60 mt-2">
+          <p className="text-xs/60 leading-[18px] font-base text-theme-text-primary mt-2">
             Timeout value between token responses to auto-timeout the stream.
           </p>
         </div>
@@ -110,11 +105,9 @@ function NovitaModelSelection({ settings }) {
   if (loading || Object.keys(groupedModels).length === 0) {
     return (
       <div className="flex flex-col w-60">
-        <Label variant="settings" className="block mb-3">
-          Chat Model Selection
-        </Label>
+        <Label className="block mb-3">Chat Model Selection</Label>
         <Select name="NovitaLLMModelPref" disabled={true}>
-          <SelectTrigger variant="settings">
+          <SelectTrigger className="w-full">
             <SelectValue placeholder="-- loading available models --" />
           </SelectTrigger>
           <SelectContent />
@@ -125,9 +118,7 @@ function NovitaModelSelection({ settings }) {
 
   return (
     <div className="flex flex-col w-60">
-      <Label variant="settings" className="block mb-3">
-        Chat Model Selection
-      </Label>
+      <Label className="block mb-3">Chat Model Selection</Label>
       <Select
         name="NovitaLLMModelPref"
         required={true}
@@ -136,7 +127,7 @@ function NovitaModelSelection({ settings }) {
           groupedModels[Object.keys(groupedModels).sort()[0]]?.[0]?.id
         }
       >
-        <SelectTrigger variant="settings">
+        <SelectTrigger className="w-full">
           <SelectValue placeholder="Select an option" />
         </SelectTrigger>
         <SelectContent>

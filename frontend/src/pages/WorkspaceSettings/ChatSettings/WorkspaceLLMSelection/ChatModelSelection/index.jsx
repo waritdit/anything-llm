@@ -29,12 +29,12 @@ export default function ChatModelSelection({
           <label htmlFor="name" className="block input-label">
             {t("chat.model.title")}
           </label>
-          <p className="text-white text-opacity-60 text-xs font-medium">
+          <p className="text-theme-text-primary/60 text-xs font-medium">
             {t("chat.model.description")}
           </p>
         </div>
         <Select name="chatModel" required={true} disabled={true}>
-          <SelectTrigger variant="settings">
+          <SelectTrigger>
             <SelectValue placeholder="-- waiting for models --" />
           </SelectTrigger>
           <SelectContent />
@@ -49,7 +49,7 @@ export default function ChatModelSelection({
         <label htmlFor="name" className="block input-label">
           {t("chat.model.title")}
         </label>
-        <p className="text-white text-opacity-60 text-xs font-medium">
+        <p className="text-theme-text-primary/60 text-xs font-medium">
           {t("chat.model.description")}
         </p>
       </div>
@@ -62,7 +62,7 @@ export default function ChatModelSelection({
           setHasChanges(true);
         }}
       >
-        <SelectTrigger variant="settings">
+        <SelectTrigger>
           <SelectValue placeholder="Select a model" />
         </SelectTrigger>
         <SelectContent>

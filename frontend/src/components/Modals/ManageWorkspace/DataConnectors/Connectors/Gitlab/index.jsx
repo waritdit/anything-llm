@@ -85,13 +85,12 @@ export default function GitlabOptions() {
             <div className="w-full flex flex-col gap-4">
               <div className="flex flex-col pr-10">
                 <div className="flex flex-col gap-y-1 mb-4">
-                  <Label variant="bold">{t("connectors.gitlab.URL")}</Label>
+                  <Label>{t("connectors.gitlab.URL")}</Label>
                   <p className="text-xs font-normal text-theme-text-secondary">
                     {t("connectors.gitlab.URL_explained")}
                   </p>
                 </div>
                 <Input
-                  variant="settings"
                   type="url"
                   name="repo"
                   placeholder="https://gitlab.com/gitlab-org/gitlab"
@@ -104,8 +103,8 @@ export default function GitlabOptions() {
               </div>
               <div className="flex flex-col pr-10">
                 <div className="flex flex-col gap-y-1 mb-4">
-                  <Label variant="bold" className="flex gap-x-2 items-center">
-                    <p className="font-bold text-white">
+                  <Label className="flex gap-x-2 items-center">
+                    <p className="font-bold text-theme-text-primary">
                       {t("connectors.gitlab.token")}
                     </p>{" "}
                     <p className="text-xs font-light flex items-center">
@@ -120,7 +119,6 @@ export default function GitlabOptions() {
                   </p>
                 </div>
                 <Input
-                  variant="settings"
                   type="text"
                   name="accessToken"
                   placeholder="glpat-XXXXXXXXXXXXXXXXXXXX"
@@ -133,10 +131,12 @@ export default function GitlabOptions() {
               </div>
               <div className="flex flex-col pr-10">
                 <div className="flex flex-col gap-y-1 mb-4">
-                  <Label variant="bold" className="flex gap-x-2 items-center">
-                    <p className="font-bold text-white">Settings</p>
+                  <Label className="flex gap-x-2 items-center">
+                    <p className="font-bold text-theme-text-primary">
+                      Settings
+                    </p>
                   </Label>
-                  <p className="text-xs font-normal text-white">
+                  <p className="text-xs font-normal text-theme-text-primary">
                     {t("connectors.gitlab.token_description")}
                   </p>
                 </div>
@@ -163,8 +163,8 @@ export default function GitlabOptions() {
 
             <div className="flex flex-col w-full py-4 pr-10">
               <div className="flex flex-col gap-y-1 mb-4">
-                <label className="text-white text-sm flex gap-x-2 items-center">
-                  <p className="text-white text-sm font-bold">
+                <label className="text-theme-text-primary text-sm flex gap-x-2 items-center">
+                  <p className="text-theme-text-primary text-sm font-bold">
                     {t("connectors.gitlab.ignores")}
                   </p>
                 </label>
@@ -180,7 +180,7 @@ export default function GitlabOptions() {
                 classNames={{
                   tag: "bg-theme-settings-input-bg light:bg-black/10 bg-blue-300/10 text-zinc-800",
                   input:
-                    "flex p-1 !bg-theme-settings-input-bg text-white placeholder:text-theme-settings-input-placeholder text-sm rounded-lg focus:outline-primary-button active:outline-primary-button outline-none",
+                    "flex p-1 bg-theme-settings-input-bg! text-theme-text-primary placeholder:text-theme-settings-input-placeholder text-sm rounded-lg focus:outline-primary-button active:outline-primary-button outline-none",
                 }}
               />
             </div>
@@ -188,7 +188,7 @@ export default function GitlabOptions() {
 
           <div className="flex flex-col gap-y-2 w-full pr-10">
             <PATAlert accessToken={accessToken} />
-            <Button variant="homePrimary" type="submit" disabled={loading}>
+            <Button variant="default" type="submit" disabled={loading}>
               {loading ? "Collecting files..." : "Submit"}
             </Button>
             {loading && (
@@ -231,13 +231,13 @@ function GitLabBranchSelection({ repo, accessToken }) {
     return (
       <div className="flex flex-col w-full max-w-60">
         <div className="flex flex-col gap-y-1 mb-4">
-          <Label variant="bold">{t("connectors.gitlab.branch")}</Label>
+          <Label>{t("connectors.gitlab.branch")}</Label>
           <p className="text-xs font-normal text-theme-text-secondary">
             {t("connectors.gitlab.branch_explained")}
           </p>
         </div>
         <Select name="branch" required={true}>
-          <SelectTrigger className="border-none bg-theme-settings-input-bg border-gray-500 text-white focus:outline-primary-button active:outline-primary-button outline-none text-sm rounded-lg w-full p-2.5">
+          <SelectTrigger className="border-none bg-theme-settings-input-bg border-gray-500 text-theme-text-primary focus:outline-primary-button active:outline-primary-button outline-none text-sm rounded-lg w-full p-2.5">
             <SelectValue placeholder={t("connectors.gitlab.branch_loading")} />
           </SelectTrigger>
           <SelectContent />
@@ -249,13 +249,13 @@ function GitLabBranchSelection({ repo, accessToken }) {
   return (
     <div className="flex flex-col w-60">
       <div className="flex flex-col gap-y-1 mb-4">
-        <Label variant="bold">Branch</Label>
+        <Label>Branch</Label>
         <p className="text-xs font-normal text-theme-text-secondary">
           {t("connectors.gitlab.branch_explained")}
         </p>
       </div>
       <Select name="branch" required={true}>
-        <SelectTrigger className="border-none bg-theme-settings-input-bg border-gray-500 text-white focus:outline-primary-button active:outline-primary-button outline-none text-sm rounded-lg w-full p-2.5">
+        <SelectTrigger className="border-none bg-theme-settings-input-bg border-gray-500 text-theme-text-primary focus:outline-primary-button active:outline-primary-button outline-none text-sm rounded-lg w-full p-2.5">
           <SelectValue placeholder="Select an option" />
         </SelectTrigger>
         <SelectContent>
@@ -276,7 +276,7 @@ function PATAlert({ accessToken }) {
   const { t } = useTranslation();
   if (!!accessToken) return null;
   return (
-    <div className="flex flex-col md:flex-row md:items-center gap-x-2 text-white mb-4 bg-blue-800/30 w-fit rounded-lg px-4 py-2">
+    <div className="flex flex-col md:flex-row md:items-center gap-x-2 text-theme-text-primary mb-4 bg-blue-800/30 w-fit rounded-lg px-4 py-2">
       <div className="gap-x-2 flex items-center">
         <Info className="shrink-0 h-6 w-6" />
         <p className="text-sm">
@@ -309,9 +309,11 @@ function PATTooltip({ accessToken }) {
     <>
       {!accessToken && (
         <Tooltip>
-          <TooltipTrigger asChild>
-            <AlertTriangle className="ml-1 h-3.5 w-3.5 text-orange-500 cursor-pointer" />
-          </TooltipTrigger>
+          <TooltipTrigger
+            render={
+              <AlertTriangle className="ml-1 h-3.5 w-3.5 text-orange-500 cursor-pointer" />
+            }
+          ></TooltipTrigger>
           <TooltipContent side="right" className="max-w-[250px] text-xs">
             <p className="text-sm">
               {t("connectors.gitlab.token_explained_start")}

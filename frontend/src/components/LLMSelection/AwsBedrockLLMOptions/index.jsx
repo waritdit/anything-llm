@@ -1,4 +1,4 @@
-import { ArrowSquareOut, Info } from "@phosphor-icons/react";
+import { Info, SquareArrowOutUpRight } from "lucide-react";
 import { AWS_REGIONS } from "./regions";
 import { useState, useEffect } from "react";
 import System from "@/models/system";
@@ -22,7 +22,7 @@ export default function AwsBedrockLLMOptions({ settings }) {
   return (
     <div className="w-full flex flex-col">
       {!settings?.credentialsOnly && (
-        <div className="flex flex-col md:flex-row md:items-center gap-x-2 text-white mb-4 bg-blue-800/30 w-fit rounded-lg px-4 py-2">
+        <div className="flex flex-col md:flex-row md:items-center gap-x-2 text-theme-text-primary mb-4 bg-blue-800/30 w-fit rounded-lg px-4 py-2">
           <div className="gap-x-2 flex items-center">
             <Info size={40} />
             <p className="text-base">
@@ -35,7 +35,7 @@ export default function AwsBedrockLLMOptions({ settings }) {
                 rel="noreferrer"
               >
                 Read more on how to use AWS Bedrock in AnythingLLM
-                <ArrowSquareOut size={14} />
+                <SquareArrowOutUpRight size={14} />
               </a>
             </p>
           </div>
@@ -44,33 +44,28 @@ export default function AwsBedrockLLMOptions({ settings }) {
 
       <div className="w-full flex items-center gap-[36px] my-1.5">
         <div className="flex flex-col w-60">
-          <Label variant="settings" className="block mb-3">
-            AWS Bedrock API Key
-          </Label>
+          <Label className="block mb-3">AWS Bedrock API Key</Label>
           <Input
-            variant="settings"
             type="password"
             name="AwsBedrockLLMApiKey"
             placeholder="AWS Bedrock API Key"
             defaultValue={settings?.AwsBedrockLLMApiKey ? "*".repeat(20) : ""}
             required={true}
-            autoComplete="off"
+            autoComplete="new-password"
             spellCheck={false}
             onChange={(e) => setInputValue(e.target.value)}
             onBlur={() => setApiKey(inputValue)}
           />
         </div>
         <div className="flex flex-col w-60">
-          <Label variant="settings" className="block mb-3">
-            AWS Region
-          </Label>
+          <Label className="block mb-3">AWS Region</Label>
           <Select
             name="AwsBedrockLLMRegion"
             value={region}
             required={true}
             onValueChange={setRegion}
           >
-            <SelectTrigger variant="settings">
+            <SelectTrigger className="w-full">
               <SelectValue placeholder="Select a region" />
             </SelectTrigger>
             <SelectContent>
@@ -95,11 +90,8 @@ export default function AwsBedrockLLMOptions({ settings }) {
               region={region}
             />
             <div className="flex flex-col w-60">
-              <Label variant="settings" className="block mb-3">
-                Model context window
-              </Label>
+              <Label className="block mb-3">Model context window</Label>
               <Input
-                variant="settings"
                 type="number"
                 name="AwsBedrockLLMTokenLimit"
                 placeholder="Content window limit (eg: 8192)"
@@ -112,19 +104,19 @@ export default function AwsBedrockLLMOptions({ settings }) {
             </div>
             <div className="flex flex-col w-60">
               <div className="flex items-center gap-x-1 mb-3">
-                <Label variant="settings" className="block">
-                  Max Tokens
-                </Label>
+                <Label className="block">Max Tokens</Label>
                 <div className="group relative">
-                  <Info size={14} className="text-white/60 cursor-pointer" />
-                  <div className="hidden group-hover:block absolute left-0 bottom-full mb-1 w-64 p-2 bg-theme-settings-input-bg text-white text-xs rounded-lg shadow-lg z-10">
+                  <Info
+                    size={14}
+                    className="text-theme-text-secondary cursor-pointer"
+                  />
+                  <div className="hidden group-hover:block absolute left-0 bottom-full mb-1 w-64 p-2 bg-theme-settings-input-bg text-theme-text-primary text-xs rounded-lg shadow-lg z-10">
                     Maximum number of tokens the model can generate per
                     response. Increase for longer outputs. Default is 4096.
                   </div>
                 </div>
               </div>
               <Input
-                variant="settings"
                 type="number"
                 name="AwsBedrockLLMMaxTokens"
                 placeholder="4096"
@@ -173,11 +165,9 @@ function BedrockModelSelection({ settings, apiKey, region }) {
   if (loading || Object.keys(groupedModels).length === 0) {
     return (
       <div className="flex flex-col w-60">
-        <Label variant="settings" className="block mb-3">
-          Chat Model Selection
-        </Label>
+        <Label className="block mb-3">Chat Model Selection</Label>
         <Select name="AwsBedrockLLMModel" disabled={true}>
-          <SelectTrigger variant="settings">
+          <SelectTrigger className="w-full">
             <SelectValue placeholder="-- loading available models --" />
           </SelectTrigger>
           <SelectContent />
@@ -188,9 +178,7 @@ function BedrockModelSelection({ settings, apiKey, region }) {
 
   return (
     <div className="flex flex-col w-60">
-      <Label variant="settings" className="block mb-3">
-        Chat Model Selection
-      </Label>
+      <Label className="block mb-3">Chat Model Selection</Label>
       <Select
         name="AwsBedrockLLMModel"
         required={true}
@@ -199,7 +187,7 @@ function BedrockModelSelection({ settings, apiKey, region }) {
           groupedModels[Object.keys(groupedModels).sort()[0]]?.[0]?.id
         }
       >
-        <SelectTrigger variant="settings">
+        <SelectTrigger className="w-full">
           <SelectValue placeholder="Select an option" />
         </SelectTrigger>
         <SelectContent>
